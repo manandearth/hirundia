@@ -14,7 +14,7 @@
    [:link {:href "https://fonts.googleapis.com/css?family=Roboto" :rel "stylesheet"}]
    [:meta {:charset "UTF-8"}]
 
-   (page/include-css "css/styles.css")])
+   (page/include-css "/css/styles.css")])
 
 (def header-links
   [:div#header-links

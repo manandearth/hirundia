@@ -4,7 +4,11 @@
    [clojure.java.jdbc :as jdbc]
    [clojure.spec.alpha :as spec]
    [honeysql.core :as h]
-   [hirundia.services.nests.retrieve.logic :as logic])
+   [hirundia.views :as views]
+   [hirundia.services.nests.retrieve.logic :as logic]
+   [hiccup.page :as page]
+   )
+
   (:import
    [org.postgresql.jdbc4 Jdbc4Array]))
 
@@ -22,7 +26,11 @@
                     (jdbc/query db)
                     (first))]
     (if record
-      {:status 200
-       :body   record}
+      (page/html5
+       (views/gen-page-head (str "Record No: " id))
+       views/header-links
+       [:div
+        [:h1 (str "Nest record No: " id)]
+        [:p (str record)]])
       {:status 404})))
 

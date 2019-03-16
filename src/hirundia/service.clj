@@ -13,16 +13,27 @@
    [hirundia.services.invoices.insert.endpoint :as invoices.insert]
    [hirundia.services.invoices.retrieve.endpoint :as invoices.retrieve]
    [hirundia.services.invoices.delete.endpoint :as invoices.delete]
-   [hirundia.services.nests.retrieve.endpoint :as nests.retrieve]))
+   [hirundia.services.nests.retrieve.endpoint :as nests.retrieve]
+   [hirundia.services.nests.retrieveall.endpoint :as nests.retrieveall]
+   [hirundia.views :as views]))
 
-(defn about-page [request]
+(defn about [request]
   (->> (route/url-for ::about-page)
        (format "Clojure %s - served from %s"
                (clojure-version))
        ring-resp/response))
 
+(defn about-page [request]
+  (ring-resp/response  (views/about)))
+
 (defn home-page [request]
-  (ring-resp/response "Hello World!"))
+  (ring-resp/response (views/home)))
+
+(defn retrieveall-page [request]
+  (ring-resp/response (nests.retrieveall/perform request)))
+
+(defn retrieve-page [request]
+  (ring-resp/response (nests.retrieve/perform request)))
 
 (spec/def ::temperature int?)
 
@@ -77,7 +88,8 @@
     ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
     ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]
     ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
-    ["/nests/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::nests.retrieve/api :path-params) `nests.retrieve/perform])]
+    ["/nests" :get  (conj common-interceptors `retrieveall-page)]
+    ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `retrieve-page)]
     })
 
 (comment

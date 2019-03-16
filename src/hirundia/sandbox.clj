@@ -4,9 +4,9 @@
    [clojure.data.json :as json]
    [clojure.java.jdbc :as jdbc]
    [honeysql.core :as sql]
-   [honeysql.helpers :as helpers :refer :all]
+   [honeysql.helpers :as helpers :refer :all :exclude [update]]
    [java-time :refer :all
-     ;; :exclude [update contains? iterate range min max zero?]
+     :exclude [format update contains? iterate range min max zero?]
     ]
    [clojure.string :as string]))
 
@@ -166,10 +166,10 @@
                   sql/format))
 
 
-(jdbc/with-db-transaction [db conn] ;makes sure that the transaction is carried only if there are no errors, cool!
-                      (jdbc/execute!
-                       db
-                       test-map))
+;; (jdbc/with-db-transaction [db conn] ;makes sure that the transaction is carried only if there are no errors, cool!
+;;                       (jdbc/execute!
+;;                        db
+;;                        test-map))
 
 
 (def select-all-query

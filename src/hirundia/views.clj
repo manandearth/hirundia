@@ -25,7 +25,7 @@
    " |"
    [:a {:href "/nests"} "View all nests"]
    " | "
-   [:a {:href "/add-address"} "Add a nest"]
+   [:a {:href "/nests-insert"} "Add a nest"]
    " ]"])
 
 (defn home []

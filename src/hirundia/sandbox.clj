@@ -1,7 +1,7 @@
 (ns hirundia.sandbox
   (:require
    [clj-postgresql.core :as pg]
-   [clojure.data.json :as json]
+   ;[clojure.data.json :as json]
    [clojure.java.jdbc :as jdbc]
    [honeysql.core :as sql]
    [honeysql.helpers :as helpers :refer :all :exclude [update]]

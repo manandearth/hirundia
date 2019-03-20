@@ -1,4 +1,4 @@
-(ns dev
+(ns user
   "Tools for interactive development with the REPL. This file should
   not be included in a production build of the application.
 
@@ -15,7 +15,7 @@
    [clojure.string :as string]
    [com.grzm.component.pedestal :as pedestal-component]
    [com.stuartsierra.component :as component]
-   [com.stuartsierra.component.repl :refer [set-init]]
+   [com.stuartsierra.component.repl :refer [reset set-init]]
    [modular.postgres]
    #_ [background-processing.background-processor :as background-processor]
    #_ [background-processing.enqueuer :as enqueuer]

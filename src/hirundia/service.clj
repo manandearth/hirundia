@@ -35,6 +35,9 @@
 (defn retrieve-page [request]
   (ring-resp/response (nests.retrieve/perform request)))
 
+(defn insert-nest-page [request]
+  (ring-resp/response (views/insert-to-db2)))
+
 (spec/def ::temperature int?)
 
 (spec/def ::orientation (spec/and keyword? #{:north :south :east :west}))
@@ -90,6 +93,7 @@
     ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
     ["/nests" :get  (conj common-interceptors `retrieveall-page)]
     ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `retrieve-page)]
+    ["/nests-insert" :get (into common-interceptors [http/json-body `insert-nest-page])]
     })
 
 (comment

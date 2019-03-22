@@ -81,8 +81,9 @@
        [:p [:label.justify "Destroyed date: " [:input {:type "text" :name "destroyed_date"}]]]
        [:p [:label.justify "λ ->" [:input {:type "submit" :value "Submit"}]]]]]]))
 
-;;HERE the :get function
-(defn insert-to-db2 []
+
+
+(defn insert-entry []
   (page/html5
    (gen-page-head "add a nest to the database")
     header-links

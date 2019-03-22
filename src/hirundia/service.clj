@@ -29,14 +29,11 @@
 (defn home-page [request]
   (ring-resp/response (views/home)))
 
-(defn retrieveall-page [request]
-  (ring-resp/response (nests.retrieveall/perform request)))
-
 (defn retrieve-page [request]
   (ring-resp/response (nests.retrieve/perform request)))
 
 (defn insert-nest-page [request]
-  (ring-resp/response (views/insert-to-db2)))
+  (ring-resp/response (views/insert-entry)))
 
 (spec/def ::temperature int?)
 
@@ -92,7 +89,7 @@
     ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]
     ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
     ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform)]
-    ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `retrieve-page)]
+    ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `nests.retrieve/perform)]
     ["/nests-insert" :get (into common-interceptors [http/json-body `insert-nest-page])]
     })
 

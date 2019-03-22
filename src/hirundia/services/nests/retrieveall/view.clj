@@ -12,10 +12,10 @@
     [:div (let [attr-fns {:data-value-transform (fn [label-key v]
                                                   (if (= :id label-key)
                                                     [:a {:href (str "/nests/" v)} v]
-                                                    )
-                                                  (if (= :delete label-key)
-                                                    [:a {:href (str "/nests-delete/")} (str "delete " v) ]
-                                                    v))}
+                                                    
+                                                    (if (= :delete label-key)
+                                                      [:a {:href (str "/nests-delete/")} (str "delete " v) ]
+                                                      v)))}
                 extended-records (map #(assoc % :delete (:id %)) records)]
             (table/to-table1d
              extended-records

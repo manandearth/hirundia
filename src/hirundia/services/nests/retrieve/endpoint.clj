@@ -6,8 +6,7 @@
    [honeysql.core :as h]
    [hirundia.views :as views]
    [hirundia.services.nests.retrieve.logic :as logic]
-   [hiccup.page :as page]
-   )
+   [hirundia.services.nests.retrieve.view :as view])
 
   (:import
    [org.postgresql.jdbc4 Jdbc4Array]))
@@ -26,11 +25,6 @@
                     (jdbc/query db)
                     (first))]
     (if record
-      (page/html5
-       (views/gen-page-head (str "Record No: " id))
-       views/header-links
-       [:div
-        [:h1 (str "Nest record No: " id)]
-        [:p (str record)]])
-      {:status 404})))
+      {:status 200 :body (view/update-entry record id)}
+      {:status 404 :body "Not in DB"})))
 

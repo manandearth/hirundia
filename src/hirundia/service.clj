@@ -91,7 +91,7 @@
     ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
     ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]
     ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
-    ["/nests" :get  (conj common-interceptors `retrieveall-page)]
+    ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform)]
     ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `retrieve-page)]
     ["/nests-insert" :get (into common-interceptors [http/json-body `insert-nest-page])]
     })

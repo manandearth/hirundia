@@ -4,10 +4,8 @@
    [clojure.java.jdbc :as jdbc]
    [clojure.spec.alpha :as spec]
    [honeysql.core :as h]
-   [hirundia.views :as views]
    [hirundia.services.nests.retrieveall.logic :as logic]
-   [hiccup.page :as page]
-   [hiccup.table :as table]
+   [hirundia.services.nests.retrieveall.view :as view]
    )
   (:import
    [org.postgresql.jdbc4 Jdbc4Array]))
@@ -21,24 +19,8 @@
 
 (defn perform [{{:keys [id]} :path-params :keys [db] :as request}]
   (let [db (->> db :pool (hash-map :datasource))
-        record (->> (logic/to-query)
+        records (->> (logic/to-query)
                     (h/format)
                     (jdbc/query db))]
-    (if record
-      (page/html5
-       (views/gen-page-head "Complete List of Entries")
-       views/header-links
-       [:div
-        [:h1 "Complete List Of Entries"]
-        [:div (let [attr-fns {:data-value-transform (fn [label-key v]
-                                             (if (= :id label-key)
-                                               [:a {:href (str "/nests/" v)} v]
-                                               v))}]
-                (table/to-table1d
-                 record
-                 [:id "ID" :street "Street" :number "No." :gps "GPS" :species "Species" :facing "Facing" :height "Height" :type "Type" :date "Date"  :destroyed "Destroyed?" :destroyed_date "Date destroyed"]
-                 attr-fns))]])
-
-      {:status 404})
-    ))
+    {:status 200 :body (view/all-invoices records)}))
 

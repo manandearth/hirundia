@@ -5,6 +5,7 @@
             [hirundia.views :as views]))
 
 (defn update-entry [record id]
+;;FIXME ugly estraction of the lat and lon from gps point (i.e. "(12.123, 45.456)" -> 12.123 45.456
   (let [lat (first (string/split (last (string/split (:gps record) #"\(")) #"\,"))
         lon (first (string/split (last (string/split (last (string/split (:gps record) #"\(")) #"\,")) #"\)"))] 
     (page/html5
@@ -12,7 +13,7 @@
      views/header-links
      [:div
       [:h1 (str "update entry: " id )]
-      [:form {:action "/add-address2" :method "POST"}
+      [:form {:action (str "/nests-update/" id) :method "POST"}
        ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
        [:div
         [:p [:label.justify "Street: " [:input {:type "text" :name "street" :value (:street record)}]]]
@@ -30,11 +31,3 @@
         [:p [:label.justify "λ ->" [:input {:type "submit" :value "Update"}]]]]
        ]])))
 
-(def p "(33.142,0.221)")
-#_(defn update-entry [record id]
-  (page/html5
-   (views/gen-page-head (str "Record No: " id))
-   views/header-links
-   [:div
-    [:h1 (str "Nest record No: " id)]
-    [:p (str record)]]))

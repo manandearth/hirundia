@@ -9,12 +9,14 @@
    [io.pedestal.interceptor.chain :as interceptor-chain]
    [ring.util.response :as ring-resp]
    [hirundia.coerce :as coerce]
-   [hirundia.jobs.sample]
-   [hirundia.services.invoices.insert.endpoint :as invoices.insert]
-   [hirundia.services.invoices.retrieve.endpoint :as invoices.retrieve]
-   [hirundia.services.invoices.delete.endpoint :as invoices.delete]
+   ;; [hirundia.jobs.sample]
+   ;; [hirundia.services.invoices.insert.endpoint :as invoices.insert]
+   ;; [hirundia.services.invoices.retrieve.endpoint :as invoices.retrieve]
+   ;; [hirundia.services.invoices.delete.endpoint :as invoices.delete]
    [hirundia.services.nests.retrieve.endpoint :as nests.retrieve]
    [hirundia.services.nests.retrieveall.endpoint :as nests.retrieveall]
+   [hirundia.services.nests.update.endpoint :as nests.update]
+   [hirundia.services.nests.insert.endpoint :as nests.insert]
    [hirundia.views :as views]))
 
 (defn about [request]
@@ -35,17 +37,17 @@
 (defn insert-nest-page [request]
   (ring-resp/response (views/insert-entry)))
 
-(spec/def ::temperature int?)
+;; (spec/def ::temperature int?)
 
-(spec/def ::orientation (spec/and keyword? #{:north :south :east :west}))
+;; (spec/def ::orientation (spec/and keyword? #{:north :south :east :west}))
 
-(spec/def ::api (spec/keys :req-un [::temperature ::orientation]))
+;; (spec/def ::api (spec/keys :req-un [::temperature ::orientation]))
 
-(defn api [{{:keys [temperature orientation]} :query-params :keys [db] :as request}]
+;; (defn api [{{:keys [temperature orientation]} :query-params :keys [db] :as request}]
   #_(go
     (-> enqueuer :channel (>! (hirundia.jobs.sample/new temperature))))
-  {:status 200
-   :body   {:temperature temperature :orientation orientation}})
+  ;; {:status 200
+  ;;  :body   {:temperature temperature :orientation orientation}})
 
 
 
@@ -84,13 +86,15 @@
   "Tabular routes"
   #{["/" :get (conj common-interceptors `home-page)]
     ["/about" :get (conj common-interceptors `about-page)]
-    ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
-    ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
-    ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]
-    ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
+    ;; ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
+    ;; ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
+    ;; ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]
+    ;; ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
     ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform)]
+    ["/nests-update/:id" :post (into common-interceptors [http/json-body #_(param-spec-interceptor ::nests.update/api :form-params) `nests.update/perform])]
     ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `nests.retrieve/perform)]
     ["/nests-insert" :get (into common-interceptors [http/json-body `insert-nest-page])]
+    ["/nests-insert" :post (into common-interceptors [http/json-body `nests.insert/perform])]
     })
 
 (comment

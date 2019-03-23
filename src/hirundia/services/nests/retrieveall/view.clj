@@ -19,5 +19,16 @@
                 extended-records (map #(assoc % :delete (:id %)) records)]
             (table/to-table1d
              extended-records
-             [:id "ID" :street "Street" :number "No." :gps "GPS" :species "Species" :facing "Facing" :height "Height" :type "Type" :date "Date"  :destroyed "Destroyed?" :destroyed_date "Date destroyed" :delete "Delete Entry"]
+             [:id "ID"
+              :street "Street"
+              :number "No."
+              :gps "GPS"
+              :species "Species"
+              :facing "Facing"
+              :height "Height"
+              :type "Type"
+              :date "Date"
+              :destroyed "Destroyed?"
+              :destroyed_date "Date destroyed"
+              :delete "Delete Entry"]
              attr-fns))]]))

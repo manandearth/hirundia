@@ -1,10 +1,11 @@
 (ns hirundia.services.nests.insert.logic
   (:require
+   [honeysql.core :as h]
    [honeysql.helpers :as hh]))
 
-(defn to-insert [amount random-uuid]
-  (-> (hh/insert-into :users)
-      (hh/values [{:email (str amount "@" random-uuid ".com")}])))
+(defn to-insert [entry-map]
+  (-> (hh/insert-into :nests)
+      (hh/values [entry-map])))
 
 (def to-query
   {:select   [:id :email]
@@ -14,3 +15,5 @@
 
 (defn to-serialize [results]
   (-> results first (select-keys [:id :email])))
+
+

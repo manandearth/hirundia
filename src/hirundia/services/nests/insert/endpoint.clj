@@ -3,6 +3,8 @@
    [clojure.java.jdbc :as jdbc]
    [clojure.spec.alpha :as spec]
    [honeysql.core :as h]
+   [clj-postgresql.core :as pg]
+   [clojure.string :as string]
    [hirundia.services.nests.insert.logic :as logic]
    [java-time :refer :all
      :exclude [format update contains? iterate range min max zero?]
@@ -24,13 +26,24 @@
 
 (spec/def ::api (spec/keys :req-un [::street ::number ::height])) ;TODO need to extend
 
-(defn perform [{{:keys [amount]} :query-params :keys [db] :as request}]
-  (let [db     (->> db :pool (hash-map :datasource))
-        insert (-> (logic/to-insert amount (java.util.UUID/randomUUID))
+(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db] :as request}]
+  (let [parsed-map {:street street
+                    :number (Integer/parseInt number)
+                    :gps (pg/point (list (Float/parseFloat lat) (Float/parseFloat lon)))
+                    :species species
+                    :height (Integer/parseInt height)
+                    :facing facing
+                    :type  type-of
+                    :date (sql-date (clj-time.format/parse (clj-time.format/formatters :date) date))
+                    :destroyed (if (string/blank? destroyed) false (read-string destroyed))
+                    :destroyed_date (if (empty? destroyed_date) nil (sql-date (clj-time.format/parse (clj-time.format/formatters :date) destroyed_date)))
+                    }
+        db     (->> db :pool (hash-map :datasource))
+        insert (-> (logic/to-insert parsed-map)
                    (h/format))
-        fetch  (h/format logic/to-query)
+        ;fetch  (h/format logic/to-query)
         _      (jdbc/execute! db insert)
-        result (-> (jdbc/query db fetch)
-                   (logic/to-serialize))]
-    {:status 200
-     :body   result}))
+        ;; result (-> (jdbc/query db fetch)
+        ;; (logic/to-serialize))
+    ]
+    {:status 302 :headers {"Location" "/nests"} :body ""}))

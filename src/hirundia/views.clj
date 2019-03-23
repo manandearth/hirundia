@@ -89,7 +89,7 @@
     header-links
     [:div
      [:h1 "Add a nest to the database"]
-     [:form {:action "/add-address2" :method "POST"}
+     [:form {:action "/nests-insert" :method "POST"}
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
       [:div
        [:p [:label.justify "Street: " [:input {:type "text" :name "street"}]]]

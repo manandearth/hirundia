@@ -81,14 +81,15 @@
        [:p [:label.justify "Destroyed date: " [:input {:type "text" :name "destroyed_date"}]]]
        [:p [:label.justify "λ ->" [:input {:type "submit" :value "Submit"}]]]]]]))
 
-;;HERE the :get function
-(defn insert-to-db2 []
+
+
+(defn insert-entry []
   (page/html5
    (gen-page-head "add a nest to the database")
     header-links
     [:div
      [:h1 "Add a nest to the database"]
-     [:form {:action "/add-address2" :method "POST"}
+     [:form {:action "/nests-insert" :method "POST"}
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
       [:div
        [:p [:label.justify "Street: " [:input {:type "text" :name "street"}]]]

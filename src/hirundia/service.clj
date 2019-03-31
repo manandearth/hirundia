@@ -9,15 +9,14 @@
    [io.pedestal.interceptor.chain :as interceptor-chain]
    [ring.util.response :as ring-resp]
    [hirundia.coerce :as coerce]
-   ;; [hirundia.jobs.sample]
-   ;; [hirundia.services.invoices.insert.endpoint :as invoices.insert]
-   ;; [hirundia.services.invoices.retrieve.endpoint :as invoices.retrieve]
-   ;; [hirundia.services.invoices.delete.endpoint :as invoices.delete]
    [hirundia.services.nests.retrieve.endpoint :as nests.retrieve]
    [hirundia.services.nests.retrieveall.endpoint :as nests.retrieveall]
    [hirundia.services.nests.update.endpoint :as nests.update]
    [hirundia.services.nests.insert.endpoint :as nests.insert]
-   [hirundia.views :as views]))
+   [hirundia.services.session.register.endpoint :as session.register]
+   [hirundia.views :as views]
+   [ring.middleware.session.cookie :as cookie]
+   [ring.middleware.flash :as flash]))
 
 (defn about [request]
   (->> (route/url-for ::about-page)
@@ -36,6 +35,9 @@
 
 (defn insert-nest-page [request]
   (ring-resp/response (views/insert-entry)))
+
+(defn register-page [request]
+  (ring-resp/response (views/register request)))
 
 ;; (spec/def ::temperature int?)
 
@@ -86,6 +88,8 @@
   "Tabular routes"
   #{["/" :get (conj common-interceptors `home-page) :route-name :home]
     ["/about" :get (conj common-interceptors `about-page)]
+    ["/register" :get (conj common-interceptors `register-page)]
+    ["/register" :post (conj common-interceptors `session.register/perform)]
     ;; ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
     ;; ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
     ;; ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]

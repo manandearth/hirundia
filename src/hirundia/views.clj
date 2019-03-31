@@ -26,6 +26,8 @@
    [:a {:href "/nests"} "View all nests"]
    " | "
    [:a {:href "/nests-insert"} "Add a nest"]
+   " | "
+   [:a {:href "/register"} "Register"]
    " ]"])
 
 (defn home []
@@ -172,6 +174,19 @@
     context))
 
 
+
+(defn register [{:keys [flash] :as request}]
+  (page/html5
+   (gen-page-head "Register")
+   header-links
+[:div (when (seq flash) [:h2 flash])]
+   [:div
+    [:h1 "Register"]
+    [:form {:action "/register" :method "POST"}
+     [:div
+      [:p [:label.justify "User name: " [:input {:type "text" :name "username"}]]]
+      [:p [:lable.justify "Password: " [:input {:type "text" :name "password"}]]]
+      [:p [:label.justify "" [:input {:type "submit" :value "submit"}]]]]]]))
 
 
 ;; (insert-to-db-results {:params {"street" "Kookoo"}})

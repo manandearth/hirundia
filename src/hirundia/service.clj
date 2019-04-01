@@ -7,12 +7,14 @@
    [io.pedestal.http.route :as route]
    [io.pedestal.http.body-params :as body-params]
    [io.pedestal.interceptor.chain :as interceptor-chain]
+   [io.pedestal.http.ring-middlewares :as ring-middlewares]
    [ring.util.response :as ring-resp]
    [hirundia.coerce :as coerce]
    [hirundia.services.nests.retrieve.endpoint :as nests.retrieve]
    [hirundia.services.nests.retrieveall.endpoint :as nests.retrieveall]
    [hirundia.services.nests.update.endpoint :as nests.update]
    [hirundia.services.nests.insert.endpoint :as nests.insert]
+   [hirundia.services.nests.delete.endpoint :as nests.delete]
    [hirundia.services.session.register.endpoint :as session.register]
    [hirundia.views :as views]
    [ring.middleware.session.cookie :as cookie]
@@ -77,6 +79,11 @@
                     components))
    :name  ::context-injector})
 
+(def session-interceptor (ring-middlewares/session {:store (cookie/cookie-store)}))
+
+(def flash-interceptor (ring-middlewares/flash))
+
+
 (def components-to-inject [:db
                            #_:background-processor #_:enqueuer
                            ])
@@ -85,7 +92,7 @@
   (conj (mapv pedestal-component/using-component components-to-inject)
         (context-injector components-to-inject)))
 
-(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body]))
+(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body flash-interceptor]))
 
 (def routes
   "Tabular routes"
@@ -103,6 +110,7 @@
     ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `nests.retrieve/perform)]
     ["/nests-insert" :get (into common-interceptors [http/json-body `insert-nest-page])]
     ["/nests-insert" :post (into common-interceptors [http/json-body `nests.insert/perform])]
+["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
     })
 
 (comment

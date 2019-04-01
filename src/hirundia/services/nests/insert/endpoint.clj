@@ -21,7 +21,6 @@
 (spec/def ::date           inst?) 
 (spec/def ::destroyed      (spec/or :bool boolean? :empty empty?))
 (spec/def ::destroyed_date (spec/or :inst inst? :empty empty?)) 
-
 #_(spec/valid? ::date (sql-date (local-date)))
 
 
@@ -39,9 +38,9 @@
                     :destroyed      (if (boolean? destroyed)
                                       destroyed
                                       false)
-                    :destroyed_date (if (inst? destroyed_date)
-                                      (sql-date destroyed_date)
-                                      nil)
+                    :destroyed_date (if (empty? destroyed_date)
+                                      nil
+                                      (sql-date destroyed_date))
                     }
         db     (->> db :pool (hash-map :datasource))
         insert (-> (logic/to-insert parsed-map)

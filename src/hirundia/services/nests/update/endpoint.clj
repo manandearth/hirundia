@@ -48,9 +48,9 @@
                     :destroyed      (if (boolean? destroyed)
                                       destroyed
                                       false)
-                    :destroyed_date (if (inst? destroyed_date)
-                                      (sql-date destroyed_date)
-                                      nil)
+                    :destroyed_date (if (empty? destroyed_date)
+                                      nil
+                                      (sql-date destroyed_date))
                     }
         db     (->> db :pool (hash-map :datasource))
         update (-> (logic/to-update parsed-map  (Integer/parseInt id))

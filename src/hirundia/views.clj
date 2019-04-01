@@ -81,7 +81,7 @@
        [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
        [:p "If the nest is no longer there fill in the following and include the day recorded:"]
        [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"] "false")]]
-       [:p [:label.justify "Destroyed date: " [:input {:type "date" :name "destroyed_date"}]]]
+       [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]
        [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
 
 (defn insert-to-db-results

@@ -6,6 +6,7 @@
    [io.pedestal.http :as http]
    [io.pedestal.http.route :as route]
    [io.pedestal.http.body-params :as body-params]
+   [io.pedestal.interceptor :as interceptor]
    [io.pedestal.interceptor.chain :as interceptor-chain]
    [io.pedestal.http.ring-middlewares :as ring-middlewares]
    [ring.util.response :as ring-resp]
@@ -16,9 +17,12 @@
    [hirundia.services.nests.insert.endpoint :as nests.insert]
    [hirundia.services.nests.delete.endpoint :as nests.delete]
    [hirundia.services.session.register.endpoint :as session.register]
+   [hirundia.services.session.login.endpoint :as session.login]
    [hirundia.views :as views]
    [ring.middleware.session.cookie :as cookie]
-   [ring.middleware.flash :as flash]))
+   [ring.middleware.flash :as flash]
+   [buddy.auth.middleware :refer [authentication-request]]
+   [buddy.auth.backends.session :refer [session-backend]]))
 
 (defn about [request]
   (->> (route/url-for ::about-page)
@@ -78,6 +82,22 @@
                     context
                     components))
    :name  ::context-injector})
+
+(def session-auth-backend
+  (session-backend
+   {:authfn (fn [request]
+              (let [{:keys [username password]} request
+                    known-user                  (get (session.login/all-usernames) username)]
+                (when (= (session.login/password-by-username username) password)
+                  username)))}))
+
+(def authentication-interceptor
+  "Port of buddy-auth's wrap-authentication middleware."
+  (interceptor/interceptor
+   {:name ::authenticate
+    :enter (fn [context]
+             (update context :request authentication-request session-auth-backend))}))
+
 
 (def session-interceptor (ring-middlewares/session {:store (cookie/cookie-store)}))
 

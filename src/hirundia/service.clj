@@ -106,10 +106,10 @@
     ;; ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]
     ;; ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
     ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform)]
-    ["/nests-update/:id" :post (into common-interceptors [http/json-body #_(param-spec-interceptor ::nests.update/api :form-params) `nests.update/perform])]
+    ["/nests-update/:id" :post (into common-interceptors [http/json-body (param-spec-interceptor ::nests.update/api :form-params) `nests.update/perform])]
     ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `nests.retrieve/perform)]
-    ["/nests-insert" :get (into common-interceptors [http/json-body `insert-nest-page])]
-    ["/nests-insert" :post (into common-interceptors [http/json-body `nests.insert/perform])]
+    ["/nests-insert" :get (into common-interceptors [http/json-body  `insert-nest-page])]
+    ["/nests-insert" :post (into common-interceptors [http/json-body  (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
 ["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
     })
 

@@ -10,33 +10,38 @@
      :exclude [format update contains? iterate range min max zero?]
     ]))
 
-(spec/def ::street string?)
-(spec/def ::number nat-int?)
-(spec/def ::lat float?)
-(spec/def ::lon float?)
-(spec/def ::species (spec/and keyword? #{"swallow" "swift" "martin"}))
-(spec/def ::height nat-int?)
-(spec/def ::facing (spec/and keyword? #{"N" "NW" "W" "SW" "S" "SE" "E" "NE"}))
-(spec/def ::type-of (spec/and keyword? #{"roof" "pergola"})) ;TODO extend this set
-(spec/def ::date inst?) 
-(spec/def ::destroyed boolean?)
-(spec/def ::destroyed_date inst?) 
+(spec/def ::street         string?)
+(spec/def ::number         nat-int?)
+(spec/def ::lat            float?)
+(spec/def ::lon            float?)
+(spec/def ::species        #{"swallow" "swift" "martin"})
+(spec/def ::height         nat-int?)
+(spec/def ::facing         #{"N" "NW" "W" "SW" "S" "SE" "E" "NE"})
+(spec/def ::type-of        #{"roof" "pergola"}) ;TODO extend this set
+(spec/def ::date           inst?) 
+(spec/def ::destroyed      (spec/or :bool boolean? :empty empty?))
+(spec/def ::destroyed_date (spec/or :inst inst? :empty empty?)) 
 
 #_(spec/valid? ::date (sql-date (local-date)))
 
-(spec/def ::api (spec/keys :req-un [::street ::number ::height])) ;TODO need to extend
+
+(spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::number ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
 
 (defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db] :as request}]
-  (let [parsed-map {:street street
-                    :number (Integer/parseInt number)
-                    :gps (pg/point (list (Float/parseFloat lat) (Float/parseFloat lon)))
-                    :species species
-                    :height (Integer/parseInt height)
-                    :facing facing
-                    :type  type-of
-                    :date (sql-date (clj-time.format/parse (clj-time.format/formatters :date) date))
-                    :destroyed (if (string/blank? destroyed) false (read-string destroyed))
-                    :destroyed_date (if (empty? destroyed_date) nil (sql-date (clj-time.format/parse (clj-time.format/formatters :date) destroyed_date)))
+  (let [parsed-map {:street         street
+                    :number         number
+                    :gps            (pg/point (list lat lon))
+                    :species        species
+                    :height         height
+                    :facing         facing
+                    :type           type-of
+                    :date           (sql-date date)
+                    :destroyed      (if (boolean? destroyed)
+                                      destroyed
+                                      false)
+                    :destroyed_date (if (inst? destroyed_date)
+                                      (sql-date destroyed_date)
+                                      nil)
                     }
         db     (->> db :pool (hash-map :datasource))
         insert (-> (logic/to-insert parsed-map)
@@ -47,3 +52,4 @@
         ;; (logic/to-serialize))
     ]
     {:status 302 :headers {"Location" "/nests"} :body "" :flash "Entry added to db"}))
+

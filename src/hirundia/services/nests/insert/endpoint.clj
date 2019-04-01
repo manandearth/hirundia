@@ -46,4 +46,4 @@
         ;; result (-> (jdbc/query db fetch)
         ;; (logic/to-serialize))
     ]
-    {:status 302 :headers {"Location" "/nests"} :body ""}))
+    {:status 302 :headers {"Location" "/nests"} :body "" :flash "Entry added to db"}))

@@ -17,10 +17,10 @@
 
 #_(spec/def ::api (spec/keys :req-un [::id]))
 
-(defn perform [{{:keys [id]} :path-params :keys [db] :as request}]
+(defn perform [{{:keys [id]} :path-params :keys [db flash] :as request}]
   (let [db (->> db :pool (hash-map :datasource))
         records (->> (logic/to-query)
                     (h/format)
                     (jdbc/query db))]
-    {:status 200 :body (view/all-invoices records)}))
+    {:status 200 :body (view/all-nests records flash)}))
 

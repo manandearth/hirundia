@@ -3,11 +3,12 @@
             [hiccup.table :as table]
             [hirundia.views :as views]))
 
-(defn all-invoices [records]
+(defn all-nests [records & flash]
   (page/html5
    (views/gen-page-head "Complete List of Entries")
    views/header-links
    [:div
+    [:h2.flash (when (seq? flash) flash)]
     [:h1 "Complete List Of Entries"]
     [:div (let [attr-fns {:data-value-transform (fn [label-key v]
                                                   (if (= :id label-key)

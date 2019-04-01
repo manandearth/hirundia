@@ -33,4 +33,4 @@
         update (-> (logic/to-update parsed-map  (Integer/parseInt id))
                    (h/format))
         _      (jdbc/execute! db update)]
-   {:status 302 :headers {"Location" "/nests"} :body ""}))
+   {:status 302 :headers {"Location" "/nests"} :body "" :flash (str "Entry " id " has been updated")}))

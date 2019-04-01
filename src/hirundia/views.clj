@@ -181,7 +181,7 @@
   (page/html5
    (gen-page-head "Register")
    header-links
-   [:div (when (seq flash) [:h2 flash])
+   [:div (when (seq flash) [:h2.flash flash])
     [:div
      [:h1 "Register"]
      [:form {:action "/register" :method "POST"}
@@ -194,12 +194,12 @@
   (page/html5
    (gen-page-head "Login")
    header-links
-   [:div (when (seq flash) [:h2 flash])
+   [:div (when (seq flash) [:h2.flash (str flash ", you are now registered. Please login")])
     [:div
      [:h1 "Login"]
      [:form {:action "/login" :method "POST"}
       [:div
-       [:p [:label.justify "Username: " [:input {:type "text" :name "username"}]]]
+       [:p [:label.justify "Username: " [:input {:type "text" :name "username" :value flash}]]]
        [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 

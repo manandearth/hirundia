@@ -82,3 +82,10 @@ table td {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+
+h2.flash {
+    background-color: #55e;
+    color:       #fff;
+    
+}

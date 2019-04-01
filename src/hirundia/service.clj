@@ -39,6 +39,9 @@
 (defn register-page [request]
   (ring-resp/response (views/register request)))
 
+(defn login-page [request]
+  (ring-resp/response (views/login request)))
+
 ;; (spec/def ::temperature int?)
 
 ;; (spec/def ::orientation (spec/and keyword? #{:north :south :east :west}))
@@ -90,6 +93,7 @@
     ["/about" :get (conj common-interceptors `about-page)]
     ["/register" :get (conj common-interceptors `register-page)]
     ["/register" :post (conj common-interceptors `session.register/perform)]
+    ["/login" :get (conj common-interceptors `login-page)]
     ;; ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
     ;; ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
     ;; ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]

@@ -27,6 +27,8 @@
    " | "
    [:a {:href "/nests-insert"} "Add a nest"]
    " | "
+   [:a {:href "/login"} "Login"]
+   " | "
    [:a {:href "/register"} "Register"]
    " ]"])
 
@@ -179,14 +181,27 @@
   (page/html5
    (gen-page-head "Register")
    header-links
-[:div (when (seq flash) [:h2 flash])]
-   [:div
-    [:h1 "Register"]
-    [:form {:action "/register" :method "POST"}
-     [:div
-      [:p [:label.justify "User name: " [:input {:type "text" :name "username"}]]]
-      [:p [:lable.justify "Password: " [:input {:type "text" :name "password"}]]]
-      [:p [:label.justify "" [:input {:type "submit" :value "submit"}]]]]]]))
+   [:div (when (seq flash) [:h2 flash])
+    [:div
+     [:h1 "Register"]
+     [:form {:action "/register" :method "POST"}
+      [:div
+       [:p [:label.justify "Username: " [:input {:type "text" :name "username"}]]]
+       [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
+       [:p [:label.justify "" [:input {:type "submit" :value "Register"}]]]]]]]))
+
+(defn login [{:keys [flash] :as request}]
+  (page/html5
+   (gen-page-head "Login")
+   header-links
+   [:div (when (seq flash) [:h2 flash])
+    [:div
+     [:h1 "Login"]
+     [:form {:action "/login" :method "POST"}
+      [:div
+       [:p [:label.justify "Username: " [:input {:type "text" :name "username"}]]]
+       [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
+       [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 
 
 ;; (insert-to-db-results {:params {"street" "Kookoo"}})

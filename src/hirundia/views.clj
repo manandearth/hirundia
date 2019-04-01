@@ -3,6 +3,7 @@
    [clj-postgresql.core :as pg]
    [hiccup.page :as page]
    [hiccup.table :as table]
+   [hiccup.form :as form]
    [java-time :refer :all :exclude [contains? iterate max zero? format min max range]]
    [hirundia.sandbox :as records]
    ))
@@ -75,7 +76,8 @@
        [:p [:label.justify "Number: " [:input {:type "int" :name "number"}]]]
        [:p [:label.justify "Latitude: " [:input {:type "int" :name "lat"}]]]
        [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
-       [:p [:label.justify "Species: " [:input {:type "text" :name "species"}]]]
+       [:p [:label.justify "Species: " [:input {:type "datalist" :name "species"}
+                                        [:opt {:value "swallow"}]]]]
        [:p [:label.justify "Height: " [:input {:type "text" :name "height"}]]]
        [:p [:label.justify "Facing: " [:input {:type "text" :name "facing"}]]]
        [:p [:label.justify "Type: " [:input {:type "text" :name "type-of"}]]]
@@ -85,7 +87,16 @@
        [:p [:label.justify "Destroyed date: " [:input {:type "text" :name "destroyed_date"}]]]
        [:p [:label.justify "λ ->" [:input {:type "submit" :value "Submit"}]]]]]]))
 
-
+;; <form action="/action_page.php">
+;;   <input list="browsers">
+;;   <datalist id="browsers">
+;;     <option value="Internet Explorer">
+;;     <option value="Firefox">
+;;     <option value="Chrome">
+;;     <option value="Opera">
+;;     <option value="Safari">
+;;   </datalist> 
+;; </form>
 
 (defn insert-entry []
   (page/html5
@@ -96,19 +107,19 @@
      [:form {:action "/nests-insert" :method "POST"}
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
       [:div
-       [:p [:label.justify "Street: " [:input {:type "text" :name "street"}]]]
-       [:p [:label.justify "Number: " [:input {:type "int" :name "number"}]]]
-       [:p [:label.justify "Latitude: " [:input {:type "int" :name "lat"}]]]
+       [:p [:label.justify "Street: "    [:input {:type "text" :name "street"}]]]
+       [:p [:label.justify "Number: "    [:input {:type "int" :name "number"}]]]
+       [:p [:label.justify "Latitude: "  [:input {:type "int" :name "lat"}]]]
        [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
-       [:p [:label.justify "Species: " [:input {:type "text" :name "species"}]]]
-       [:p [:label.justify "Height: " [:input {:type "text" :name "height"}]]]
-       [:p [:label.justify "Facing: " [:input {:type "text" :name "facing"}]]]
-       [:p [:label.justify "Type: " [:input {:type "text" :name "type-of"}]]]
-       [:p [:label.justify "Date: " [:input {:type "text" :name "date"}]]]
+       [:p [:label.justify "Species: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin") ]]
+       [:p [:label.justify "Height: "    (form/drop-down "height" (map inc (range 20)) 5)]]
+       [:p [:label.justify "Facing: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
+       [:p [:label.justify "Type: "      (form/drop-down "type-of" ["roof" "pergola" "wall" "corner"] "roof")]]
+       [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
        [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-       [:p [:label.justify "Destroyed: " [:input {:type "text" :name "destroyed"}]]]
-       [:p [:label.justify "Destroyed date: " [:input {:type "text" :name "destroyed_date"}]]]
-       [:p [:label.justify "λ ->" [:input {:type "submit" :value "Submit"}]]]]]]))
+       [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"] "false")]]
+       [:p [:label.justify "Destroyed date: " [:input {:type "date" :name "destroyed_date"}]]]
+       [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
 
 (defn insert-to-db-results
   [context]

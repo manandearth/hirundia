@@ -1,6 +1,7 @@
 (ns hirundia.services.nests.retrieve.view
   (:require [hiccup.page :as page]
             [hiccup.table :as table]
+            [hiccup.form :as form]
             [clojure.string :as string]
             [hirundia.views :as views]))
 
@@ -20,14 +21,14 @@
         [:p [:label.justify "Number: " [:input {:type "int" :name "number" :value (:number record)}]]]
         [:p [:label.justify "Latitude: " [:input {:type "int" :name "lat" :value lat}]]]
         [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon" :value lon}]]]
-        [:p [:label.justify "Species: " [:input {:type "text" :name "species" :value (:species record)}]]]
-        [:p [:label.justify "Height: " [:input {:type "text" :name "height" :value (:height record)}]]]
-        [:p [:label.justify "Facing: " [:input {:type "text" :name "facing" :value (:facing record)}]]]
-        [:p [:label.justify "Type: " [:input {:type "text" :name "type-of" :value (:type record)}]]]
-        [:p [:label.justify "Date: " [:input {:type "text" :name "date" :value (:date record)}]]]
+        [:p [:label.justify "Species: " (form/drop-down "species" ["swallow" "swift" "martin"] (:species record))]]
+        [:p [:label.justify "Height: " (form/drop-down "height" (map inc (range 20)) (:height record))]]
+        [:p [:label.justify "Facing: "(form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] (:facing record))]]
+        [:p [:label.justify "Type: " (form/drop-down "type-of" ["roof" "pergola" "wall" "corner"] (:type record))]]
+        [:p [:label.justify "Date: " [:input {:type "date" :name "date" :value (:date record)}]]]
         [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-        [:p [:label.justify "Destroyed: " [:input {:type "text" :name "destroyed" :value (:destroyed record)}]]]
-        [:p [:label.justify "Destroyed date: " [:input {:type "text" :name "destroyed_date" :destroyed_date record}]]]
+        [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"] (:destroyed record))]]
+        [:p [:label.justify "Destroyed date: " [:input {:type "date" :name "destroyed_date" :destroyed_date record}]]]
         [:p [:label.justify "λ ->" [:input {:type "submit" :value "Update"}]]]]
        ]])))
 

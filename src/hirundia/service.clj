@@ -22,7 +22,8 @@
    [ring.middleware.session.cookie :as cookie]
    [ring.middleware.flash :as flash]
    [buddy.auth.middleware :refer [authentication-request]]
-   [buddy.auth.backends.session :refer [session-backend]]))
+   [buddy.auth.backends.session :refer [session-backend]]
+   [buddy.auth :refer [authenticated?]]))
 
 (defn about [request]
   (->> (route/url-for ::about-page)
@@ -48,6 +49,9 @@
 (defn login-page [request]
   (ring-resp/response (views/login request)))
 
+
+(defn greet-page [request]
+  (ring-resp/response (views/greet request)))
 ;; (spec/def ::temperature int?)
 
 ;; (spec/def ::orientation (spec/and keyword? #{:north :south :east :west}))
@@ -87,7 +91,7 @@
   (session-backend
    {:authfn (fn [request]
               (let [{:keys [username password]} request
-                    known-user                  (get (session.login/all-usernames) username)]
+                    known-user                  (get (session.login/all-usernames request) username)]
                 (when (= (session.login/password-by-username username) password)
                   username)))}))
 
@@ -103,7 +107,6 @@
 
 (def flash-interceptor (ring-middlewares/flash))
 
-
 (def components-to-inject [:db
                            #_:background-processor #_:enqueuer
                            ])
@@ -112,7 +115,7 @@
   (conj (mapv pedestal-component/using-component components-to-inject)
         (context-injector components-to-inject)))
 
-(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body session-interceptor flash-interceptor]))
+(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body authentication-interceptor session-interceptor flash-interceptor]))
 
 (def routes
   "Tabular routes"
@@ -121,6 +124,8 @@
     ["/register" :get (conj common-interceptors `register-page)]
     ["/register" :post (conj common-interceptors `session.register/perform)]
     ["/login" :get (conj common-interceptors `login-page)]
+    ["/login" :post (conj common-interceptors `session.login/perform)]
+    ["/greet" :get (conj common-interceptors `greet-page)]
     ;; ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
     ;; ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
     ;; ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]

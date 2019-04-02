@@ -5,6 +5,7 @@
    [hiccup.table :as table]
    [hiccup.form :as form]
    [java-time :refer :all :exclude [contains? iterate max zero? format min max range]]
+   [buddy.auth :refer [authenticated?]]
    [hirundia.sandbox :as records]
    ))
 
@@ -49,6 +50,20 @@
      [:div
       [:h1 "About this project"]
       [:p "The Hirundia project is a tool exploring the relations of Swallows, Swifts, and House Martins with humans for conservation."]]))
+
+
+(defn greet [{:keys [session] :as request}]
+    (page/html5
+     (gen-page-head "Greet")
+     header-links
+     [:div
+      [:h1 "A greeting"]
+      (if (authenticated? (:session request))
+        (let [username (:identity session)]
+          [:p (str "Hi, " username)])
+        "Hi, Anonymous...")]))
+
+
 
 ;;TODO convert to pedestal db
 (defn list-of-entries []
@@ -164,16 +179,19 @@
        [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Register"}]]]]]]]))
 
+
+;FIXME flash here suppose to be just the username but this view is redirected by also `login` POST perform endpoint which sends a flash message for wrong password..
 (defn login [{:keys [flash] :as request}]
   (page/html5
    (gen-page-head "Login")
    header-links
-   [:div (when (seq flash) [:h2.flash (str flash ", you are now registered. Please login")])
+   [:div (when (seq flash) [:h2.flash flash])
     [:div
      [:h1 "Login"]
      [:form {:action "/login" :method "POST"}
       [:div
-       [:p [:label.justify "Username: " [:input {:type "text" :name "username" :value flash}]]]
+       [:p [:label.justify "Username: "
+            [:input {:type "text" :name "username"}]]]
        [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 

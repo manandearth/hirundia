@@ -17,5 +17,5 @@
                    (h/format))]
     (if (empty? check)
       (do (jdbc/execute! db insert)
-          {:status 301 :headers {"Location" "/login" } :body "" :flash  username})
+          {:status 301 :headers {"Location" "/login" } :body "" :flash  (str  username ", You are registered. Please login")})
       {:status 301 :headers {"Location" "/register"} :body "" :flash "username already taken, choose another"})))

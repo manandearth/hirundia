@@ -32,6 +32,8 @@
    [:a {:href "/login"} "Login"]
    " | "
    [:a {:href "/register"} "Register"]
+   " | "
+   [:a {:href "/logout"} "Logout"]
    " ]"])
 
 (defn home []

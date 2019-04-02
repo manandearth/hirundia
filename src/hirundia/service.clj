@@ -49,6 +49,10 @@
 (defn login-page [request]
   (ring-resp/response (views/login request)))
 
+(defn logout [request]
+  (let [req (assoc request :flash "You have logged out")]
+    (-> (ring-resp/response (views/login req))
+          (assoc-in [:session :identity] nil))))
 
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))
@@ -125,6 +129,7 @@
     ["/register" :post (conj common-interceptors `session.register/perform)]
     ["/login" :get (conj common-interceptors `login-page)]
     ["/login" :post (conj common-interceptors `session.login/perform)]
+    ["/logout" :get (conj common-interceptors `logout)]
     ["/greet" :get (conj common-interceptors `greet-page)]
     ;; ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
     ;; ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]

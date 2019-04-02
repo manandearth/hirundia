@@ -3,7 +3,9 @@
    [clj-postgresql.core :as pg]
    [hiccup.page :as page]
    [hiccup.table :as table]
+   [hiccup.form :as form]
    [java-time :refer :all :exclude [contains? iterate max zero? format min max range]]
+   [buddy.auth :refer [authenticated?]]
    [hirundia.sandbox :as records]
    ))
 
@@ -26,6 +28,10 @@
    [:a {:href "/nests"} "View all nests"]
    " | "
    [:a {:href "/nests-insert"} "Add a nest"]
+   " | "
+   [:a {:href "/login"} "Login"]
+   " | "
+   [:a {:href "/register"} "Register"]
    " ]"])
 
 (defn home []
@@ -45,6 +51,20 @@
       [:h1 "About this project"]
       [:p "The Hirundia project is a tool exploring the relations of Swallows, Swifts, and House Martins with humans for conservation."]]))
 
+
+(defn greet [{:keys [session] :as request}]
+    (page/html5
+     (gen-page-head "Greet")
+     header-links
+     [:div
+      [:h1 "A greeting"]
+      (if (authenticated? (:session request))
+        (let [username (:identity session)]
+          [:p (str "Hi, " username)])
+        "Hi, Anonymous...")]))
+
+
+
 ;;TODO convert to pedestal db
 (defn list-of-entries []
   (page/html5
@@ -56,33 +76,6 @@
             records/select-all-query
             [:id "ID" :street "Street" :number "No." :gps "GPS" :species "Species" :facing "Facing" :height "Height" :type "Type" :date "Date"  :destroyed "Destroyed?" :destroyed_date "Date destroyed"])]]))
 
-#_(count records/select-all-query)
-
-(defn insert-to-db []
-  (page/html5
-   (gen-page-head "add a nest to the database")
-    header-links
-    [:div
-     [:h1 "Add a nest to the database"]
-     [:form {:action "/add-address" :method "POST"}
-     ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
-      [:div
-       [:p [:label.justify "Street: " [:input {:type "text" :name "street"}]]]
-       [:p [:label.justify "Number: " [:input {:type "int" :name "number"}]]]
-       [:p [:label.justify "Latitude: " [:input {:type "int" :name "lat"}]]]
-       [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
-       [:p [:label.justify "Species: " [:input {:type "text" :name "species"}]]]
-       [:p [:label.justify "Height: " [:input {:type "text" :name "height"}]]]
-       [:p [:label.justify "Facing: " [:input {:type "text" :name "facing"}]]]
-       [:p [:label.justify "Type: " [:input {:type "text" :name "type-of"}]]]
-       [:p [:label.justify "Date: " [:input {:type "text" :name "date"}]]]
-       [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-       [:p [:label.justify "Destroyed: " [:input {:type "text" :name "destroyed"}]]]
-       [:p [:label.justify "Destroyed date: " [:input {:type "text" :name "destroyed_date"}]]]
-       [:p [:label.justify "λ ->" [:input {:type "submit" :value "Submit"}]]]]]]))
-
-
-
 (defn insert-entry []
   (page/html5
    (gen-page-head "add a nest to the database")
@@ -92,19 +85,19 @@
      [:form {:action "/nests-insert" :method "POST"}
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
       [:div
-       [:p [:label.justify "Street: " [:input {:type "text" :name "street"}]]]
-       [:p [:label.justify "Number: " [:input {:type "int" :name "number"}]]]
-       [:p [:label.justify "Latitude: " [:input {:type "int" :name "lat"}]]]
+       [:p [:label.justify "Street: "    [:input {:type "text" :name "street"}]]]
+       [:p [:label.justify "Number: "    [:input {:type "int" :name "number"}]]]
+       [:p [:label.justify "Latitude: "  [:input {:type "int" :name "lat"}]]]
        [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
-       [:p [:label.justify "Species: " [:input {:type "text" :name "species"}]]]
-       [:p [:label.justify "Height: " [:input {:type "text" :name "height"}]]]
-       [:p [:label.justify "Facing: " [:input {:type "text" :name "facing"}]]]
-       [:p [:label.justify "Type: " [:input {:type "text" :name "type-of"}]]]
-       [:p [:label.justify "Date: " [:input {:type "text" :name "date"}]]]
+       [:p [:label.justify "Species: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin") ]]
+       [:p [:label.justify "Height: "    (form/drop-down "height" (map inc (range 20)) 5)]]
+       [:p [:label.justify "Facing: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
+       [:p [:label.justify "Type: "      (form/drop-down "type-of" ["roof" "pergola" "wall" "corner"] "roof")]]
+       [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
        [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-       [:p [:label.justify "Destroyed: " [:input {:type "text" :name "destroyed"}]]]
-       [:p [:label.justify "Destroyed date: " [:input {:type "text" :name "destroyed_date"}]]]
-       [:p [:label.justify "λ ->" [:input {:type "submit" :value "Submit"}]]]]]]))
+       [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"] "false")]]
+       [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]
+       [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
 
 (defn insert-to-db-results
   [context]
@@ -172,6 +165,35 @@
     context))
 
 
+
+(defn register [{:keys [flash] :as request}]
+  (page/html5
+   (gen-page-head "Register")
+   header-links
+   [:div (when (seq flash) [:h2.flash flash])
+    [:div
+     [:h1 "Register"]
+     [:form {:action "/register" :method "POST"}
+      [:div
+       [:p [:label.justify "Username: " [:input {:type "text" :name "username"}]]]
+       [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
+       [:p [:label.justify "" [:input {:type "submit" :value "Register"}]]]]]]]))
+
+
+;FIXME flash here suppose to be just the username but this view is redirected by also `login` POST perform endpoint which sends a flash message for wrong password..
+(defn login [{:keys [flash] :as request}]
+  (page/html5
+   (gen-page-head "Login")
+   header-links
+   [:div (when (seq flash) [:h2.flash flash])
+    [:div
+     [:h1 "Login"]
+     [:form {:action "/login" :method "POST"}
+      [:div
+       [:p [:label.justify "Username: "
+            [:input {:type "text" :name "username"}]]]
+       [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
+       [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 
 
 ;; (insert-to-db-results {:params {"street" "Kookoo"}})

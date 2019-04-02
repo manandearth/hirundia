@@ -6,18 +6,24 @@
    [io.pedestal.http :as http]
    [io.pedestal.http.route :as route]
    [io.pedestal.http.body-params :as body-params]
+   [io.pedestal.interceptor :as interceptor]
    [io.pedestal.interceptor.chain :as interceptor-chain]
+   [io.pedestal.http.ring-middlewares :as ring-middlewares]
    [ring.util.response :as ring-resp]
    [hirundia.coerce :as coerce]
-   ;; [hirundia.jobs.sample]
-   ;; [hirundia.services.invoices.insert.endpoint :as invoices.insert]
-   ;; [hirundia.services.invoices.retrieve.endpoint :as invoices.retrieve]
-   ;; [hirundia.services.invoices.delete.endpoint :as invoices.delete]
    [hirundia.services.nests.retrieve.endpoint :as nests.retrieve]
    [hirundia.services.nests.retrieveall.endpoint :as nests.retrieveall]
    [hirundia.services.nests.update.endpoint :as nests.update]
    [hirundia.services.nests.insert.endpoint :as nests.insert]
-   [hirundia.views :as views]))
+   [hirundia.services.nests.delete.endpoint :as nests.delete]
+   [hirundia.services.session.register.endpoint :as session.register]
+   [hirundia.services.session.login.endpoint :as session.login]
+   [hirundia.views :as views]
+   [ring.middleware.session.cookie :as cookie]
+   [ring.middleware.flash :as flash]
+   [buddy.auth.middleware :refer [authentication-request]]
+   [buddy.auth.backends.session :refer [session-backend]]
+   [buddy.auth :refer [authenticated?]]))
 
 (defn about [request]
   (->> (route/url-for ::about-page)
@@ -37,6 +43,15 @@
 (defn insert-nest-page [request]
   (ring-resp/response (views/insert-entry)))
 
+(defn register-page [request]
+  (ring-resp/response (views/register request)))
+
+(defn login-page [request]
+  (ring-resp/response (views/login request)))
+
+
+(defn greet-page [request]
+  (ring-resp/response (views/greet request)))
 ;; (spec/def ::temperature int?)
 
 ;; (spec/def ::orientation (spec/and keyword? #{:north :south :east :west}))
@@ -72,6 +87,26 @@
                     components))
    :name  ::context-injector})
 
+(def session-auth-backend
+  (session-backend
+   {:authfn (fn [request]
+              (let [{:keys [username password]} request
+                    known-user                  (get (session.login/all-usernames request) username)]
+                (when (= (session.login/password-by-username username) password)
+                  username)))}))
+
+(def authentication-interceptor
+  "Port of buddy-auth's wrap-authentication middleware."
+  (interceptor/interceptor
+   {:name ::authenticate
+    :enter (fn [context]
+             (update context :request authentication-request session-auth-backend))}))
+
+
+(def session-interceptor (ring-middlewares/session {:store (cookie/cookie-store)}))
+
+(def flash-interceptor (ring-middlewares/flash))
+
 (def components-to-inject [:db
                            #_:background-processor #_:enqueuer
                            ])
@@ -80,21 +115,27 @@
   (conj (mapv pedestal-component/using-component components-to-inject)
         (context-injector components-to-inject)))
 
-(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body]))
+(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body authentication-interceptor session-interceptor flash-interceptor]))
 
 (def routes
   "Tabular routes"
   #{["/" :get (conj common-interceptors `home-page) :route-name :home]
     ["/about" :get (conj common-interceptors `about-page)]
+    ["/register" :get (conj common-interceptors `register-page)]
+    ["/register" :post (conj common-interceptors `session.register/perform)]
+    ["/login" :get (conj common-interceptors `login-page)]
+    ["/login" :post (conj common-interceptors `session.login/perform)]
+    ["/greet" :get (conj common-interceptors `greet-page)]
     ;; ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
     ;; ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
     ;; ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]
     ;; ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
     ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform)]
-    ["/nests-update/:id" :post (into common-interceptors [http/json-body #_(param-spec-interceptor ::nests.update/api :form-params) `nests.update/perform])]
+    ["/nests-update/:id" :post (into common-interceptors [http/json-body (param-spec-interceptor ::nests.update/api :form-params) `nests.update/perform])]
     ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `nests.retrieve/perform)]
-    ["/nests-insert" :get (into common-interceptors [http/json-body `insert-nest-page])]
-    ["/nests-insert" :post (into common-interceptors [http/json-body `nests.insert/perform])]
+    ["/nests-insert" :get (into common-interceptors [http/json-body  `insert-nest-page])]
+    ["/nests-insert" :post (into common-interceptors [http/json-body  (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
+["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
     })
 
 (comment

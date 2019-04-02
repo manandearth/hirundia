@@ -12,12 +12,12 @@
 
 (spec/def ::street         string?)
 (spec/def ::number         nat-int?)
-(spec/def ::lat            float?)
-(spec/def ::lon            float?)
+(spec/def ::lat            double?)
+(spec/def ::lon            double?)
 (spec/def ::species        #{"swallow" "swift" "martin"})
 (spec/def ::height         nat-int?)
 (spec/def ::facing         #{"N" "NW" "W" "SW" "S" "SE" "E" "NE"})
-(spec/def ::type-of        #{"roof" "pergola"}) ;TODO extend this set
+(spec/def ::type-of        #{"balcony" "window" "cornice" "gable" "cables" "crack"}) ;TODO extend this set
 (spec/def ::date           inst?) 
 (spec/def ::destroyed      (spec/or :bool boolean? :empty empty?))
 (spec/def ::destroyed_date (spec/or :inst inst? :empty empty?)) 

@@ -92,7 +92,7 @@
        [:p [:label.justify "Species: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin") ]]
        [:p [:label.justify "Height: "    (form/drop-down "height" (map inc (range 20)) 5)]]
        [:p [:label.justify "Facing: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
-       [:p [:label.justify "Type: "      (form/drop-down "type-of" ["roof" "pergola" "wall" "corner"] "roof")]]
+       [:p [:label.justify "Type: "      (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] "window")]]
        [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
        [:p "If the nest is no longer there fill in the following and include the day recorded:"]
        [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"] "false")]]

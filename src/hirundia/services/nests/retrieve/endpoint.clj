@@ -3,6 +3,8 @@
    [cheshire.generate]
    [clojure.java.jdbc :as jdbc]
    [clojure.spec.alpha :as spec]
+   [ring.util.response :as ring-resp]
+   [buddy.auth :refer [authenticated?]]
    [honeysql.core :as h]
    [hirundia.views :as views]
    [hirundia.services.nests.retrieve.logic :as logic]
@@ -18,13 +20,16 @@
 
 (spec/def ::api (spec/keys :req-un [::id]))
 
-(defn perform [{{:keys [id]} :path-params :keys [db] :as request}]
-  (let [db     (->> db :pool (hash-map :datasource))
-        record (->> (logic/to-query id)
-                    (h/format)
-                    (jdbc/query db)
-                    (first))]
-    (if record
-      {:status 200 :body (view/update-entry record id)}
-      {:status 404 :body "Not in DB"})))
+(defn perform [{{:keys [id]} :path-params :keys [db session] :as request}]
+  (if (authenticated? session)
+    (let [db     (->> db :pool (hash-map :datasource))
+          record (->> (logic/to-query id)
+                      (h/format)
+                      (jdbc/query db)
+                      (first))]
+      (if record
+        (ring-resp/response (view/update-entry record id))
+        (ring-resp/not-found "Not in DB")))
+    (-> (ring-resp/redirect "/nests")
+        (assoc :flash "login in order to update the db"))))
 

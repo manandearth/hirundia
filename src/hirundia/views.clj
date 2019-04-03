@@ -5,9 +5,10 @@
    [hiccup.table :as table]
    [hiccup.form :as form]
    [java-time :refer :all :exclude [contains? iterate max zero? format min max range]]
+   [clojure.java.io :as io]
    [buddy.auth :refer [authenticated?]]
    [hirundia.sandbox :as records]
-   ))
+   [hirundia.pages :as pages]))
 
 (defn gen-page-head
   [title]
@@ -36,14 +37,18 @@
    [:a {:href "/logout"} "Logout"]
    " ]"])
 
-(defn home []
+(defn home [request]
   (page/html5
    (gen-page-head "Home")
    header-links
-    [:div
-     [:h1 "Welcome to Hirundia Project."]
-     [:p "Access the database or add data with the links above"]
-     ]))
+   (if (authenticated? (:session request))
+     [:div
+      [:h1 "Welcome to Hirundia Project."]
+      [:p "Access the database or add data with the links above"]
+      ]
+     [:div
+      [:h1 "Welcome to Hirundia Project."]
+      (pages/intro)])))
 
 (defn about []
     (page/html5

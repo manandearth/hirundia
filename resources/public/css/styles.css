@@ -87,5 +87,15 @@ table td {
 h2.flash {
     background-color: #55e;
     color:       #fff;
-    
+
+}
+
+h2 {
+    font-size: 1.6m;
+    color: #777;
+}
+p {
+    font-family: "Roboto", sans-serif;
+    font-size: 1.3em;
+    padding: .5em;
 }

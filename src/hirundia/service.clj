@@ -35,7 +35,7 @@
   (ring-resp/response  (views/about)))
 
 (defn home-page [request]
-  (ring-resp/response (views/home)))
+  (ring-resp/response (views/home request)))
 
 (defn retrieve-page [request]
   (ring-resp/response (nests.retrieve/perform request)))

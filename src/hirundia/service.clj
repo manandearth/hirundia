@@ -41,7 +41,10 @@
   (ring-resp/response (nests.retrieve/perform request)))
 
 (defn insert-nest-page [request]
-  (ring-resp/response (views/insert-entry)))
+  (if (authenticated? (:session request))
+    (ring-resp/response (views/insert-entry))
+    (-> (ring-resp/redirect "/login")
+        (assoc :flash "Login in order to add an entry"))))
 
 (defn register-page [request]
   (ring-resp/response (views/register request)))

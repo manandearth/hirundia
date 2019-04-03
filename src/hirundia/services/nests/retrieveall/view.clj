@@ -31,5 +31,6 @@
               :date "Date"
               :destroyed "Destroyed?"
               :destroyed_date "Date destroyed"
-              :delete "Delete Entry"]
+              :delete "Delete Entry"
+              :username "Username"]
              attr-fns))]]))

@@ -26,7 +26,7 @@
 
 (spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::number ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
 
-(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db] :as request}]
+(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db session] :as request}]
   (let [parsed-map {:street         street
                     :number         number
                     :gps            (pg/point (list lat lon))
@@ -41,6 +41,7 @@
                     :destroyed_date (if (empty? destroyed_date)
                                       nil
                                       (sql-date destroyed_date))
+                    :username (:identity session)
                     }
         db     (->> db :pool (hash-map :datasource))
         insert (-> (logic/to-insert parsed-map)

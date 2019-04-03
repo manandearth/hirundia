@@ -23,5 +23,3 @@
         (-> (ring-resp/redirect "/nests")
             (assoc :flash (str "Entry " id " has beed deleted."))))
       (throw-unauthorized))))
-
-

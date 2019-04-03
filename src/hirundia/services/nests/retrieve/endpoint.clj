@@ -4,11 +4,12 @@
    [clojure.java.jdbc :as jdbc]
    [clojure.spec.alpha :as spec]
    [ring.util.response :as ring-resp]
-   [buddy.auth :refer [authenticated?]]
+   [buddy.auth :refer [authenticated? throw-unauthorized]]
    [honeysql.core :as h]
    [hirundia.views :as views]
    [hirundia.services.nests.retrieve.logic :as logic]
-   [hirundia.services.nests.retrieve.view :as view])
+   [hirundia.services.nests.retrieve.view :as view]
+   [hirundia.services.session.login.endpoint :as session.login])
 
   (:import
    [org.postgresql.jdbc4 Jdbc4Array]))
@@ -21,15 +22,15 @@
 (spec/def ::api (spec/keys :req-un [::id]))
 
 (defn perform [{{:keys [id]} :path-params :keys [db session] :as request}]
-  (if (authenticated? session)
-    (let [db     (->> db :pool (hash-map :datasource))
-          record (->> (logic/to-query id)
-                      (h/format)
-                      (jdbc/query db)
-                      (first))]
+  (let [known-user (session.login/username-password-role request (:identity session))
+        db     (->> db :pool (hash-map :datasource))
+        record (->> (logic/to-query id)
+                    (h/format)
+                    (jdbc/query db)
+                    (first))]
+    (if (or (= :admin (keyword (:role known-user)))
+            (= (:identity session) (:username record)))
       (if record
         (ring-resp/response (view/update-entry record id))
-        (ring-resp/not-found "Not in DB")))
-    (-> (ring-resp/redirect "/nests")
-        (assoc :flash "login in order to update the db"))))
-
+        (ring-resp/not-found "Not in DB"))
+      (throw-unauthorized))))

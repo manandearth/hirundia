@@ -34,9 +34,7 @@
 
 
 
-(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params {:keys [id]} :path-params :keys [db] :as request}]
-
-
+(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params {:keys [id]} :path-params :keys [db session] :as request}]
   (let [parsed-map {:street         street
                     :number         number
                     :gps            (pg/point (list lat lon))

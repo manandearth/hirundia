@@ -18,6 +18,13 @@
          (h/format)
          (jdbc/query db))))
 
+(defn username-password-role [{:keys [db] :as request} username]
+  (let [db (->> db :pool (hash-map :datasource))]
+    (->> (logic/query-username-password-role username)
+         (h/format)
+         (jdbc/query db)
+         (first))))
+
 (defn password-by-username [{:keys [db] :as request} username]
   (let [db (->> db :pool (hash-map :datasource))]
     (->> (logic/query-pass-by-user username)

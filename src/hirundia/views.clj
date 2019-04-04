@@ -21,7 +21,7 @@
 
 (defn header-links
   [{:keys [session] :as request}]
-  (if (authenticated? (:identity session))
+  (if  (:identity session)
     [:div#header-links
      "[ "
      [:a {:href "/"} "Home"]
@@ -31,8 +31,7 @@
      [:a {:href "/nests"} "View all nests"]
      " | "
      [:a {:href "/nests-insert"} "Add a nest"]
-     " | "
-     [:p "Logged in as" (:identity session)]
+     " | Logged in as "(:identity session)
      " | "
      [:a {:href "/logout"} "Logout"]
      " ]"]

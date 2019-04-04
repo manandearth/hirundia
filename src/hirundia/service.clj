@@ -54,9 +54,10 @@
   (ring-resp/response (views/login request)))
 
 (defn logout [request]
-  (let [req (assoc request :flash "You have logged out")]
-    (-> (ring-resp/response (views/login req))
-          (assoc-in [:session :identity] nil))))
+  (let [req (-> (assoc request :flash "You have logged out")
+                (assoc-in [:session :identity] nil))]
+    (ring-resp/response (views/login req))
+    ))
 
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))

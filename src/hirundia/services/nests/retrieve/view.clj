@@ -6,7 +6,6 @@
             [hirundia.views :as views]))
 
 (defn update-entry [request id record]
-;;FIXME ugly estraction of the lat and lon from gps point (i.e. "(12.123, 45.456)" -> 12.123 45.456
   (let [lat (first (string/split (last (string/split (:gps record) #"\(")) #"\,"))
         lon (first (string/split (last (string/split (last (string/split (:gps record) #"\(")) #"\,")) #"\)"))] 
     (page/html5

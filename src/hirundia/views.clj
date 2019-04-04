@@ -85,7 +85,7 @@
 
 
 ;;TODO convert to pedestal db
-(defn list-of-entries []
+#_(defn list-of-entries []
   (page/html5
    (gen-page-head "Complete List of Entries")
     header-links
@@ -95,10 +95,10 @@
             records/select-all-query
             [:id "ID" :street "Street" :number "No." :gps "GPS" :species "Species" :facing "Facing" :height "Height" :type "Type" :date "Date"  :destroyed "Destroyed?" :destroyed_date "Date destroyed"])]]))
 
-(defn insert-entry []
+(defn insert-entry [request]
   (page/html5
    (gen-page-head "add a nest to the database")
-    header-links
+   (header-links request)
     [:div
      [:h1 "Add a nest to the database"]
      [:form {:action "/nests-insert" :method "POST"}
@@ -118,7 +118,7 @@
        [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]
        [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
 
-(defn insert-to-db-results
+#_(defn insert-to-db-results
   [context]
   (if-let [params (get context :params)]
     (let [street (get params "street" nil)
@@ -150,7 +150,7 @@
     context))
 
 ;;HERE passing the db parameters to insert-nest2! which wraps a JDBC INSERT . using (:db context) 
-(defn insert-to-db-results2
+#_(defn insert-to-db-results2
   [context]
   (if-let [params (get context :params)]
     (let [street (get params "street" nil)

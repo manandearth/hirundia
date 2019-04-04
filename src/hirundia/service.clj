@@ -43,7 +43,7 @@
 
 (defn insert-nest-page [request]
   (if (authenticated? (:session request))
-    (ring-resp/response (views/insert-entry))
+    (ring-resp/response (views/insert-entry request))
     (-> (ring-resp/redirect "/login")
         (assoc :flash "Login in order to add an entry"))))
 
@@ -54,10 +54,10 @@
   (ring-resp/response (views/login request)))
 
 (defn logout [request]
-  (let [req (-> (assoc request :flash "You have logged out")
-                (assoc-in [:session :identity] nil))]
-    (ring-resp/response (views/login req))
-    ))
+  (-> (ring-resp/redirect "/login")
+   (assoc-in [:session :identity] nil)
+   (assoc :flash "You have logged out"))
+    )
 
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))

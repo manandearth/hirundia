@@ -5,6 +5,7 @@
    [honeysql.core :as h]
    [clj-postgresql.core :as pg]
    [clojure.string :as string]
+   [ring.util.response :as ring-resp]
    [hirundia.services.nests.insert.logic :as logic]
    [java-time :refer :all
      :exclude [format update contains? iterate range min max zero?]
@@ -51,5 +52,7 @@
         ;; result (-> (jdbc/query db fetch)
         ;; (logic/to-serialize))
     ]
-    {:status 302 :headers {"Location" "/nests"} :body "" :flash "Entry added to db"}))
+    (-> (ring-resp/redirect "/nests")
+        (assoc :flash "Entry added to db"))
+    #_{:status 302 :headers {"Location" "/nests"} :body "" :flash "Entry added to db"}))
 

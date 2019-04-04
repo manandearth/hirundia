@@ -4,6 +4,7 @@
    [clojure.java.jdbc :as jdbc]
    [clojure.spec.alpha :as spec]
    [honeysql.core :as h]
+   [ring.util.response :as ring-resp]
    [hirundia.services.nests.retrieveall.logic :as logic]
    [hirundia.services.nests.retrieveall.view :as view]
    )
@@ -17,10 +18,10 @@
 
 #_(spec/def ::api (spec/keys :req-un [::id]))
 
-(defn perform [{{:keys [id]} :path-params :keys [db flash] :as request}]
+(defn perform [{:keys [db] :as request}]
   (let [db (->> db :pool (hash-map :datasource))
         records (->> (logic/to-query)
                      (h/format)
                      (jdbc/query db))]
-    {:status 200 :body (view/all-nests records flash)}))
+    (ring-resp/response (view/all-nests request records))))
 

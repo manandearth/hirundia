@@ -5,13 +5,13 @@
             [clojure.string :as string]
             [hirundia.views :as views]))
 
-(defn update-entry [record id]
+(defn update-entry [request id record]
 ;;FIXME ugly estraction of the lat and lon from gps point (i.e. "(12.123, 45.456)" -> 12.123 45.456
   (let [lat (first (string/split (last (string/split (:gps record) #"\(")) #"\,"))
         lon (first (string/split (last (string/split (last (string/split (:gps record) #"\(")) #"\,")) #"\)"))] 
     (page/html5
      (views/gen-page-head (str "update entry " id))
-     views/header-links
+     (views/header-links request)
      [:div
       [:h1 (str "update entry: " id )]
       [:form {:action (str "/nests-update/" id) :method "POST"}

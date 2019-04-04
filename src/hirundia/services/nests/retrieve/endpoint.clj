@@ -31,6 +31,6 @@
     (if (or (= :admin (keyword (:role known-user)))
             (= (:identity session) (:username record)))
       (if record
-        (ring-resp/response (view/update-entry record id))
+        (ring-resp/response (view/update-entry request id record))
         (ring-resp/not-found "Not in DB"))
       (throw-unauthorized))))

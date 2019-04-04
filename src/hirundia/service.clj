@@ -33,7 +33,7 @@
        ring-resp/response))
 
 (defn about-page [request]
-  (ring-resp/response  (views/about)))
+  (ring-resp/response  (views/about request)))
 
 (defn home-page [request]
   (ring-resp/response (views/home request)))
@@ -61,7 +61,7 @@
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))
 
-(defn admin-page
+(defn admin-page [request]
   "Returns a 200 response for authorized users, otherwise throws a buddy-auth
   'unauthorized' exception."
   [{{:keys [identity]} :session :as request}]

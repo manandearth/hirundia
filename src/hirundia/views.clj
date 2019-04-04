@@ -19,28 +19,41 @@
 
    (page/include-css "/css/styles.css")])
 
-(def header-links
-  [:div#header-links
-   "[ "
-   [:a {:href "/"} "Home"]
-   " | "
-   [:a {:href "/about"} "About"]
-   " |"
-   [:a {:href "/nests"} "View all nests"]
-   " | "
-   [:a {:href "/nests-insert"} "Add a nest"]
-   " | "
-   [:a {:href "/login"} "Login"]
-   " | "
-   [:a {:href "/register"} "Register"]
-   " | "
-   [:a {:href "/logout"} "Logout"]
-   " ]"])
+(defn header-links
+  [{:keys [session] :as request}]
+  (if (authenticated? (:identity session))
+    [:div#header-links
+     "[ "
+     [:a {:href "/"} "Home"]
+     " | "
+     [:a {:href "/about"} "About"]
+     " |"
+     [:a {:href "/nests"} "View all nests"]
+     " | "
+     [:a {:href "/nests-insert"} "Add a nest"]
+     " | "
+     [:p "Logged in as" (:identity session)]
+     " | "
+     [:a {:href "/logout"} "Logout"]
+     " ]"]
+    [:div#header-links
+     "[ "
+     [:a {:href "/"} "Home"]
+     " | "
+     [:a {:href "/about"} "About"]
+     " |"
+     [:a {:href "/nests"} "View all nests"]
+     " | "
+     [:a {:href "/login"} "Login"]
+     " | "
+     [:a {:href "/register"} "Register"]
+     " ]"]
+    ))
 
 (defn home [request]
   (page/html5
    (gen-page-head "Home")
-   header-links
+   (header-links request)
    (if (authenticated? (:session request))
      [:div
       [:h1 "Welcome to Hirundia Project."]
@@ -50,10 +63,10 @@
       [:h1 "Welcome to Hirundia Project."]
       (pages/intro)])))
 
-(defn about []
+(defn about [request]
     (page/html5
      (gen-page-head "About")
-     header-links
+     (header-links request)
      [:div
       [:h1 "About this project"]
       [:p "The Hirundia project is a tool exploring the relations of Swallows, Swifts, and House Martins with humans for conservation."]]))
@@ -62,7 +75,7 @@
 (defn greet [{:keys [session] :as request}]
     (page/html5
      (gen-page-head "Greet")
-     header-links
+     (header-links request)
      [:div
       [:h1 "A greeting"]
       (if (authenticated? (:session request))
@@ -176,7 +189,7 @@
 (defn register [{:keys [flash] :as request}]
   (page/html5
    (gen-page-head "Register")
-   header-links
+   (header-links request)
    [:div (when (seq flash) [:h2.flash flash])
     [:div
      [:h1 "Register"]
@@ -191,7 +204,7 @@
 (defn login [{:keys [flash] :as request}]
   (page/html5
    (gen-page-head "Login")
-   header-links
+   (header-links request)
    [:div (when (seq flash) [:h2.flash flash])
     [:div
      [:h1 "Login"]

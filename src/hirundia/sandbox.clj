@@ -23,6 +23,9 @@
            :user "postgres"
            :password "postgres"})
 
+;; (jdbc/query conn "select * from nests")
+
+
 ;HERE the db uri-connection string that JDBC is happy eith
   (def dbspec "postgresql://postgres:postgres@localhost:5432/postgres")
 
@@ -98,14 +101,13 @@
 
 ;;HONEYSQL
 
-
 (def sqlmap {:select [:id :street :number]
              :from [:nests]
              :where [:> :id 1]})
 
 #_(sql/format sqlmap)
 
-#_(jdbc/query conn (sql/format sqlmap))
+;; (jdbc/query conn (sql/format sqlmap))
 
 #_ (insert-nest! {:street "Doop" :species "unicorn"})
 #_ (count (jdbc/query conn ["SELECT * FROM nests WHERE (species = 'unicorn')"]))

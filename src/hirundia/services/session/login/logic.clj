@@ -15,3 +15,9 @@
   (-> (select :password)
       (from :register)
       (where [:= :username username])))
+
+(defn query-username-password-role [username]
+  (-> (select :*)
+      (from :register)
+      (where [:= :username username])))
+

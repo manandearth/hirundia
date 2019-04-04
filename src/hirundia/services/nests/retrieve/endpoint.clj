@@ -3,10 +3,13 @@
    [cheshire.generate]
    [clojure.java.jdbc :as jdbc]
    [clojure.spec.alpha :as spec]
+   [ring.util.response :as ring-resp]
+   [buddy.auth :refer [authenticated? throw-unauthorized]]
    [honeysql.core :as h]
    [hirundia.views :as views]
    [hirundia.services.nests.retrieve.logic :as logic]
-   [hirundia.services.nests.retrieve.view :as view])
+   [hirundia.services.nests.retrieve.view :as view]
+   [hirundia.services.session.login.endpoint :as session.login])
 
   (:import
    [org.postgresql.jdbc4 Jdbc4Array]))
@@ -18,13 +21,16 @@
 
 (spec/def ::api (spec/keys :req-un [::id]))
 
-(defn perform [{{:keys [id]} :path-params :keys [db] :as request}]
-  (let [db     (->> db :pool (hash-map :datasource))
+(defn perform [{{:keys [id]} :path-params :keys [db session] :as request}]
+  (let [known-user (session.login/username-password-role request (:identity session))
+        db     (->> db :pool (hash-map :datasource))
         record (->> (logic/to-query id)
                     (h/format)
                     (jdbc/query db)
                     (first))]
-    (if record
-      {:status 200 :body (view/update-entry record id)}
-      {:status 404 :body "Not in DB"})))
-
+    (if (or (= :admin (keyword (:role known-user)))
+            (= (:identity session) (:username record)))
+      (if record
+        (ring-resp/response (view/update-entry request id record))
+        (ring-resp/not-found "Not in DB"))
+      (throw-unauthorized))))

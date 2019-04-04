@@ -5,10 +5,12 @@
    [honeysql.core :as h]
    [java-time :refer :all :exclude [contains? iterate max zero? format min max range]]
    [clj-postgresql.core :as pg]
+   [ring.util.response :as ring-resp]
    [hirundia.services.nests.update.logic :as logic]
    #_[hirundia.services.nests.retrieve-all.logic :as retrieve-all.logic]
    [hirundia.services.nests.update.view :as view]
-   [clojure.string :as string]))
+   [clojure.string :as string]
+   [hirundia.views :as views]))
 
 
 ;(spec/def ::street (spec/and string? (complement string/blank?)))
@@ -34,20 +36,16 @@
 
 
 
-(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params {:keys [id]} :path-params :keys [db] :as request}]
-
-
+(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params {:keys [id]} :path-params :keys [db session] :as request}]
   (let [parsed-map {:street         street
                     :number         number
                     :gps            (pg/point (list lat lon))
                     :species        species
                     :height         height
                     :facing         facing
-                    :type           type-of
+                    :type-of           type-of
                     :date           (sql-date date)
-                    :destroyed      (if (boolean? destroyed)
-                                      destroyed
-                                      false)
+                    :destroyed      destroyed
                     :destroyed_date (if (empty? destroyed_date)
                                       nil
                                       (sql-date destroyed_date))
@@ -56,4 +54,6 @@
         update (-> (logic/to-update parsed-map  (Integer/parseInt id))
                    (h/format))
         _      (jdbc/execute! db update)]
-   {:status 302 :headers {"Location" "/nests"} :body "" :flash (str "Entry " id " has been updated")}))
+    (-> (ring-resp/redirect "/nests")
+        (assoc :flash (str "Entry " id " has been updated")))
+   #_{:status 302 :headers {"Location" "/nests"} :body "" :flash (str "Entry " id " has been updated")}))

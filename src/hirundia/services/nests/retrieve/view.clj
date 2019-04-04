@@ -5,13 +5,12 @@
             [clojure.string :as string]
             [hirundia.views :as views]))
 
-(defn update-entry [record id]
-;;FIXME ugly estraction of the lat and lon from gps point (i.e. "(12.123, 45.456)" -> 12.123 45.456
+(defn update-entry [request id record]
   (let [lat (first (string/split (last (string/split (:gps record) #"\(")) #"\,"))
         lon (first (string/split (last (string/split (last (string/split (:gps record) #"\(")) #"\,")) #"\)"))] 
     (page/html5
      (views/gen-page-head (str "update entry " id))
-     views/header-links
+     (views/header-links request)
      [:div
       [:h1 (str "update entry: " id )]
       [:form {:action (str "/nests-update/" id) :method "POST"}
@@ -27,8 +26,9 @@
         [:p [:label.justify "Type: " (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] (:type record))]]
         [:p [:label.justify "Date: " [:input {:type "date" :name "date" :value (:date record)}]]]
         [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-        [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"] (:destroyed record))]]
+        [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" [true false] (:destroyed record))]]
         [:p [:label.justify "Destroyed date: " [:input {:type "date" :name "destroyed_date" :destroyed_date record}]]]
         [:p [:label.justify "λ ->" [:input {:type "submit" :value "Update"}]]]]
-       ]])))
+       ]]
+     [:div [:h1 (:destroyed record)]])))
 

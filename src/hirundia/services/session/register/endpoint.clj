@@ -2,6 +2,7 @@
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.spec.alpha :as spec]
             [honeysql.core :as h]
+            [ring.util.response :as ring-resp]
             [hirundia.services.session.register.logic :as logic]))
 
 (spec/def ::username (spec/and string? (spec/nilable not-empty)))
@@ -17,5 +18,8 @@
                    (h/format))]
     (if (empty? check)
       (do (jdbc/execute! db insert)
-          {:status 301 :headers {"Location" "/login" } :body "" :flash  (str  username ", You are registered. Please login")})
-      {:status 301 :headers {"Location" "/register"} :body "" :flash "username already taken, choose another"})))
+          (-> (ring-resp/redirect "/login")
+              (assoc  :flash (str  username ", You are registered. Please login"))))
+          
+      (-> (ring-resp/redirect "/register")
+          (assoc  :flash (str  "username already taken, choose another"))))))

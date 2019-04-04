@@ -5,6 +5,7 @@
    [honeysql.core :as h]
    [clj-postgresql.core :as pg]
    [clojure.string :as string]
+   [ring.util.response :as ring-resp]
    [hirundia.services.nests.insert.logic :as logic]
    [java-time :refer :all
      :exclude [format update contains? iterate range min max zero?]
@@ -17,7 +18,7 @@
 (spec/def ::species        #{"swallow" "swift" "martin"})
 (spec/def ::height         nat-int?)
 (spec/def ::facing         #{"N" "NW" "W" "SW" "S" "SE" "E" "NE"})
-(spec/def ::type-of        #{"balcony" "window" "cornice" "gable" "cables" "crack"}) ;TODO extend this set
+(spec/def ::type-of        #{"balcony" "window" "cornice" "gable" "cables" "crack"})
 (spec/def ::date           inst?) 
 (spec/def ::destroyed      (spec/or :bool boolean? :empty empty?))
 (spec/def ::destroyed_date (spec/or :inst inst? :empty empty?)) 
@@ -26,7 +27,7 @@
 
 (spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::number ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
 
-(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db] :as request}]
+(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db session] :as request}]
   (let [parsed-map {:street         street
                     :number         number
                     :gps            (pg/point (list lat lon))
@@ -41,6 +42,7 @@
                     :destroyed_date (if (empty? destroyed_date)
                                       nil
                                       (sql-date destroyed_date))
+                    :username (:identity session)
                     }
         db     (->> db :pool (hash-map :datasource))
         insert (-> (logic/to-insert parsed-map)
@@ -50,5 +52,7 @@
         ;; result (-> (jdbc/query db fetch)
         ;; (logic/to-serialize))
     ]
-    {:status 302 :headers {"Location" "/nests"} :body "" :flash "Entry added to db"}))
+    (-> (ring-resp/redirect "/nests")
+        (assoc :flash "Entry added to db"))
+    #_{:status 302 :headers {"Location" "/nests"} :body "" :flash "Entry added to db"}))
 

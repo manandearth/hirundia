@@ -7,7 +7,8 @@
    [io.pedestal.http.route :as route]
    [io.pedestal.http.body-params :as body-params]
    [io.pedestal.interceptor :as interceptor]
-   [io.pedestal.interceptor.chain :as interceptor-chain]
+   [io.pedestal.interceptor.chain :as interceptor.chain]
+   [io.pedestal.interceptor.error :refer [error-dispatch]]
    [io.pedestal.http.ring-middlewares :as ring-middlewares]
    [ring.util.response :as ring-resp]
    [hirundia.coerce :as coerce]
@@ -21,9 +22,9 @@
    [hirundia.views :as views]
    [ring.middleware.session.cookie :as cookie]
    [ring.middleware.flash :as flash]
-   [buddy.auth.middleware :refer [authentication-request]]
+   [buddy.auth.middleware :refer [authentication-request] :as auth.middleware]
    [buddy.auth.backends.session :refer [session-backend]]
-   [buddy.auth :refer [authenticated?]]))
+   [buddy.auth :refer [authenticated?] :as auth]))
 
 (defn about [request]
   (->> (route/url-for ::about-page)
@@ -32,16 +33,19 @@
        ring-resp/response))
 
 (defn about-page [request]
-  (ring-resp/response  (views/about)))
+  (ring-resp/response  (views/about request)))
 
 (defn home-page [request]
-  (ring-resp/response (views/home)))
+  (ring-resp/response (views/home request)))
 
 (defn retrieve-page [request]
   (ring-resp/response (nests.retrieve/perform request)))
 
 (defn insert-nest-page [request]
-  (ring-resp/response (views/insert-entry)))
+  (if (authenticated? (:session request))
+    (ring-resp/response (views/insert-entry request))
+    (-> (ring-resp/redirect "/login")
+        (assoc :flash "Login in order to add an entry"))))
 
 (defn register-page [request]
   (ring-resp/response (views/register request)))
@@ -49,9 +53,26 @@
 (defn login-page [request]
   (ring-resp/response (views/login request)))
 
+(defn logout [request]
+  (-> (ring-resp/redirect "/login")
+   (assoc-in [:session :identity] nil)
+   (assoc :flash "You have logged out"))
+    )
 
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))
+
+(defn admin-page [request]
+  "Returns a 200 response for authorized users, otherwise throws a buddy-auth
+  'unauthorized' exception."
+  [{{:keys [identity]} :session :as request}]
+  (let [known-user (session.login/username-password-role request identity)]
+    (if (= :admin (keyword (:role known-user)))
+      (ring-resp/response  "Only admins can see this!")
+      #_(ring-resp/response  known-user)
+      (buddy.auth/throw-unauthorized))))
+
+
 ;; (spec/def ::temperature int?)
 
 ;; (spec/def ::orientation (spec/and keyword? #{:north :south :east :west}))
@@ -76,7 +97,7 @@
                 (-> context
                     (assoc :response {:status 422
                                       :body   {:explanation (spec/explain-str spec result)}})
-                    interceptor-chain/terminate)
+                    interceptor.chain/terminate)
                 (assoc-in context [:request params-key] result))))})
 
 (defn context-injector [components]
@@ -103,6 +124,23 @@
              (update context :request authentication-request session-auth-backend))}))
 
 
+(defn authorization-interceptor
+  "Port of buddy-auth's wrap-authorization middleware."
+  [backend]
+  (error-dispatch [ctx exc]
+                  [{:exception-type :clojure.lang.ExceptionInfo :stage :enter}]
+                  (try
+                    (assoc ctx
+                           :response
+                           (auth.middleware/authorization-error (:request ctx)
+                                                                exc
+                                                                backend))
+                    (catch Exception e
+                      (assoc ctx ::interceptor.chain/error e)))
+
+                  :else (assoc ctx ::interceptor.chain/error exc)))
+
+
 (def session-interceptor (ring-middlewares/session {:store (cookie/cookie-store)}))
 
 (def flash-interceptor (ring-middlewares/flash))
@@ -115,7 +153,7 @@
   (conj (mapv pedestal-component/using-component components-to-inject)
         (context-injector components-to-inject)))
 
-(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body authentication-interceptor session-interceptor flash-interceptor]))
+(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body authentication-interceptor (authorization-interceptor session-auth-backend) session-interceptor flash-interceptor]))
 
 (def routes
   "Tabular routes"
@@ -125,7 +163,9 @@
     ["/register" :post (conj common-interceptors `session.register/perform)]
     ["/login" :get (conj common-interceptors `login-page)]
     ["/login" :post (conj common-interceptors `session.login/perform)]
+    ["/logout" :get (conj common-interceptors `logout)]
     ["/greet" :get (conj common-interceptors `greet-page)]
+    ["/admin" :get (conj common-interceptors `admin-page)]
     ;; ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
     ;; ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
     ;; ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]

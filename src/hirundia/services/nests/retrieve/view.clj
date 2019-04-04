@@ -26,8 +26,9 @@
         [:p [:label.justify "Type: " (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] (:type record))]]
         [:p [:label.justify "Date: " [:input {:type "date" :name "date" :value (:date record)}]]]
         [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-        [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"] (:destroyed record))]]
+        [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" [true false] (:destroyed record))]]
         [:p [:label.justify "Destroyed date: " [:input {:type "date" :name "destroyed_date" :destroyed_date record}]]]
         [:p [:label.justify "λ ->" [:input {:type "submit" :value "Update"}]]]]
-       ]])))
+       ]]
+     [:div [:h1 (:destroyed record)]])))
 

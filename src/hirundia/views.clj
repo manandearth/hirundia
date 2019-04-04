@@ -114,7 +114,7 @@
        [:p [:label.justify "Type: "      (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] "window")]]
        [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
        [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-       [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"] "false")]]
+       [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" [true false] false)]]
        [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]
        [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
 

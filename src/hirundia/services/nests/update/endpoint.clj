@@ -43,11 +43,9 @@
                     :species        species
                     :height         height
                     :facing         facing
-                    :type           type-of
+                    :type-of           type-of
                     :date           (sql-date date)
-                    :destroyed      (if (boolean? destroyed)
-                                      destroyed
-                                      false)
+                    :destroyed      destroyed
                     :destroyed_date (if (empty? destroyed_date)
                                       nil
                                       (sql-date destroyed_date))

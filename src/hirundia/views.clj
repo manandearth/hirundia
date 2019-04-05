@@ -30,6 +30,8 @@
      " |"
      [:a {:href "/nests"} "View all nests"]
      " | "
+     [:a {:href "/nests-viz"} "Viz"]
+     " | "
      [:a {:href "/nests-insert"} "Add a nest"]
      " | Logged in as "(:identity session)
      " | "
@@ -42,6 +44,8 @@
      [:a {:href "/about"} "About"]
      " |"
      [:a {:href "/nests"} "View all nests"]
+     " | "
+     [:a {:href "/nests-viz"} "Viz"]
      " | "
      [:a {:href "/login"} "Login"]
      " | "

@@ -8,7 +8,10 @@
             [clojure.java.jdbc :as jdbc]
             [clj-postgresql.geojson :as geojson]
             [clj-postgresql.core :as pg]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [clojure.java.io :as io]
+            [cheshire.core :as cheshire]
+            ))
 
 (defn play-data [& names]
   (for [n names
@@ -44,23 +47,34 @@
 
 (defn map-plot [all-entries]
   
-  
-  #_{:data         {:values {1 {:latitude 10 :longitude 10}
-                             2 {:latitude 20 :longitude 20}}
-                    :format {:type "topojson" :feature "states"} }
-     :projection {:type "alberUsa"}
-     :mark       {:type "geoshape" :fill "lightgray" :stroke "white"}}
-  {:width  800
+  {:schema "https://vega.github.io/schema/vega-lite/v3.json"
+   :width  800
    :height 500
-   :data       {:values all-entries}
-   :projection {:type "albers"}
-   :mark       {:type "circle" :tooltip {:content :data}}
-   :encoding   {:longitude {:field "longitude" :type "quantitative"}
-                :latitude  {:field "latitude" :type "quantitative"}
-                :size      {:value 40}                
-                }
-   :config {:view {:stroke "red"}
-            :style {:cell {:stroke "transparent"}}}})
+   :config
+   {:autosize "none" ;default is pad and it doesn't crop a too lage an object
+    }
+   :layer
+   [{:data       {:values (slurp "resources/public/json/vejer-geoshape.json")
+                  :format {:type "json" :feature "features"}}
+      :projection {:type "albers"}
+     :mark       {:type "geoshape" :fill "lightgray" :stroke "transparent"}}
+
+    {:data       {:values all-entries}
+     :projection {:type "albers"}
+     :mark       {:type "circle" :tooltip {:content :data}}
+     :encoding   {:longitude {:field "longitude" :type "quantitative"}
+                  :latitude  {:field "latitude" :type "quantitative"}
+                  :size      {:field "height" :type "quantitative"}
+                  :color     {:field "species"
+                              :type  "nominal"
+                              :legend {:title nil,
+                                       :orient "bottom-right"
+                                       :offset 0
+                                       }
+                              }
+                  }
+     :config     {:view  {:stroke "transparent"}
+                  :style {:cell {:stroke "transparent"}}}}]})
 
 
 (defn perform [{:keys [db] :as request}]

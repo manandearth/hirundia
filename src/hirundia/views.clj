@@ -30,6 +30,8 @@
      " |"
      [:a {:href "/nests"} "View all nests"]
      " | "
+     [:a {:href "/nests-viz"} "Viz"]
+     " | "
      [:a {:href "/nests-insert"} "Add a nest"]
      " | Logged in as "(:identity session)
      " | "
@@ -42,6 +44,8 @@
      [:a {:href "/about"} "About"]
      " |"
      [:a {:href "/nests"} "View all nests"]
+     " | "
+     [:a {:href "/nests-viz"} "Viz"]
      " | "
      [:a {:href "/login"} "Login"]
      " | "
@@ -84,17 +88,6 @@
 
 
 
-;;TODO convert to pedestal db
-#_(defn list-of-entries []
-  (page/html5
-   (gen-page-head "Complete List of Entries")
-    header-links
-    [:div
-      [:h1 "Complete List Of Entries"]
-     [:div (table/to-table1d
-            records/select-all-query
-            [:id "ID" :street "Street" :number "No." :gps "GPS" :species "Species" :facing "Facing" :height "Height" :type "Type" :date "Date"  :destroyed "Destroyed?" :destroyed_date "Date destroyed"])]]))
-
 (defn insert-entry [request]
   (page/html5
    (gen-page-head "add a nest to the database")
@@ -117,73 +110,6 @@
        [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" [true false] false)]]
        [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]
        [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
-
-#_(defn insert-to-db-results
-  [context]
-  (if-let [params (get context :params)]
-    (let [street (get params "street" nil)
-          num (get params "number" nil)
-          lat (get params "lat" nil)
-          lon (get params "lon" nil)
-          species (get params "species" nil)
-          height (get params "height" nil)
-          facing (get params "facing" nil)
-          type-of (get params "type-of" nil)
-          day (get params "date" nil)
-          destroyed (get params "destroyed" nil)
-          destroyed-date (get params "destroyed_date" nil)]
-      (do (page/html5
-           (gen-page-head "Added an entry")
-            header-links
-            [:p (str street " " num " ,GPS: (" lat ", " lon  " ) a " species " nest" " at " height " meters, facing " facing ", constructed: " type-of " recorded on " day)])
-          (records/insert-nest!
-           {:street (if-not (= 0 (count street)) street nil)
-            :number (if-not (= 0 (count num)) (Integer/parseInt num) nil)
-            :gps (if-not (or (= 0 (count lon)) (= 0 (count lat))) (pg/point (list (Float/parseFloat lat) (Float/parseFloat lon))) nil)
-            :species (if-not (= 0 (count species)) species nil)
-            :height (if-not (= 0 (count height)) (Integer/parseInt height) nil)
-            :facing (if-not (= 0 (count facing)) facing nil)
-            :type-of (if-not (= 0 (count type-of)) type-of nil)
-            :date (if-not (= 0 (count day)) (sql-date (clj-time.format/parse (clj-time.format/formatters :date) day)) nil) ;;require a yyyy-mm-dd format (TODO create a spec)
-            :destroyed (if-not (= 0 (count destroyed)) (read-string destroyed) nil)
-            :destroyed_date (if-not (= 0 (count destroyed-date)) (sql-date (clj-time.format/parse (clj-time.format/formatters :date)  destroyed-date)) nil)})))
-    context))
-
-;;HERE passing the db parameters to insert-nest2! which wraps a JDBC INSERT . using (:db context) 
-#_(defn insert-to-db-results2
-  [context]
-  (if-let [params (get context :params)]
-    (let [street (get params "street" nil)
-          num (get params "number" nil)
-          lat (get params "lat" nil)
-          lon (get params "lon" nil)
-          species (get params "species" nil)
-          height (get params "height" nil)
-          facing (get params "facing" nil)
-          type-of (get params "type-of" nil)
-          day (get params "date" nil)
-          destroyed (get params "destroyed" nil)
-          destroyed-date (get params "destroyed_date" nil)]
-      (do (page/html5
-           (gen-page-head "Added an entry")
-            header-links
-            [:p (str street " " num " ,GPS: (" lat ", " lon  " ) a " species " nest" " at " height " meters, facing " facing ", constructed: " type-of " recorded on " day)])
-          (records/insert-nest2!
-           {:street (if-not (= 0 (count street)) street nil)
-            :number (if-not (= 0 (count num)) (Integer/parseInt num) nil)
-            :gps (if-not (or (= 0 (count lon)) (= 0 (count lat))) (pg/point (list (Float/parseFloat lat) (Float/parseFloat lon))) nil)
-            :species (if-not (= 0 (count species)) species nil)
-            :height (if-not (= 0 (count height)) (Integer/parseInt height) nil)
-            :facing (if-not (= 0 (count facing)) facing nil)
-            :type-of (if-not (= 0 (count type-of)) type-of nil)
-            :date (if-not (= 0 (count day)) (sql-date (clj-time.format/parse (clj-time.format/formatters :date) day)) nil) ;;require a yyyy-mm-dd format (TODO create a spec)
-            :destroyed (if-not (= 0 (count destroyed)) (read-string destroyed) nil)
-            :destroyed_date (if-not (= 0 (count destroyed-date)) (sql-date (clj-time.format/parse (clj-time.format/formatters :date)  destroyed-date)) nil)}
-           (:db context)
-           )))
-    context))
-
-
 
 (defn register [{:keys [flash] :as request}]
   (page/html5

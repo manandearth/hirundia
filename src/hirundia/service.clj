@@ -19,6 +19,7 @@
    [hirundia.services.nests.delete.endpoint :as nests.delete]
    [hirundia.services.session.register.endpoint :as session.register]
    [hirundia.services.session.login.endpoint :as session.login]
+   [hirundia.services.viz.geo.endpoint :as viz.geo]
    [hirundia.views :as views]
    [ring.middleware.session.cookie :as cookie]
    [ring.middleware.flash :as flash]
@@ -72,6 +73,8 @@
       #_(ring-resp/response  known-user)
       (buddy.auth/throw-unauthorized))))
 
+#_(defn viz-page [request]
+  (ring-resp/response (viz/try-viz request)))
 
 ;; (spec/def ::temperature int?)
 
@@ -175,7 +178,8 @@
     ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `nests.retrieve/perform)]
     ["/nests-insert" :get (into common-interceptors [http/json-body  `insert-nest-page])]
     ["/nests-insert" :post (into common-interceptors [http/json-body  (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
-["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
+    ["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
+    ["/nests-viz" :get (conj common-interceptors `viz.geo/perform)]
     })
 
 (comment

@@ -1,6 +1,20 @@
 # hirundia
 
-A sandbox for [reducecombine/playground](https://github.com/reducecombine/playground)
+This project is based on [reducecombine/playground](https://github.com/reducecombine/playground)
+
+## Synopsis
+The barn swallow appears to have used man-made structures and bridges since time immemorial. An early reference is in Virgil's Georgics (29 BC):
+
+"Ante garrula quam tignis nidum suspendat hirundo" (Before the twittering swallow hangs its nest from the rafters)
+
+Swallows mate for life. They always return to the same nest. If the nest isn't there they will try torebuild it.
+
+Some people remove swallows nests, consider them pests.
+
+We would like to educate about swallows. This app is a CRUD app for collecting data about swallows nests. We start in Vejer de la Frontera, province of Cádiz, Andalusia. extending the tools as we go along.
+
+
+
 
 ## Installation
 

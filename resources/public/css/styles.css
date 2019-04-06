@@ -47,12 +47,12 @@ input + input {
 }
     
     
-
+/* messes up with the tooltip of Oz, so dissabled for now */
 table {
     border: 1px solid #ccc;
-    border-collapse: collapse;
-    table-layout: fixed;
-    width: 100%;
+    /* border-collapse: collapse; */
+    /* table-layout: fixed; */
+    /* width: 100%; */
 }
 table caption {
     font-size: 1.5em;

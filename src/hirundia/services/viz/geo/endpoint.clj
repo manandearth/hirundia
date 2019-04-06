@@ -61,7 +61,7 @@
 
     {:data       {:values all-entries}
      :projection {:type "albers"}
-     :mark       {:type "circle" :tooltip {:content :data}}
+     :mark       "circle"
      :encoding   {:longitude {:field "longitude" :type "quantitative"}
                   :latitude  {:field "latitude" :type "quantitative"}
                   :size      {:field "height" :type "quantitative"}
@@ -70,8 +70,13 @@
                               :legend {:title nil,
                                        :orient "bottom-right"
                                        :offset 0
-                                       }
-                              }
+                                       }}
+                  
+                  :tooltip  [{:field "street" :type "nominal"}
+                             {:field "number" :type "quantitative"}
+                             {:field "facing" :type "nominal"}
+                             {:field "type" :type "nominal"}
+                             {:field "username" :type "nominal"}]
                   }
      :config     {:view  {:stroke "transparent"}
                   :style {:cell {:stroke "transparent"}}}}]})

@@ -73,6 +73,24 @@
       #_(ring-resp/response  known-user)
       (buddy.auth/throw-unauthorized))))
 
+(def js-app
+  "<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+    <link href=\"css/style.css\" rel=\"stylesheet\" type=\"text/css\">
+    <link rel=\"icon\" href=\"https://clojurescript.org/images/cljs-logo-icon-32.png\">
+  </head>
+  <body>
+    <div id=\"app\"></div>
+   <!-- <script src=\"/js/compiled/app.js\" type=\"text/javascript\"></script> -->
+  </body>
+</html>")
+
+(defn js-app-page [request]
+  (ring-resp/response (views/js-app request)))
+
 #_(defn viz-page [request]
   (ring-resp/response (viz/try-viz request)))
 
@@ -180,6 +198,7 @@
     ["/nests-insert" :post (into common-interceptors [http/json-body  (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
     ["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
     ["/nests-viz" :get (conj common-interceptors `viz.geo/perform)]
+    ["/js-app" :get (conj common-interceptors `js-app-page)]
     })
 
 (comment

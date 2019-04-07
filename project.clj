@@ -47,11 +47,12 @@
                                   [figwheel-sidecar "0.5.18"]
                                   [cider/piggieback "0.4.0"]]
                    
-                   :source-paths ["dev"]
+                   :source-paths ["dev" "src/clj"]
                    :repl-options {:init-ns user}}
              :uberjar {:aot [hirundia.server]}}
   :cljsbuild
   {:builds [{:id "dev"
+             :ring-handler "hirundia.service/js-app-page"
              ;; The path to the top-level ClojureScript source directory:
              :source-paths ["src/cljs"]
              ;; The standard ClojureScript compiler options:

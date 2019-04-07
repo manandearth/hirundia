@@ -141,6 +141,18 @@
        [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 
 
+
+(defn js-app [request]
+  (page/html5
+   (gen-page-head "js-app")
+   (header-links request)
+   [:div {:id "app"}]
+   [:script {:src "js/compiled/app.js" :type "text/javascript"}]
+   )
+  )
+
+
+
 ;; (insert-to-db-results {:params {"street" "Kookoo"}})
 ;;(list-of-entries)
 

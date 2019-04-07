@@ -46,7 +46,7 @@
       :figwheel true
       :source-paths ["src/cljs"]
       :compiler {:main "hirundia.core"
-                 ;:asset-path "/out"
+                 ;;:asset-path "/out"
                  :output-to "resources/public/js/compiled/app.js"
                  :output-dir "resources/public/js/compiled/out"
                  :asset-path "js/compiled/out"

@@ -33,7 +33,8 @@
                  [hiccup-table "0.2.0"]
                  [buddy/buddy-auth "2.1.0"]
                  [metasoarous/oz "1.6.0-alpha2"]
-                 [reagent "0.8.1"]]
+                 [reagent "0.8.1"]
+                 [re-frame "0.10.6"]]
   :repl-options {:port 41234}
   :min-lein-version "2.0.0"
   :resource-paths ["config" "resources"]
@@ -52,6 +53,7 @@
              :uberjar {:aot [hirundia.server]}}
   :cljsbuild
   {:builds [{:id "dev"
+             ;;TODO check if this path actually makes a difference.
              :ring-handler "hirundia.service/js-app-page"
              ;; The path to the top-level ClojureScript source directory:
              :source-paths ["src/cljs"]

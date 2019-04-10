@@ -19,7 +19,7 @@
   (fn [_world [_ val]]
     {:http-xhrio {:method          :get
                   :uri             "/transit"
-                  :params          data
+                 ; :params          data
                   :timeout         5000
                   :format          (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})

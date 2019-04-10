@@ -37,7 +37,9 @@
                  [re-frame "0.10.6"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [com.cognitect/transit-clj "0.8.313"]
-                 [cljs-ajax "0.8.0"]]
+                 [cljs-ajax "0.8.0"]
+                 [funcool/promesa "2.0.1"]
+]
   :repl-options {:port 41234}
   :min-lein-version "2.0.0"
   :resource-paths ["config" "resources"]

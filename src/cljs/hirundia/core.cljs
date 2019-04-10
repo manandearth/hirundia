@@ -59,31 +59,76 @@
 
 (def df (r/atom nil))
 
+(def mock-df [{:date "2019-04-04T22:00:00Z",
+  :number 4,
+  :gps "(36.25319,-5.96485)",
+  :username "sophie",
+  :species "swift",
+  :facing "NW",
+  :type "cornice",
+  :street "Juan Bueno",
+  :id 747,
+  :destroyed_date nil,
+  :destroyed false,
+  :height 6}
+ {:date "2019-04-04T22:00:00Z",
+  :number 4,
+  :gps "(36.25319,-5.96485)",
+  :username "sophie",
+  :species "swift",
+  :facing "NW",
+  :type "cornice",
+  :street "Juan Bueno",
+  :id 748,
+  :destroyed_date nil,
+  :destroyed false,
+  :height 6}
+ {:date "2019-04-04T22:00:00Z",
+  :number 5,
+  :gps "(36.25319,-5.9649)",
+  :username "sophie",
+  :species "swift",
+  :facing "NW",
+  :type "cornice",
+  :street "Juan Bueno",
+  :id 749, 
+  :destroyed_date nil, 
+  :destroyed false, 
+  :height 6}])
+
+(defn coords-helper [entry]
+  (let [split (clojure.string/split (:gps entry) #"[(),]")
+                          lat (js/parseFloat (second split))
+                          lon (js/parseFloat (last split))]
+    {:lat lat :lon lon}))
+
+
+
+#_(new js/Date (:date (first @df)))
+
+#_(def df3 (atom {}))
+
+#_(GET "/transit" :response-format :json
+     :keywords? true
+     :handler (fn [response] (reset! df3 response)))
+
+(defn transform-df [df] 
+  (for [e df]
+    (-> (conj e (coords-helper e))
+        (assoc :date (new js/Date (:date e)))
+        (assoc :destroyed_date (if-not nil? (new js/Date (:destroyed_date e))))
+        (dissoc :gps))))
+
+
+
 (defn get-data []
   (GET "/transit" {:response-format    :json
                    :keywords? true
-                   :handler   (fn [response] (reset! df response))})
+                   :handler   (fn [response] (reset! df (transform-df response)))})
   (fn []
     [:div
      (for [d @df]
        [:p (str "Entry: " (.indexOf @df d) " -> " d)])]))
-
-
-(let [split (clojure.string/split (:gps (first @df)) #"[(),]")
-      lat (js/parseFloat (second split))
-      lon (js/parseFloat (last split))]
-  [lat lon])
-
-(map :gps @df)
-
-
-
-
-(def df3 (atom {}))
-(GET "/transit" :response-format :json
-     :keywords? true
-     :handler (fn [response] (reset! df3 response)))
-@df3
 
 
 #_(defn all-data []

@@ -18,7 +18,7 @@
                  [io.pedestal/pedestal.jetty "0.5.3"]
                  [io.pedestal/pedestal.service "0.5.3"]
                  [juxt.modular/postgres "0.0.1-SNAPSHOT"]
-                 [org.clojure/core.async "0.4.474"]
+                 [org.clojure/core.async "0.4.490"]
                  [org.clojure/java.jdbc "0.7.6"]
                  [org.clojure/tools.logging "0.4.0"]
                  [nrepl "0.6.0"]
@@ -34,7 +34,10 @@
                  [buddy/buddy-auth "2.1.0"]
                  [metasoarous/oz "1.6.0-alpha2"]
                  [reagent "0.8.1"]
-                 [re-frame "0.10.6"]]
+                 [re-frame "0.10.6"]
+                 [day8.re-frame/http-fx "0.1.6"]
+                 [com.cognitect/transit-clj "0.8.313"]
+                 [cljs-ajax "0.8.0"]]
   :repl-options {:port 41234}
   :min-lein-version "2.0.0"
   :resource-paths ["config" "resources"]
@@ -48,7 +51,7 @@
                                   [figwheel-sidecar "0.5.18"]
                                   [cider/piggieback "0.4.0"]]
                    
-                   :source-paths ["dev" "src/clj"]
+                   :source-paths ["dev" "src/clj" "src/cljs"]
                    :repl-options {:init-ns user}}
              :uberjar {:aot [hirundia.server]}}
   :cljsbuild

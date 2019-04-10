@@ -10,6 +10,7 @@
    [io.pedestal.interceptor.chain :as interceptor.chain]
    [io.pedestal.interceptor.error :refer [error-dispatch]]
    [io.pedestal.http.ring-middlewares :as ring-middlewares]
+   [io.pedestal.http.jetty.websockets :as ws]
    [ring.util.response :as ring-resp]
    [hirundia.coerce :as coerce]
    [hirundia.services.nests.retrieve.endpoint :as nests.retrieve]
@@ -57,8 +58,7 @@
 (defn logout [request]
   (-> (ring-resp/redirect "/login")
    (assoc-in [:session :identity] nil)
-   (assoc :flash "You have logged out"))
-    )
+   (assoc :flash "You have logged out")))
 
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))
@@ -199,6 +199,7 @@
     ["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
     ["/nests-viz" :get (conj common-interceptors `viz.geo/perform)]
     ["/js-app" :get (conj common-interceptors `js-app-page)]
+    ["/transit" :get  (into common-interceptors [http/json-body `nests.retrieveall/to-cljs])]
     })
 
 (comment
@@ -212,6 +213,8 @@
     `[[["/" {:get home-page}
         ^:interceptors [(body-params/body-params) http/html-body]
         ["/about" {:get about-page}]]]]))
+
+
 
 ;; Consumed by hirundia.server/create-server
 ;; See http/default-interceptors for additional options you can configure
@@ -250,7 +253,9 @@
    ;; Options to pass to the container (Jetty)
    ::http/container-options {:h2c? true
                              :h2?  false
+                             
                              ;; :keystore "test/hp/keystore.jks"
                              ;; :key-password "password"
                              ;; :ssl-port 8443
-                             :ssl? false}})
+                             :ssl? false
+                             }})

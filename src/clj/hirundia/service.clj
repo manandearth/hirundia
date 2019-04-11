@@ -84,7 +84,16 @@
   </head>
   <body>
     <div id=\"app\"></div>
-   <!-- <script src=\"/js/compiled/app.js\" type=\"text/javascript\"></script> -->
+
+  <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.css\"
+   integrity=\"sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==\"
+   crossorigin=\"\"/>
+
+  <script src=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.js\"
+   integrity=\"sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==\"
+	     crossorigin=\"\"></script>
+  
+   <script src=\"js/compiled/app.js\" type=\"text/javascript\"></script> 
   </body>
 </html>")
 
@@ -200,6 +209,7 @@
     ["/nests-viz" :get (conj common-interceptors `viz.geo/perform)]
     ["/js-app" :get (conj common-interceptors `js-app-page)]
     ["/transit" :get  (into common-interceptors [http/json-body `nests.retrieveall/to-cljs])]
+    ["/osm" :get (conj common-interceptors `views/osm-page)]
     })
 
 (comment

@@ -151,11 +151,29 @@
    (gen-page-head "js-app")
    (header-links request)
    [:div {:id "app"}]
+   [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+           :integrity"sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+           :crossorigin ""}]
+   [:script {:src "https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+             :integrity"sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+             :crossorigin ""}]
+
+
    [:script {:src "js/compiled/app.js" :type "text/javascript"}]
    )
   )
 
-
+(defn osm-page [request]
+  (page/html5
+  [:head
+   [:meta {:charset "UTF-8"}]
+   [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+   [:link {:rel "stylesheet" :href "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" :type "text/css"}]
+   [:script {:src "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js" :charset "utf-8"}]
+  [:body
+   [:div {:id "mapid"}]
+   [:div {:id "main-app-area"}]
+   [:script {:src "js/compiled/osm.js" :type "text/javascript"}]]]) )
 
 ;; (insert-to-db-results {:params {"street" "Kookoo"}})
 ;;(list-of-entries)

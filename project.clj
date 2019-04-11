@@ -33,6 +33,7 @@
                  [hiccup-table "0.2.0"]
                  [buddy/buddy-auth "2.1.0"]
                  [metasoarous/oz "1.6.0-alpha2"]
+                 #_[cljsjs/leaflet "1.4.0-0"] 
                  [reagent "0.8.1"]
                  [re-frame "0.10.6"]
                  [day8.re-frame/http-fx "0.1.6"]

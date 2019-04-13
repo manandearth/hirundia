@@ -10,6 +10,7 @@
    [io.pedestal.interceptor.chain :as interceptor.chain]
    [io.pedestal.interceptor.error :refer [error-dispatch]]
    [io.pedestal.http.ring-middlewares :as ring-middlewares]
+   [io.pedestal.http.jetty.websockets :as ws]
    [ring.util.response :as ring-resp]
    [hirundia.coerce :as coerce]
    [hirundia.services.nests.retrieve.endpoint :as nests.retrieve]
@@ -57,8 +58,7 @@
 (defn logout [request]
   (-> (ring-resp/redirect "/login")
    (assoc-in [:session :identity] nil)
-   (assoc :flash "You have logged out"))
-    )
+   (assoc :flash "You have logged out")))
 
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))
@@ -72,6 +72,33 @@
       (ring-resp/response  "Only admins can see this!")
       #_(ring-resp/response  known-user)
       (buddy.auth/throw-unauthorized))))
+
+(def js-app
+  "<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+    <link href=\"css/style.css\" rel=\"stylesheet\" type=\"text/css\">
+    <link rel=\"icon\" href=\"https://clojurescript.org/images/cljs-logo-icon-32.png\">
+  </head>
+  <body>
+    <div id=\"app\"></div>
+
+  <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.css\"
+   integrity=\"sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==\"
+   crossorigin=\"\"/>
+
+  <script src=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.js\"
+   integrity=\"sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==\"
+	     crossorigin=\"\"></script>
+  
+   <script src=\"js/compiled/app.js\" type=\"text/javascript\"></script> 
+  </body>
+</html>")
+
+(defn js-app-page [request]
+  (ring-resp/response (views/js-app request)))
 
 #_(defn viz-page [request]
   (ring-resp/response (viz/try-viz request)))
@@ -180,6 +207,9 @@
     ["/nests-insert" :post (into common-interceptors [http/json-body  (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
     ["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
     ["/nests-viz" :get (conj common-interceptors `viz.geo/perform)]
+    ["/js-app" :get (conj common-interceptors `js-app-page)]
+    ["/transit" :get  (into common-interceptors [http/json-body `nests.retrieveall/to-cljs])]
+    ["/osm" :get (conj common-interceptors `views/osm-page)]
     })
 
 (comment
@@ -193,6 +223,8 @@
     `[[["/" {:get home-page}
         ^:interceptors [(body-params/body-params) http/html-body]
         ["/about" {:get about-page}]]]]))
+
+
 
 ;; Consumed by hirundia.server/create-server
 ;; See http/default-interceptors for additional options you can configure
@@ -231,7 +263,9 @@
    ;; Options to pass to the container (Jetty)
    ::http/container-options {:h2c? true
                              :h2?  false
+                             
                              ;; :keystore "test/hp/keystore.jks"
                              ;; :key-password "password"
                              ;; :ssl-port 8443
-                             :ssl? false}})
+                             :ssl? false
+                             }})

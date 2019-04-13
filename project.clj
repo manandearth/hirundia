@@ -32,6 +32,8 @@
                  [hiccup "1.0.5"]
                  [hiccup-table "0.2.0"]
                  [buddy/buddy-auth "2.1.0"]
+                 [cljsjs/vega "5.3.2-0"]
+                 [cljsjs/vega-lite "3.0.2-0"]
                  [metasoarous/oz "1.6.0-alpha2"]
                  #_[cljsjs/leaflet "1.4.0-0"] 
                  [reagent "0.8.1"]
@@ -76,7 +78,7 @@
              :source-paths ["src/cljs"]
              :compiler     {:main            hirundia.core
                             :output-to       "resources/public/js/compiled/app.js"
-                            :optimizations   :advanced
+                            :optimizations   :simple
                             :closure-defines {goog.DEBUG false}
                             :pretty-print    false}}]}
   

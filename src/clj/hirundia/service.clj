@@ -238,9 +238,9 @@
   "Tabular routes"
   #{["/" :get (conj common-interceptors `home-page) :route-name :home]
     ["/about" :get (conj common-interceptors `about-page)]
-    ["/register" :get (conj common-interceptors `register-page)]
+    ["/register" :get (conj common-interceptors `register-page) :route-name :register]
     ["/register" :post (conj common-interceptors `session.register/perform)]
-    ["/login" :get (conj common-interceptors `login-page)]
+    ["/login" :get (conj common-interceptors `login-page) :route-name :login]
     ["/login" :post (conj common-interceptors `session.login/perform)]
     ["/logout" :get (conj common-interceptors `logout)]
     ["/greet" :get (conj common-interceptors `greet-page)]

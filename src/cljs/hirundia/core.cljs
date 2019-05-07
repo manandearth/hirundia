@@ -16,6 +16,8 @@
      [hirundia.events :as events]
      [hirundia.config :as config]
      [oz.core :as oz]
+     [oops.core :refer [oget oset! ocall oapply ocall! oapply!
+                        oget+ oset!+ ocall+ oapply+ ocall!+ oapply!+]]
      #_[cljsjs.leaflet]))
 
 ;;upon startup
@@ -38,7 +40,7 @@
     [:p (str "the heights are: " (map :height  (:data db/default-db)))]])
 
 ;;THE DATAFRAME ATOM
-(def df (r/atom nil))
+(defonce df (r/atom nil))
 
 ;;parse ps string to :lat and :lon floats
 (defn coords-helper [entry]
@@ -55,18 +57,19 @@
              (assoc :destroyed_date (if-not nil? (new js/Date (:destroyed_date e))))
              (dissoc :gps)))))
 
-;;update the atom from DB via AJAX
+;;update the (local) atom from DB via AJAX
 (defn fetch-data! [a]
   (GET "/transit" {:response-format    :json
                    :keywords? true
                    :handler   (fn [response] (reset! a (transform-df response)))})
  )
 
-(defn get-data []
+;;trial -> see if updating a global atom works
+(defn get-data! []
   (GET "/transit" {:response-format    :json
                    :keywords? true
                    :handler   (fn [response] (reset! df (transform-df response)))})
-  (fn []
+  #_(fn []
     [:div
      (for [d @df]
        [:p (str "Entry: " (.indexOf @df d) " -> " d)])]))
@@ -137,7 +140,7 @@
 
 
 
-  (def URL-OSM "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+  (def URL-OSM   "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
 (def attribution "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors")
 #_(defn create-osm []
   (let [m (-> js/L
@@ -192,13 +195,23 @@
 
 (defn circle [entry]
   (let [lon  (:longitude   entry)
-        lat  (:latitude   entry)]
-     (.circle js/L #js [lat lon]
-                  (clj->js {:color       "red"
-                            :fillColor   "#f03"
-                            :fillOpacity 0.5
-                            :radius      5}))))
+        lat  (:latitude   entry)
+        species (:species entry)]
+    (.circle js/L #js [lat lon]
+             (clj->js {
+                       :color       (case species
+                                      "swallow" "crimson"
+                                      "martin" "steelblue"
+                                      "swift" "seagreen"
+                                      )
+                       :fillColor   (case species
+                                      "swallow" "red"
+                                      "martin" "dodgerblue"
+                                      "swift" "green")
+                       :fillOpacity 0.2
+                       :radius      5}))))
 
+;;a simple one circle try that works
 (defn home-did-mount []
   (let [map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
         centered (-> (.tileLayer js/L  URL-OSM
@@ -223,16 +236,16 @@
                                      (clj->js {:attribution attribution
                                                :maxZoom     19}))
                          (.addTo map))]
-        (doseq [e @atm]
-          (-> (circle e)
-              (.addTo map)))))))
+         (doseq [e @atm]
+                  (-> (circle e)
+                      (.addTo map)))))))
 
 
 (defn home []
   (fn []
     (r/create-class
      {:component-did-mount  (homes-did-mount)
-      :reagent-render      (fn [] [:div#map {:style {:height "640px" :width "1024px"}}])})
+      :reagent-render       (fn [] [:div#map {:style {:height "640px" :width "1024px"}}])})
     #_[:h2 (str (first @d))]))
 
 ;;THE TEMP VIEW

@@ -42,6 +42,7 @@
                  [com.cognitect/transit-clj "0.8.313"]
                  [cljs-ajax "0.8.0"]
                  [funcool/promesa "2.0.1"]
+                 [binaryage/oops "0.5.6"]
 ]
   :repl-options {:port 41234}
   :min-lein-version "2.0.0"

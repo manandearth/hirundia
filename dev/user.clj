@@ -17,9 +17,6 @@
    [com.stuartsierra.component :as component]
    [com.stuartsierra.component.repl :refer [reset set-init system]]
    [modular.postgres]
-   #_ [duct.component.figwheel :as figwheel]
-   #_ [background-processing.background-processor :as background-processor]
-   #_ [background-processing.enqueuer :as enqueuer]
    [io.pedestal.test :refer [response-for]]
    [io.pedestal.http :as http]
    [io.pedestal.http.route :as route]
@@ -29,9 +26,9 @@
    [hirundia.service]))
 
 #_(def figwheel
-  (figwheel/server
-   {:css-dirs ["resources/public/css"]
-    :cljsbuild {:builds
+    (figwheel/server
+     {:css-dirs ["resources/public/css"]
+      :cljsbuild {:builds
                   [{:source-paths ["src/cljs"]
                     :build-options
                     {:output-to     "target/figwheel/public/main.js"
@@ -40,18 +37,18 @@
 
 (def figwheel-config
   {:figwheel-options {} ;; <-- figwheel server config goes here 
-    :build-ids ["dev"]   ;; <-- a vector of build ids to start autobuilding
-    :all-builds          ;; <-- supply your build configs here
-    [{:id "dev"
-      :figwheel true
-      :source-paths ["src/cljs"]
-      :compiler {:main "hirundia.core"
+   :build-ids ["dev"]   ;; <-- a vector of build ids to start autobuilding
+   :all-builds          ;; <-- supply your build configs here
+   [{:id "dev"
+     :figwheel true
+     :source-paths ["src/cljs"]
+     :compiler {:main "hirundia.core"
                  ;;:asset-path "/out"
-                 :output-to "resources/public/js/compiled/app.js"
-                 :output-dir "resources/public/js/compiled/out"
-                 :asset-path "js/compiled/out"
-                 :optimizations :none
-                 :pretty-print true}}]})
+                :output-to "resources/public/js/compiled/app.js"
+                :output-dir "resources/public/js/compiled/out"
+                :asset-path "js/compiled/out"
+                :optimizations :none
+                :pretty-print true}}]})
 
 (defrecord Figwheel []
   component/Lifecycle
@@ -64,6 +61,9 @@
     (figwheel/stop-figwheel!)
     config))
 
+(defn env [name]
+  {:post [(seq %)]}
+  (System/getenv name))
 
 (defn dev-system
   []
@@ -71,11 +71,12 @@
    :service-map hirundia.server/dev-map
    ;; :background-processor (background-processor/new :queue-name "cljtest")
    ;; :enqueuer (enqueuer/new :queue-name "cljtest")
-   :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:postgres" :user "postgres" :password "postgres"})
+   :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:postgres"
+                                        :user (env "MANANDEARTH_HIRUNDIA_USER")
+                                        :password (env "MANANDEARTH_HIRUNDIA_PASSWORD")})
    :pedestal (component/using (pedestal-component/pedestal (constantly hirundia.server/dev-map))
                               hirundia.service/components-to-inject)
-   :figwheel (map->Figwheel figwheel-config)
-   ))
+   :figwheel (map->Figwheel figwheel-config)))
 
 (set-init (fn [_]
             (dev-system)))
@@ -92,6 +93,8 @@
 
 
 ;;printing routes and interceptors
+
+
 (defn print-routes
   "Print our application's routes"
   []

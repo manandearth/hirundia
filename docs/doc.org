@@ -1,0 +1,19 @@
+* db
+
+when I get : server can't start kind of error...:
+in `/var/run`: 
+;;[adam@adam-pc run]$ sudo mkdir postgresql
+;;[adam@adam-pc run]$ sudo chown -R postgres:postgres /var/run/postgresql
+;;[adam@adam-pc run]$ sudo -u postgres -i
+
+;;starting server:
+
+;;[postgres@adam-pc ~]$ pg_ctl -D /user/local/pgsql/data -l logfile start
+;;waiting for server to start.... done
+;;server started
+
+
+
+access with:
+ 
+pg_ctl -D /var/lib/postgres/data/ -l logfile start

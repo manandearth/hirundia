@@ -7,7 +7,7 @@
    [io.pedestal.http.route :as route]
    [io.pedestal.http.body-params :as body-params]
    [io.pedestal.interceptor :as interceptor]
-   [io.pedestal.interceptor.chain :as interceptor.chain]
+   [io.pedestal.interceptor.chain :as interceptor-chain]
    [io.pedestal.interceptor.error :refer [error-dispatch]]
    [io.pedestal.http.ring-middlewares :as ring-middlewares]
    [io.pedestal.http.jetty.websockets :as ws]
@@ -22,17 +22,14 @@
    [hirundia.services.session.login.endpoint :as session.login]
    [hirundia.services.viz.geo.endpoint :as viz.geo]
    [hirundia.views :as views]
+   [hirundia.models.user :as models.user]
    [ring.middleware.session.cookie :as cookie]
+   [ring.middleware.session.store :as session.store]
    [ring.middleware.flash :as flash]
    [buddy.auth.middleware :refer [authentication-request] :as auth.middleware]
    [buddy.auth.backends.session :refer [session-backend]]
+   [buddy.auth.backends :as auth.backends]
    [buddy.auth :refer [authenticated?] :as auth]))
-
-(defn about [request]
-  (->> (route/url-for ::about-page)
-       (format "Clojure %s - served from %s"
-               (clojure-version))
-       ring-resp/response))
 
 (defn about-page [request]
   (ring-resp/response  (views/about request)))
@@ -57,8 +54,8 @@
 
 (defn logout [request]
   (-> (ring-resp/redirect "/login")
-   (assoc-in [:session :identity] nil)
-   (assoc :flash "You have logged out")))
+      (assoc-in [:session :identity] nil)
+      (assoc :flash "You have logged out")))
 
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))
@@ -101,7 +98,7 @@
   (ring-resp/response (views/js-app request)))
 
 #_(defn viz-page [request]
-  (ring-resp/response (viz/try-viz request)))
+    (ring-resp/response (viz/try-viz request)))
 
 ;; (spec/def ::temperature int?)
 
@@ -110,12 +107,60 @@
 ;; (spec/def ::api (spec/keys :req-un [::temperature ::orientation]))
 
 ;; (defn api [{{:keys [temperature orientation]} :query-params :keys [db] :as request}]
-  #_(go
+#_(go
     (-> enqueuer :channel (>! (hirundia.jobs.sample/new temperature))))
   ;; {:status 200
   ;;  :body   {:temperature temperature :orientation orientation}})
 
+;;;--------------------
+;;;auth interceptor
+;;;--------------------
+(def session-auth-backend
+  (auth.backends/session))
 
+(def authentication-interceptor
+  "Port of buddy-auth's wrap-authentication middleware."
+  (interceptor/interceptor
+   {:name ::authenticate
+    :enter (fn [context]
+             (let [session (get-in context [:request :session])]
+               (if (authenticated? session)
+                 (update context :request authentication-request session-auth-backend)
+                 (-> context
+                     (assoc :response {:status 401
+                                       :body   "must login for that..."})
+                     interceptor-chain/terminate))))}))
+
+(def admin-interceptor
+  "throw unautherized 403 by role (allows admin only)"
+  {:name ::admin-interceptor
+   :enter (fn [context]
+            (let [role (get-in context [:request :session :identity :role])]
+              (if (= role models.user/admin-role)
+                context
+                (-> context
+                    (assoc :response {:status 403
+                                      :body   "Unauthorized"})
+                    interceptor-chain/terminate))))})
+
+(defn author-interceptor [author-fn]
+  "throw unauthorized 403 by author
+  (allows admin and author of entry)"
+  {:name ::author-interceptor
+   :enter (fn [context]
+            (let [role     (get-in context [:request :session :identity :role])
+                  username (get-in context [:request :session :identity :username])
+                  id       (get-in context [:request :path-params :id])
+                  db       (get-in context [:request :db])
+                  author (author-fn (:request context))]
+              (if (or (= role models.user/admin-role) (= username author))
+                context
+                (-> context
+                    (assoc :response {:status 403
+                                      :body "only permitted to author and admin"})
+                    interceptor-chain/terminate))))})
+
+;;;;;;;;;;;;;;;;;;;
 
 (defn param-spec-interceptor
   "Coerces params according to a spec. If invalid, aborts the interceptor-chain with 422, explaining the issue."
@@ -127,7 +172,7 @@
                 (-> context
                     (assoc :response {:status 422
                                       :body   {:explanation (spec/explain-str spec result)}})
-                    interceptor.chain/terminate)
+                    interceptor-chain/terminate)
                 (assoc-in context [:request params-key] result))))})
 
 (defn context-injector [components]
@@ -138,52 +183,56 @@
                     components))
    :name  ::context-injector})
 
-(def session-auth-backend
-  (session-backend
-   {:authfn (fn [request]
-              (let [{:keys [username password]} request
-                    known-user                  (get (session.login/all-usernames request) username)]
-                (when (= (session.login/password-by-username username) password)
-                  username)))}))
+#_(def session-auth-backend
+    (session-backend
+     {:authfn (fn [request]
+                (let [{:keys [username password]} request
+                      known-user                  (get (session.login/all-usernames request) username)]
+                  (when (= (session.login/password-by-username username) password)
+                    username)))}))
 
-(def authentication-interceptor
-  "Port of buddy-auth's wrap-authentication middleware."
-  (interceptor/interceptor
-   {:name ::authenticate
-    :enter (fn [context]
-             (update context :request authentication-request session-auth-backend))}))
+#_(def authentication-interceptor
+    "Port of buddy-auth's wrap-authentication middleware."
+    (interceptor/interceptor
+     {:name ::authenticate
+      :enter (fn [context]
+               (update context :request authentication-request session-auth-backend))}))
 
+#_(defn authorization-interceptor
+    "Port of buddy-auth's wrap-authorization middleware."
+    [backend]
+    (error-dispatch [ctx exc]
+                    [{:exception-type :clojure.lang.ExceptionInfo :stage :enter}]
+                    (try
+                      (assoc ctx
+                             :response
+                             (auth.middleware/authorization-error (:request ctx)
+                                                                  exc
+                                                                  backend))
+                      (catch Exception e
+                        (assoc ctx ::interceptor-chain/error e)))
 
-(defn authorization-interceptor
-  "Port of buddy-auth's wrap-authorization middleware."
-  [backend]
-  (error-dispatch [ctx exc]
-                  [{:exception-type :clojure.lang.ExceptionInfo :stage :enter}]
-                  (try
-                    (assoc ctx
-                           :response
-                           (auth.middleware/authorization-error (:request ctx)
-                                                                exc
-                                                                backend))
-                    (catch Exception e
-                      (assoc ctx ::interceptor.chain/error e)))
-
-                  :else (assoc ctx ::interceptor.chain/error exc)))
-
+                    :else (assoc ctx ::interceptor-chain/error exc)))
 
 (def session-interceptor (ring-middlewares/session {:store (cookie/cookie-store)}))
+
+(defn make-session-store
+  [reader writer deleter]
+  (reify session.store/SessionStore
+    (read-session [_ k] (reader k))
+    (write-session [_ k s] (writer k s))
+    (delete-session [_ k] (deleter k))))
 
 (def flash-interceptor (ring-middlewares/flash))
 
 (def components-to-inject [:db
-                           #_:background-processor #_:enqueuer
-                           ])
+                           #_:background-processor #_:enqueuer])
 
 (def component-interceptors
   (conj (mapv pedestal-component/using-component components-to-inject)
         (context-injector components-to-inject)))
 
-(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body authentication-interceptor (authorization-interceptor session-auth-backend) session-interceptor flash-interceptor]))
+(def common-interceptors (into component-interceptors [(body-params/body-params) http/html-body flash-interceptor]))
 
 (def routes
   "Tabular routes"
@@ -202,15 +251,14 @@
     ;; ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
     ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform)]
     ["/nests-update/:id" :post (into common-interceptors [http/json-body (param-spec-interceptor ::nests.update/api :form-params) `nests.update/perform])]
-    ["/nests/:id" :get (conj common-interceptors (param-spec-interceptor ::nests.retrieve/api :path-params) `nests.retrieve/perform)]
+    ["/nests/:id" :get (into common-interceptors [(param-spec-interceptor ::nests.retrieve/api :path-params) (author-interceptor `nests.retrieve/perform)])]
     ["/nests-insert" :get (into common-interceptors [http/json-body  `insert-nest-page])]
-    ["/nests-insert" :post (into common-interceptors [http/json-body  (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
-    ["/nests-delete/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
+    ["/nests-insert" :post (into common-interceptors [http/json-body authentication-interceptor (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
+    ["/nests-delete/:id" :get (into common-interceptors [http/json-body authentication-interceptor admin-interceptor (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
     ["/nests-viz" :get (conj common-interceptors `viz.geo/perform)]
     ["/js-app" :get (conj common-interceptors `js-app-page)]
     ["/transit" :get  (into common-interceptors [http/json-body `nests.retrieveall/to-cljs])]
-    ["/osm" :get (conj common-interceptors `views/osm-page)]
-    })
+    ["/osm" :get (conj common-interceptors `views/osm-page)]})
 
 (comment
   (def routes
@@ -228,6 +276,8 @@
 
 ;; Consumed by hirundia.server/create-server
 ;; See http/default-interceptors for additional options you can configure
+
+
 (def service
   {:env                     :prod
    ;; You can bring your own non-default interceptors. Make
@@ -263,9 +313,8 @@
    ;; Options to pass to the container (Jetty)
    ::http/container-options {:h2c? true
                              :h2?  false
-                             
+
                              ;; :keystore "test/hp/keystore.jks"
                              ;; :key-password "password"
                              ;; :ssl-port 8443
-                             :ssl? false
-                             }})
+                             :ssl? false}})

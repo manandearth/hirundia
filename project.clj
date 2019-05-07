@@ -32,18 +32,18 @@
                  [hiccup "1.0.5"]
                  [hiccup-table "0.2.0"]
                  [buddy/buddy-auth "2.1.0"]
+                 [buddy/buddy-hashers "1.3.0"]
                  [cljsjs/vega "5.3.2-0"]
                  [cljsjs/vega-lite "3.0.2-0"]
                  [metasoarous/oz "1.6.0-alpha2"]
-                 #_[cljsjs/leaflet "1.4.0-0"] 
+                 #_[cljsjs/leaflet "1.4.0-0"]
                  [reagent "0.8.1"]
                  [re-frame "0.10.6"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [com.cognitect/transit-clj "0.8.313"]
                  [cljs-ajax "0.8.0"]
                  [funcool/promesa "2.0.1"]
-                 [binaryage/oops "0.5.6"]
-]
+                 [binaryage/oops "0.5.6"]]
   :repl-options {:port 41234}
   :min-lein-version "2.0.0"
   :resource-paths ["config" "resources"]
@@ -56,7 +56,7 @@
                                   [org.clojure/tools.nrepl "0.2.13" :exclusions [org.clojure/clojure]]
                                   [figwheel-sidecar "0.5.18"]
                                   [cider/piggieback "0.4.0"]]
-                   
+
                    :source-paths ["dev" "src/clj" "src/cljs"]
                    :repl-options {:init-ns user}}
              :uberjar {:aot [hirundia.server]}}
@@ -82,5 +82,5 @@
                             :optimizations   :simple
                             :closure-defines {goog.DEBUG false}
                             :pretty-print    false}}]}
-  
+
   :main ^{:skip-aot true} hirundia.server)

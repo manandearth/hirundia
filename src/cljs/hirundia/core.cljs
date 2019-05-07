@@ -16,6 +16,8 @@
      [hirundia.events :as events]
      [hirundia.config :as config]
      [oz.core :as oz]
+     [oops.core :refer [oget oset! ocall oapply ocall! oapply!
+                        oget+ oset!+ ocall+ oapply+ ocall!+ oapply!+]]
      #_[cljsjs.leaflet]))
 
 ;;upon startup
@@ -38,7 +40,7 @@
     [:p (str "the heights are: " (map :height  (:data db/default-db)))]])
 
 ;;THE DATAFRAME ATOM
-(def df (r/atom nil))
+(defonce df (r/atom nil))
 
 ;;parse ps string to :lat and :lon floats
 (defn coords-helper [entry]
@@ -48,19 +50,26 @@
     {:latitude lat :longitude lon}))
 
 ;;helper function to parse coordinates and time to js format
-(defn transform-df [df] 
-  (for [e df]
-    (-> (conj e (coords-helper e))
-        (assoc :date (new js/Date (:date e)))
-        (assoc :destroyed_date (if-not nil? (new js/Date (:destroyed_date e))))
-        (dissoc :gps))))
+(defn transform-df [data] 
+  (vec (for [e  data]
+         (-> (conj e (coords-helper e))
+             (assoc :date (new js/Date (:date e)))
+             (assoc :destroyed_date (if-not nil? (new js/Date (:destroyed_date e))))
+             (dissoc :gps)))))
 
-;;update the atom from DB via AJAX
-(defn get-data []
+;;update the (local) atom from DB via AJAX
+(defn fetch-data! [a]
+  (GET "/transit" {:response-format    :json
+                   :keywords? true
+                   :handler   (fn [response] (reset! a (transform-df response)))})
+ )
+
+;;trial -> see if updating a global atom works
+(defn get-data! []
   (GET "/transit" {:response-format    :json
                    :keywords? true
                    :handler   (fn [response] (reset! df (transform-df response)))})
-  (fn []
+  #_(fn []
     [:div
      (for [d @df]
        [:p (str "Entry: " (.indexOf @df d) " -> " d)])]))
@@ -72,7 +81,7 @@
     {:time i :item n :quantity (+ (Math/pow (* i (count n)) 0.8) (rand-int (count n)))}))
 
 
-(defn oz-viz []
+#_(defn oz-viz []
   [:div
    [oz/vega-lite {:data {:values (play-data "monkey" "slipper" "broom")}
    :encoding {:x {:field "time"}
@@ -84,50 +93,54 @@
 ;;---------VEGA-VIZ----------
 
 ;;---------------------------
+(defn schema [data] {:schema "https://vega.github.io/schema/vega-lite/v3.json"
+                     :width  1024
+                     :height 640
+                     :config
+                     {:autosize "none" ;default is pad and it doesn't crop a too lage an object
+                      }
+                     :layer
+                     [{:data       {:url "json/vejer-geoshape.json"
+                                      :format {:type "json" :feature "features"}}
+                         :projection {:type "albers"}
+                         :mark       {:type "geoshape" :fill "lightgray" :stroke "transparent"}}
+
+                      {:data       {:values data}
+                       :projection {:type "albers"}
+                       :mark       "circle"
+                       :encoding   {:longitude {:field "longitude" :type "quantitative"}
+                                    :latitude  {:field "latitude" :type "quantitative"}
+                                    :size      {:field "height" :type "quantitative"}
+                                    :color     {:field  "species"
+                                                :type   "nominal"
+                                                :legend {:title  nil,
+                                                         :orient "bottom-right"
+                                                         :offset 0
+                                                         }}
+                                    
+                                    :tooltip [{:field "street" :type "nominal"}
+                                              {:field "number" :type "quantitative"}
+                                              {:field "facing" :type "nominal"}
+                                              {:field "type" :type "nominal"}
+                                              {:field "username" :type "nominal"}]
+                                    }
+                       :config {:view  {:stroke "transparent"}
+                                :style {:cell {:stroke "transparent"}}}}]})
 
 (defn oz-viz2 []
-  (GET "/transit" {:response-format    :json
-                   :keywords? true
-                   :handler   (fn [response] (reset! df (transform-df response)))})
-  (fn []
-    [:div
-     [oz/vega {:schema "https://vega.github.io/schema/vega-lite/v3.json"
-               :width  1024
-               :height 640
-               :config
-               {:autosize "none" ;default is pad and it doesn't crop a too lage an object
-                }
-               :layer
-               [#_{:data       {:values @df
-                                :format {:type "json" :feature "features"}}
-                   :projection {:type "albers"}
-                   :mark       {:type "geoshape" :fill "lightgray" :stroke "transparent"}}
-
-                {:data       {:values @df}
-                 :projection {:type "albers"}
-                 :mark       "circle"
-                 :encoding   {:longitude {:field "longitude" :type "quantitative"}
-                              :latitude  {:field "latitude" :type "quantitative"}
-                              :size      {:field "height" :type "quantitative"}
-                              :color     {:field  "species"
-                                          :type   "nominal"
-                                          :legend {:title  nil,
-                                                   :orient "bottom-right"
-                                                   :offset 0
-                                                   }}
-                              
-                              :tooltip [{:field "street" :type "nominal"}
-                                        {:field "number" :type "quantitative"}
-                                        {:field "facing" :type "nominal"}
-                                        {:field "type" :type "nominal"}
-                                        {:field "username" :type "nominal"}]
-                              }
-                 :config {:view  {:stroke "transparent"}
-                          :style {:cell {:stroke "transparent"}}}}]}]]))
+  (let [d (r/atom nil)]
+    #_(GET "/transit" {:response-format :json
+                       :keywords?       true
+                       :handler         (fn [response] (reset! df (transform-df response)))})
+    (fetch-data! d)
+    (fn []
+      [:div
+       [oz/vega (schema @d)]])))
 
 
 
-  (def URL-OSM "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+
+  (def URL-OSM   "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
 (def attribution "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors")
 #_(defn create-osm []
   (let [m (-> js/L
@@ -142,64 +155,98 @@
     (.addTo ctrl m)))
 
 
-(defn home-render []
+#_(defn home-render []
   [:div#map {:style {:height "10px" :width "10px"}}])
- 
+(def mock-dist
+  [{:id 1 :street "Altozano" :number 1 :username "sophie" :height 7 :facing "NW" :longitude -5.96626 :latitude 36.25359 :destroyed false :destroyed_date nil :date nil :species "swallow" :type "gable"}
+   {:id 2 :street "Altozano" :number 1 :username "sophie" :height 7 :facing "NW" :longitude -5.96626 :latitude 36.25159 :destroyed false :destroyed_date nil :date nil :species "swallow" :type "gable"}
+   {:id 3 :street "Altozano" :number 3 :username "noah" :height 8 :facing "NW" :longitude -5.96531 :latitude 36.25259 :destroyed false :destroyed_date nil :date nil :species "swift" :type "window"}
+   {:id 4 :street "Juan Bueno" :number 1 :username "noah" :height 6 :facing "N" :longitude -5.96424 :latitude 36.2532 :destroyed false :destroyed_date nil :date nil :species "swallow" :type "window"}
+   {:id 5 :street "Juan Bueno" :number 2 :username "robin" :height 6 :facing "N" :longitude -5.96454 :latitude 36.2528 :destroyed false :destroyed_date nil :date nil :species "martin" :type "cornice"}])
 
+(def my-list (quote ({:date           #inst "2019-04-04T22:00:00.000-00:00"
+                      :number         4
+                      :username       "robin"
+                      :species        "swift"
+                      :facing         "NW"
+                      :type           "balcony"
+                      :longitude      -5.96599
+                      :street         "Altozano"
+                      :id             711
+                      :latitude       36.25368
+                      :destroyed_date nil
+                      :destroyed      false
+                      :height         7}
+                     {:date           #inst "2019-04-04T22:00:00.000-00:00"
+                      :number         9
+                      :username       "robin"
+                      :species        "swift"
+                      :facing         "N"
+                      :type           "window"
+                      :longitude      -5.96548
+                      :street         "Altozano"
+                      :id             716,
+                      :latitude       36.25359
+                      :destroyed_date nil
+                      :destroyed      false
+                      :height         12} )))
+
+
+
+(defn circle [entry]
+  (let [lon  (:longitude   entry)
+        lat  (:latitude   entry)
+        species (:species entry)]
+    (.circle js/L #js [lat lon]
+             (clj->js {
+                       :color       (case species
+                                      "swallow" "crimson"
+                                      "martin" "steelblue"
+                                      "swift" "seagreen"
+                                      )
+                       :fillColor   (case species
+                                      "swallow" "red"
+                                      "martin" "dodgerblue"
+                                      "swift" "green")
+                       :fillOpacity 0.2
+                       :radius      5}))))
+
+;;a simple one circle try that works
 (defn home-did-mount []
   (let [map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
-        
         centered (-> (.tileLayer js/L  URL-OSM
                                  (clj->js {:attribution attribution
-                                           :maxZoom     18}))
+                                           :maxZoom     19}))
                      (.addTo map))]
+    (->  #_(.circle js/L #js [36.253 -5.965]
+                  (clj->js {:color       "red"
+                            :fillColor   "#f03"
+                            :fillOpacity 0.5
+                            :radius      5}))
+          (circle {:id 5 :street "Juan Bueno" :number 2 :username "robin" :height 6 :facing "N" :longitude -5.96454 :latitude 36.2528 :destroyed false :destroyed_date nil :date nil :species "martin" :type "cornice"})
+         (.addTo map))))
 
 
-    (->  (.circle js/L #js [36.253 -5.965]
-                 (clj->js {:color       "red"
-                           :fillColor   "#f03"
-                           :fillOpacity 0.5
-                           :radius      5}))
-         
-          (.addTo map)))
-  )
-
-
-
-
-;;      var circle = L.circle([51.508, -0.11], {
-;;     color: 'red',
-;;     fillColor: '#f03',
-;;     fillOpacity: 0.5,
-;;     radius: 500
-;; }).addTo(mymap);
-
-
-
-
-
-
+(defn homes-did-mount []
+  (let [atm (r/atom nil)]
+    (fetch-data! atm)
+    (fn []
+      (let [map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
+            centered (-> (.tileLayer js/L  URL-OSM
+                                     (clj->js {:attribution attribution
+                                               :maxZoom     19}))
+                         (.addTo map))]
+         (doseq [e @atm]
+                  (-> (circle e)
+                      (.addTo map)))))))
 
 
 (defn home []
-  (r/create-class
-   {:component-did-mount  home-did-mount
-    :reagent-render      (fn [] [:div#map {:style {:height "640px" :width "1024px"}}
-                                 ])}
-   ))
-
-#_(defn osm-page []
-  
-  [:head
-   [:meta {:charset "UTF-8"}]
-   [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
-   [:link {:rel "stylesheet" :href "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" :type "text/css"}]
-   ;[:script {:src "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js" :charset "utf-8"}]
-   [:body
-    [:div {:id "app"}]
-    [:script {:src "js/compiled/app.js" :type "text/javascript"}]
-    [:script "hirundia.core.main();"]]]) 
-
+  (fn []
+    (r/create-class
+     {:component-did-mount  (homes-did-mount)
+      :reagent-render       (fn [] [:div#map {:style {:height "640px" :width "1024px"}}])})
+    #_[:h2 (str (first @d))]))
 
 ;;THE TEMP VIEW
 (defn mount-root []
@@ -211,11 +258,11 @@
     #_[osm-page]
     #_[create-osm]
     [:div
-[home]
+     [home]
      [:h1 "Distibution of nests:"]
      [oz-viz2]
      #_[all-data]]
-    [get-data]
+    #_[get-data]
      ]
    (.getElementById js/document "app")
 ))

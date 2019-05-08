@@ -71,7 +71,7 @@
    :service-map hirundia.server/dev-map
    ;; :background-processor (background-processor/new :queue-name "cljtest")
    ;; :enqueuer (enqueuer/new :queue-name "cljtest")
-   :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:postgres"
+   :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:hirundia_dev"
                                         :user (env "MANANDEARTH_HIRUNDIA_USER")
                                         :password (env "MANANDEARTH_HIRUNDIA_PASSWORD")})
    :pedestal (component/using (pedestal-component/pedestal (constantly hirundia.server/dev-map))

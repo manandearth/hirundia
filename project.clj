@@ -43,12 +43,20 @@
                  [com.cognitect/transit-clj "0.8.313"]
                  [cljs-ajax "0.8.0"]
                  [funcool/promesa "2.0.1"]
-                 [binaryage/oops "0.5.6"]]
+                 [binaryage/oops "0.5.6"]
+                 [joplin.core "0.3.11"]
+                 [joplin.jdbc "0.3.11"]]
   :repl-options {:port 41234}
   :min-lein-version "2.0.0"
   :resource-paths ["config" "resources"]
   :plugins [[lein-cljsbuild "1.1.7"]
             [cider/cider-nrepl "0.21.1"]]
+  :aliases {"migrate" ["run" "-m" "joplin.alias/migrate" "joplin.edn"]
+            "seed" ["run" "-m" "joplin.alias/seed" "joplin.edn"]
+            "rollback" ["run" "-m" "joplin.alias/rollback" "joplin.edn"]
+            "reset" ["run" "-m" "joplin.alias/reset" "joplin.edn"]
+            "pending" ["run" "-m" "joplin.alias/pending" "joplin.edn"]
+            "create" ["run" "-m" "joplin.alias/create" "joplin.edn"]}
   ;:figwheel {:css-dirs ["resources/public/css"]}
   :profiles {:dev {:dependencies [[io.pedestal/pedestal.service-tools "0.5.3"]
                                   [com.stuartsierra/component.repl "0.2.0"]

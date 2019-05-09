@@ -6,9 +6,11 @@
    [clj-postgresql.core :as pg]
    [clojure.string :as string]
    [ring.util.response :as ring-resp]
+   [io.pedestal.http.route :refer [url-for]]
    [hirundia.services.nests.insert.logic :as logic]
    [java-time :refer :all
-    :exclude [format update contains? iterate range min max zero?]]))
+    :exclude [format update contains? iterate range min max zero?]]
+   [clojure.java.io :as io]))
 
 (spec/def ::street         string?)
 (spec/def ::number         nat-int?)
@@ -49,7 +51,7 @@
         ;; result (-> (jdbc/query db fetch)
         ;; (logic/to-serialize))
         ]
-    (-> (ring-resp/redirect "/nests")
+    (-> (ring-resp/redirect (url-for :nests))
         (assoc :flash "Entry added to db"))
     #_{:status 302 :headers {"Location" "/nests"} :body "" :flash "Entry added to db"}))
 

@@ -60,16 +60,6 @@
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))
 
-(defn admin-page [request]
-  "Returns a 200 response for authorized users, otherwise throws a buddy-auth
-  'unauthorized' exception."
-  [{{:keys [identity]} :session :as request}]
-  (let [known-user (session.login/username-password-role request identity)]
-    (if (= :admin (keyword (:role known-user)))
-      (ring-resp/response  "Only admins can see this!")
-      #_(ring-resp/response  known-user)
-      (buddy.auth/throw-unauthorized))))
-
 (def js-app
   "<!DOCTYPE html>
 <html>
@@ -96,21 +86,6 @@
 
 (defn js-app-page [request]
   (ring-resp/response (views/js-app request)))
-
-#_(defn viz-page [request]
-    (ring-resp/response (viz/try-viz request)))
-
-;; (spec/def ::temperature int?)
-
-;; (spec/def ::orientation (spec/and keyword? #{:north :south :east :west}))
-
-;; (spec/def ::api (spec/keys :req-un [::temperature ::orientation]))
-
-;; (defn api [{{:keys [temperature orientation]} :query-params :keys [db] :as request}]
-#_(go
-    (-> enqueuer :channel (>! (hirundia.jobs.sample/new temperature))))
-  ;; {:status 200
-  ;;  :body   {:temperature temperature :orientation orientation}})
 
 ;;;--------------------
 ;;;auth interceptor
@@ -183,37 +158,6 @@
                     components))
    :name  ::context-injector})
 
-#_(def session-auth-backend
-    (session-backend
-     {:authfn (fn [request]
-                (let [{:keys [username password]} request
-                      known-user                  (get (session.login/all-usernames request) username)]
-                  (when (= (session.login/password-by-username username) password)
-                    username)))}))
-
-#_(def authentication-interceptor
-    "Port of buddy-auth's wrap-authentication middleware."
-    (interceptor/interceptor
-     {:name ::authenticate
-      :enter (fn [context]
-               (update context :request authentication-request session-auth-backend))}))
-
-#_(defn authorization-interceptor
-    "Port of buddy-auth's wrap-authorization middleware."
-    [backend]
-    (error-dispatch [ctx exc]
-                    [{:exception-type :clojure.lang.ExceptionInfo :stage :enter}]
-                    (try
-                      (assoc ctx
-                             :response
-                             (auth.middleware/authorization-error (:request ctx)
-                                                                  exc
-                                                                  backend))
-                      (catch Exception e
-                        (assoc ctx ::interceptor-chain/error e)))
-
-                    :else (assoc ctx ::interceptor-chain/error exc)))
-
 (def session-interceptor (ring-middlewares/session {:store (cookie/cookie-store)}))
 
 (defn make-session-store
@@ -244,11 +188,6 @@
     ["/login" :post (conj common-interceptors `session.login/perform)]
     ["/logout" :get (conj common-interceptors `logout)]
     ["/greet" :get (conj common-interceptors `greet-page)]
-    ["/admin" :get (conj common-interceptors `admin-page)]
-    ;; ["/api" :get (into component-interceptors [http/json-body (param-spec-interceptor ::api :query-params) `api])]
-    ;; ["/invoices/insert" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.insert/api :query-params) `invoices.insert/perform])]
-    ;; ["/invoices/:id" :get (into component-interceptors [http/json-body (param-spec-interceptor ::invoices.retrieve/api :path-params) `invoices.retrieve/perform])]
-    ;; ["/invoices/delete" :get (into component-interceptors [http/json-body `invoices.delete/perform])]
     ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform)]
     ["/nests-update/:id" :post (into common-interceptors [http/json-body (param-spec-interceptor ::nests.update/api :form-params) `nests.update/perform])]
     ["/nests/:id" :get (into common-interceptors [(param-spec-interceptor ::nests.retrieve/api :path-params) (author-interceptor `nests.retrieve/perform)])]
@@ -271,12 +210,6 @@
     `[[["/" {:get home-page}
         ^:interceptors [(body-params/body-params) http/html-body]
         ["/about" {:get about-page}]]]]))
-
-
-
-;; Consumed by hirundia.server/create-server
-;; See http/default-interceptors for additional options you can configure
-
 
 (def service
   {:env                     :prod

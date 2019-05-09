@@ -45,13 +45,8 @@
                     :author (get-in session [:identity :username])}
         db     (->> db :pool (hash-map :datasource))
         insert (-> (logic/to-insert parsed-map)
-                   (h/format))
-        ;fetch  (h/format logic/to-query)
-        _      (jdbc/execute! db insert)
-        ;; result (-> (jdbc/query db fetch)
-        ;; (logic/to-serialize))
-        ]
+                   (h/format))]
+    (jdbc/execute! db insert)
     (-> (ring-resp/redirect (url-for :nests))
-        (assoc :flash "Entry added to db"))
-    #_{:status 302 :headers {"Location" "/nests"} :body "" :flash "Entry added to db"}))
+        (assoc :flash "Entry added to db"))))
 

@@ -22,18 +22,14 @@
 (spec/def ::api (spec/keys :req-un [::id]))
 
 (defn perform [{{:keys [id]} :path-params :keys [db session] :as request}]
-  (let [known-user (session.login/username-password-role request (:identity session))
-        db     (->> db :pool (hash-map :datasource))
+  (let [db     (->> db :pool (hash-map :datasource))
         record (->> (logic/to-query id)
                     (h/format)
                     (jdbc/query db)
                     (first))]
-    (if (or (= :admin (keyword (:role known-user)))
-            (= (:identity session) (:username record)))
-      (if record
-        (ring-resp/response (view/update-entry request id record))
-        (ring-resp/not-found "Not in DB"))
-      (throw-unauthorized))))
+    (if record
+      (ring-resp/response (view/update-entry request id record))
+      (ring-resp/not-found "Not in DB"))))
 
 (defn get-author [{{:keys [id]} :path-params :keys [db] :as request}]
   (let [db     (->> db :pool (hash-map :datasource))

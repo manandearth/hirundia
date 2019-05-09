@@ -34,3 +34,12 @@
         (ring-resp/response (view/update-entry request id record))
         (ring-resp/not-found "Not in DB"))
       (throw-unauthorized))))
+
+(defn get-author [{{:keys [id]} :path-params :keys [db] :as request}]
+  (let [db     (->> db :pool (hash-map :datasource))
+        record (->> (logic/get-author id)
+                    (h/format)
+                    (jdbc/query db)
+                    (first)
+                    (:author))]
+    record))

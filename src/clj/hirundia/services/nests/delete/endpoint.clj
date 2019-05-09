@@ -20,6 +20,6 @@
             _  (->> (logic/to-delete id)
                     (h/format)
                     (jdbc/execute! db))]
-        (-> (ring-resp/redirect "/nests")
+        (-> (ring-resp/redirect :nests)
             (assoc :flash (str "Entry " id " has beed deleted."))))
       (throw-unauthorized))))

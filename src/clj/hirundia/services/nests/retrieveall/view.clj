@@ -13,9 +13,9 @@
     [:div (let [attr-fns {:data-value-transform (fn [label-key v]
                                                   (if (= :id label-key)
                                                     [:a {:href (str "/nests/" v)} v]
-                                                    
+
                                                     (if (= :delete label-key)
-                                                      [:a {:href (str "/nests-delete/" v)} (str "delete " v) ]
+                                                      [:a {:href (str "/nests-delete/" v)} (str "delete " v)]
                                                       v)))}
                 extended-records (map #(assoc % :delete (:id %)) records)]
             (table/to-table1d
@@ -32,5 +32,5 @@
               :destroyed "Destroyed?"
               :destroyed_date "Date destroyed"
               :delete "Delete Entry"
-              :username "Username"]
+              :author "Username"]
              attr-fns))]]))

@@ -10,12 +10,14 @@
    #_[hirundia.services.nests.retrieve-all.logic :as retrieve-all.logic]
    [hirundia.services.nests.update.view :as view]
    [clojure.string :as string]
-   [hirundia.views :as views]))
+   [hirundia.views :as views]
+   [io.pedestal.http.route :refer [url-for]]))
 
 
 ;(spec/def ::street (spec/and string? (complement string/blank?)))
 
 ;(spec/def ::api (spec/keys :req-un [::street]))
+
 
 (spec/def ::street         string?)
 (spec/def ::number         nat-int?)
@@ -25,15 +27,13 @@
 (spec/def ::height         nat-int?)
 (spec/def ::facing         #{"N" "NW" "W" "SW" "S" "SE" "E" "NE"})
 (spec/def ::type-of        #{"balcony" "window" "cornice" "gable" "cables" "crack"})
-(spec/def ::date           inst?) 
+(spec/def ::date           inst?)
 (spec/def ::destroyed      (spec/or :bool boolean? :empty empty?))
-(spec/def ::destroyed_date (spec/or :inst inst? :empty empty?)) 
+(spec/def ::destroyed_date (spec/or :inst inst? :empty empty?))
 
 #_(spec/valid? ::date (sql-date (local-date)))
 
-
 (spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::number ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
-
 
 
 (defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params {:keys [id]} :path-params :keys [db session] :as request}]
@@ -48,12 +48,11 @@
                     :destroyed      destroyed
                     :destroyed_date (if (empty? destroyed_date)
                                       nil
-                                      (sql-date destroyed_date))
-                    }
+                                      (sql-date destroyed_date))}
         db     (->> db :pool (hash-map :datasource))
         update (-> (logic/to-update parsed-map  (Integer/parseInt id))
-                   (h/format))
-        _      (jdbc/execute! db update)]
-    (-> (ring-resp/redirect "/nests")
+                   (h/format))]
+    (jdbc/execute! db update)
+    (-> (ring-resp/redirect (url-for :nests))
         (assoc :flash (str "Entry " id " has been updated")))
-   #_{:status 302 :headers {"Location" "/nests"} :body "" :flash (str "Entry " id " has been updated")}))
+    #_{:status 302 :headers {"Location" "/nests"} :body "" :flash (str "Entry " id " has been updated")}))

@@ -4,3 +4,8 @@
   {:select [:*]
    :from [:nests]
    :where [:= :id id]})
+
+(defn get-author [id]
+  {:select [:author]
+   :from [:nests]
+   :where [:= :id id]})

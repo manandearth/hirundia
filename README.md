@@ -55,10 +55,20 @@ It requires to have the following namespaces required:
 
 `[juxt.modular/postgres "0.0.1-SNAPSHOT"]` works on PostgreSQL upto verion 9.6 and **not** later..
 
-For the service.invoices ns create a table:
+### Migration
 
-`CREATE TABLE users (id SERIAL, email VARCHAR(50))`
+The original creation of the tables and migrations are managed with [joplin](https://github.com/juxt/joplin) 
 
-## Production
+In order to create the databases:
+
+```
+createdb hirundia_dev
+```
+
+To first set up (for example a dev postgres environment) run the following in a shell:
+`lein reset dev psql-dev`
+
+The db connection url is configured in: `resources/jopin.edn`
+
 
 

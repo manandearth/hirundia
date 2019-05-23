@@ -208,25 +208,10 @@
                 :ln -5.965
                 :zoom 17})
 
-#_(defn leaflet-component
-    []
-    (let [dn (r/atom nil)
-          mapatom (r/atom nil)
-          lat (:lat vejer-map)
-          lon (:lon vejer-map)
-          z (:zoom vejer-map)]
-      (r/create-class
-       {:component-did-mount (fn []
-                               (let [lmap (js/L.map @dn)
-                                     positioned (-> lmap
-                                                    (.setView (array lat lon) z))]
-                                 (.addTo (js/tileLayer URL-OSM) positioned)
-                                 (reset! mapatom positioned)))
-        :reagent-render (fn []
-                          (when @mapatom
-                            [:div#map {:style {:height "640px" :width "1024px"}}]))})))
+
 
 ;;a simple one circle try that works
+
 
 (defn home-did-mount []
   (let [map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
@@ -234,26 +219,8 @@
                                  (clj->js {:attribution attribution
                                            :maxZoom     19}))
                      (.addTo map))]
-    (->  #_(.circle js/L #js [36.253 -5.965]
-                    (clj->js {:color       "red"
-                              :fillColor   "#f03"
-                              :fillOpacity 0.5
-                              :radius      5}))
-         (circle {:id 5 :street "Juan Bueno" :number 2 :author "robin" :height 6 :facing "N" :longitude -5.96454 :latitude 36.2528 :destroyed false :destroyed_date nil :date nil :species "martin" :type "cornice"})
+    (->  (circle {:id 5 :street "Juan Bueno" :number 2 :author "robin" :height 6 :facing "N" :longitude -5.96454 :latitude 36.2528 :destroyed false :destroyed_date nil :date nil :species "martin" :type "cornice"})
          (.addTo map))))
-
-(defn homes-did-mount []
-  (fn []
-    (let [atm (r/atom  nil)
-          map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
-          centered (-> (.tileLayer js/L  URL-OSM
-                                   (clj->js {:attribution attribution
-                                             :maxZoom     19}))
-                       (.addTo map))]
-      (fetch-data! atm)
-      (doseq [e @atm]
-        (-> (circle e)
-            (.addTo map))))))
 
 (defn ajax-map-call [m]
   (GET "/transit" {:response-format    :json
@@ -283,15 +250,7 @@
       ;; :component-did-update update
       :reagent-render      (fn [] [:div#map {:style {:height "640px" :width "1024px"}}])})))
 
-(defn testing-homes []
-  (let [atm (r/atom nil)]
-    (fetch-data! atm)
 
-    (fn []
-      [:div
-       (for [a @atm]
-         [:p (str "1 " a)])
-       [:p (str @atm)]])))
 
 ;;THE TEMP VIEW
 
@@ -300,9 +259,7 @@
   (r/render
    [:div
     [:div
-
      [home]
-     [testing-homes]
      [:h1 "Distibution of nests:"]
      [oz-viz2]]]
 

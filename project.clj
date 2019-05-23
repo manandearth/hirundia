@@ -71,7 +71,7 @@
   :cljsbuild
   {:builds [{:id "dev"
              ;;TODO check if this path actually makes a difference.
-             :ring-handler "hirundia.service/js-app-page"
+             ;; :ring-handler "hirundia.service/js-app-page"  ;;;;seems to produce an error in figwheel
              ;; The path to the top-level ClojureScript source directory:
              :source-paths ["src/cljs"]
              ;; The standard ClojureScript compiler options:

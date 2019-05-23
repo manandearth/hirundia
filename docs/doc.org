@@ -1,19 +1,67 @@
-* db
+#+title: Hirundia
+#+startup: indent showall
 
-when I get : server can't start kind of error...:
-in `/var/run`: 
-;;[adam@adam-pc run]$ sudo mkdir postgresql
-;;[adam@adam-pc run]$ sudo chown -R postgres:postgres /var/run/postgresql
-;;[adam@adam-pc run]$ sudo -u postgres -i
+* dev
 
-;;starting server:
+** clj
+- Jack-in repl `C-c M-j` 
+- Open dev/user.clj and evaluate `C-c C-k`
+- reharden reset in repl 
 
-;;[postgres@adam-pc ~]$ pg_ctl -D /user/local/pgsql/data -l logfile start
-;;waiting for server to start.... done
-;;server started
+which is:
+#+BEGIN_SRC clojure
+ (do
+        (clojure.core/require 'clojure.tools.namespace.repl)
+        (clojure.core/require 'com.stuartsierra.component.repl)
+        ((clojure.core/resolve 'clojure.tools.namespace.repl/set-refresh-dirs) "src" "test")
+        (try
+          ((clojure.core/resolve 'com.stuartsierra.component.repl/reset))
+          (catch java.lang.Throwable v
+            (clojure.core/when (clojure.core/instance? java.io.FileNotFoundException v)
+              ((clojure.core/resolve 'clojure.tools.namespace.repl/clear)))
+            (clojure.core/when ((clojure.core/resolve 'com.stuartsierra.component/ex-component?) v)
+              (clojure.core/let [stop (clojure.core/resolve 'com.stuartsierra.component/stop)]
+                (clojure.core/some-> v clojure.core/ex-data :system stop)))
+            (throw v)))) 
 
+#+END_SRC
 
+** cljs
+To start a figwheel repl in cider spawn a repl:
+- `M-x cider-connect-sibling-cljs`
+- `(require '[figwheel-sidecar.repl.api :as fw])`
+- `(fw/start-figwheel)
+- `(fw/cljs-repl)
 
-access with:
+and ready to go.
+
+** TODO automate figwheel repl
+-> there still seem to be an issue with having the two environment:
+when reharden-reset the figwheel is discarded and that needs restarting too...
  
-pg_ctl -D /var/lib/postgres/data/ -l logfile start
+So I need to automate the cljs startup and find a way to add it to reharden-reset.
+
+* DB
+
+** troubleshooting
+
+*** if postgres process isn't running repl won't start.
+  when I get : server can't start kind of error...:
+  in `/var/run`: 
+  ;;[adam@adam-pc run]$ sudo mkdir postgresql
+  ;;[adam@adam-pc run]$ sudo chown -R postgres:postgres /var/run/postgresql
+  ;;[adam@adam-pc run]$ sudo -u postgres -i
+
+  ;;starting server:
+
+  ;;[postgres@adam-pc ~]$ pg_ctl -D /user/local/pgsql/data -l logfile start
+  ;;waiting for server to start.... done
+  ;;server started
+
+
+ *Better*
+  - access with:
+   
+  `pg_ctl -D /var/lib/postgres/data/ -l logfile start`
+
+

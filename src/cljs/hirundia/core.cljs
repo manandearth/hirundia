@@ -4,13 +4,13 @@
      #_[cljs-http.client :as http]
      #_[cljs.core.async :refer [<! >! chan put! take!]]
      [reagent.core :as r]
-     [re-frame.core :as re-frame]
+     [re-frame.core :as re-frame :refer [subscribe dispatch]]
      [ajax.core :refer [GET POST]]
      [day8.re-frame.http-fx]
      [cljs.core.async :refer [<! >! take! put! chan]]
      [promesa.core :as p]
-
      [hirundia.db :as db]
+     [hirundia.subs :as subs]
      [hirundia.views :as views]
      [hirundia.events :as events]
      [hirundia.config :as config]
@@ -20,6 +20,8 @@
      #_[cljsjs.leaflet]))
 
 ;;upon startup
+
+
 (defn dev-setup []
   (when config/debug?
     (enable-console-print!))
@@ -73,7 +75,10 @@
        (for [d @df]
          [:p (str "Entry: " (.indexOf @df d) " -> " d)])]))
 
+
 ;;;SANDBOX FOR VEGA-LITE;;;;;;;;;;;
+
+
 (defn play-data [& names]
   (for [n names
         i (range 20)]
@@ -158,7 +163,7 @@
 
 (def my-list (quote ({:date           #inst "2019-04-04T22:00:00.000-00:00"
                       :number         4
-                      :username       "robin"
+                      :author       "robin"
                       :species        "swift"
                       :facing         "NW"
                       :type           "balcony"
@@ -171,7 +176,7 @@
                       :height         7}
                      {:date           #inst "2019-04-04T22:00:00.000-00:00"
                       :number         9
-                      :username       "robin"
+                      :author       "robin"
                       :species        "swift"
                       :facing         "N"
                       :type           "window"
@@ -199,7 +204,30 @@
                        :fillOpacity 0.2
                        :radius      5}))))
 
+(def vejer-map {:lat 36.253
+                :ln -5.965
+                :zoom 17})
+
+#_(defn leaflet-component
+    []
+    (let [dn (r/atom nil)
+          mapatom (r/atom nil)
+          lat (:lat vejer-map)
+          lon (:lon vejer-map)
+          z (:zoom vejer-map)]
+      (r/create-class
+       {:component-did-mount (fn []
+                               (let [lmap (js/L.map @dn)
+                                     positioned (-> lmap
+                                                    (.setView (array lat lon) z))]
+                                 (.addTo (js/tileLayer URL-OSM) positioned)
+                                 (reset! mapatom positioned)))
+        :reagent-render (fn []
+                          (when @mapatom
+                            [:div#map {:style {:height "640px" :width "1024px"}}]))})))
+
 ;;a simple one circle try that works
+
 (defn home-did-mount []
   (let [map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
         centered (-> (.tileLayer js/L  URL-OSM
@@ -211,44 +239,73 @@
                               :fillColor   "#f03"
                               :fillOpacity 0.5
                               :radius      5}))
-         (circle {:id 5 :street "Juan Bueno" :number 2 :username "robin" :height 6 :facing "N" :longitude -5.96454 :latitude 36.2528 :destroyed false :destroyed_date nil :date nil :species "martin" :type "cornice"})
+         (circle {:id 5 :street "Juan Bueno" :number 2 :author "robin" :height 6 :facing "N" :longitude -5.96454 :latitude 36.2528 :destroyed false :destroyed_date nil :date nil :species "martin" :type "cornice"})
          (.addTo map))))
 
 (defn homes-did-mount []
-  (let [atm (r/atom nil)]
-    (fetch-data! atm)
-    (fn []
-      (let [map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
-            centered (-> (.tileLayer js/L  URL-OSM
-                                     (clj->js {:attribution attribution
-                                               :maxZoom     19}))
-                         (.addTo map))]
-        (doseq [e @atm]
-          (-> (circle e)
-              (.addTo map)))))))
+  (fn []
+    (let [atm (r/atom  nil)
+          map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
+          centered (-> (.tileLayer js/L  URL-OSM
+                                   (clj->js {:attribution attribution
+                                             :maxZoom     19}))
+                       (.addTo map))]
+      (fetch-data! atm)
+      (doseq [e @atm]
+        (-> (circle e)
+            (.addTo map))))))
+
+(defn ajax-map-call [m]
+  (GET "/transit" {:response-format    :json
+                   :keywords? true
+                   :error-handler (fn [] (js/console.log "problem boss.."))
+                   :handler   (fn [response]
+                                (doseq [e (transform-df response)]
+                                  (js/console.log "beep")
+                                  (-> (circle e)
+                                      (.addTo m))))}))
+
+(defn ajax-did-mount []
+  (fn []
+    (let [atm (r/atom  nil)
+          map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
+          centered (-> (.tileLayer js/L  URL-OSM
+                                   (clj->js {:attribution attribution
+                                             :maxZoom     19}))
+                       (.addTo map))]
+      (ajax-map-call map))))
 
 (defn home []
   (fn []
     (r/create-class
-     {:component-did-mount  (homes-did-mount)
-      :reagent-render       (fn [] [:div#map {:style {:height "640px" :width "1024px"}}])})
-    #_[:h2 (str (first @d))]))
+     {:display-name        "reactive-map"
+      :component-did-mount (ajax-did-mount)
+      ;; :component-did-update update
+      :reagent-render      (fn [] [:div#map {:style {:height "640px" :width "1024px"}}])})))
+
+(defn testing-homes []
+  (let [atm (r/atom nil)]
+    (fetch-data! atm)
+
+    (fn []
+      [:div
+       (for [a @atm]
+         [:p (str "1 " a)])
+       [:p (str @atm)]])))
 
 ;;THE TEMP VIEW
+
+
 (defn mount-root []
-  #_(re-frame/clear-subscription-cache!)
   (r/render
    [:div
-    #_[views/main-panel]
-    #_[base-element]
-    #_[osm-page]
-    #_[create-osm]
     [:div
+
      [home]
+     [testing-homes]
      [:h1 "Distibution of nests:"]
-     [oz-viz2]
-     #_[all-data]]
-    #_[get-data]]
+     [oz-viz2]]]
+
    (.getElementById js/document "app")))
 
 

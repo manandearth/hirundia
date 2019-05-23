@@ -58,7 +58,7 @@
   (stop [config]
     ;; you may want to restart other components but not Figwheel
     ;; consider commenting out this next line if that is the case
-    (figwheel/stop-figwheel!)
+    ;; (figwheel/stop-figwheel!)
     config))
 
 (defn env [name]

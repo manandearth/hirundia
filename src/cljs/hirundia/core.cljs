@@ -148,6 +148,19 @@
                 :ln -5.965
                 :zoom 17})
 
+(defn legend []
+  (fn []
+    [:div.legend
+
+     [:svg {:view-box "0 0 100 20" :x 200 :width 500}
+
+      [:g [:text {:x 12  :y 12 :font-size 5} "Swallow"]
+       [:circle {:r 1.5 :style {:fill "crimson" :fill-opacity 0.5 :stroke "red"} :stroke-width 0.5 :cx 10 :cy 10}]
+       [:text {:x 38  :y 12 :font-size 5} "martin"]
+       [:circle {:r 1.5 :style {:fill "steelblue" :fill-opacity 0.5 :stroke "dodgerblue"} :stroke-width 0.5 :cx 35 :cy 10}]
+       [:text {:x 62  :y 12 :font-size 5} "swift"]
+       [:circle {:r 1.5 :style {:fill "seagreen" :fill-opacity 0.5 :stroke "green"} :stroke-width 0.5 :cx 60 :cy 10}]]]]))
+
 ;;the creation of the marker must happen in the ajax call, otherwise it happens before the call returns resulting in no markers...
 (defn ajax-map-call [m]
   (GET "/transit" {:response-format    :json
@@ -187,8 +200,10 @@
 (defn mount-root []
   (r/render
    [:div
+    [:h1 "Distribution of nests:"]
     [:div
      [home]
+     [legend]
      [:h1 "Distibution of nests:"]
      [oz-viz2]]]
 

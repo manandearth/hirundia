@@ -270,6 +270,8 @@
 ;;Entry point for dev
 
 
+i
+
 (defn ^:export main []
   #_(re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)

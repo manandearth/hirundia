@@ -35,7 +35,7 @@
      [:a {:href "/js-app"} "js-app"]
      " | "
      [:a {:href "/nests-insert"} "Add a nest"]
-     " | Logged in as "(:identity session)
+     " | Logged in as " (get-in session [:identity :username])
      " | "
      [:a {:href "/logout"} "Logout"]
      " ]"]
@@ -54,8 +54,7 @@
      [:a {:href "/login"} "Login"]
      " | "
      [:a {:href "/register"} "Register"]
-     " ]"]
-    ))
+     " ]"]))
 
 (defn home [request]
   (page/html5
@@ -64,56 +63,52 @@
    (if (authenticated? (:session request))
      [:div
       [:h1 "Welcome to Hirundia Project."]
-      [:p "Access the database or add data with the links above"]
-      ]
+      [:p "Access the database or add data with the links above"]]
      [:div
       [:h1 "Welcome to Hirundia Project."]
       (pages/intro)])))
 
 (defn about [request]
-    (page/html5
-     (gen-page-head "About")
-     (header-links request)
-     [:div
-      [:h1 "About this project"]
-      [:p "The Hirundia project is a tool exploring the relations of Swallows, Swifts, and House Martins with humans for conservation."]]))
-
+  (page/html5
+   (gen-page-head "About")
+   (header-links request)
+   [:div
+    [:h1 "About this project"]
+    [:p "The Hirundia project is a tool exploring the relations of Swallows, Swifts, and House Martins with humans for conservation."]]))
 
 (defn greet [{:keys [session] :as request}]
-    (page/html5
-     (gen-page-head "Greet")
-     (header-links request)
-     [:div
-      [:h1 "A greeting"]
-      (if (authenticated? (:session request))
-        (let [username (:identity session)]
-          [:p (str "Hi, " username)])
-        "Hi, Anonymous...")]))
-
-
+  (page/html5
+   (gen-page-head "Greet")
+   (header-links request)
+   [:div
+    [:h1 "A greeting"]
+    (if (authenticated? (:session request))
+      (let [username (:identity session)]
+        [:p (str "Hi, " username)])
+      "Hi, Anonymous...")]))
 
 (defn insert-entry [request]
   (page/html5
    (gen-page-head "add a nest to the database")
    (header-links request)
-    [:div
-     [:h1 "Add a nest to the database"]
-     [:form {:action "/nests-insert" :method "POST"}
+   [:div
+    [:h1 "Add a nest to the database"]
+    [:form {:action "/nests-insert" :method "POST"}
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
-      [:div
-       [:p [:label.justify "Street: "    [:input {:type "text" :name "street"}]]]
-       [:p [:label.justify "Number: "    [:input {:type "int" :name "number"}]]]
-       [:p [:label.justify "Latitude: "  [:input {:type "int" :name "lat"}]]]
-       [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
-       [:p [:label.justify "Species: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin") ]]
-       [:p [:label.justify "Height: "    (form/drop-down "height" (map inc (range 20)) 5)]]
-       [:p [:label.justify "Facing: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
-       [:p [:label.justify "Type: "      (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] "window")]]
-       [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
-       [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-       [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" [true false] false)]]
-       [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]
-       [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
+     [:div
+      [:p [:label.justify "Street: "    [:input {:type "text" :name "street"}]]]
+      [:p [:label.justify "Number: "    [:input {:type "int" :name "number"}]]]
+      [:p [:label.justify "Latitude: "  [:input {:type "int" :name "lat"}]]]
+      [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
+      [:p [:label.justify "Species: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin")]]
+      [:p [:label.justify "Height: "    (form/drop-down "height" (map inc (range 20)) 5)]]
+      [:p [:label.justify "Facing: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
+      [:p [:label.justify "Type: "      (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] "window")]]
+      [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
+      [:p "If the nest is no longer there fill in the following and include the day recorded:"]
+      [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" [true false] false)]]
+      [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]
+      [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
 
 (defn register [{:keys [flash] :as request}]
   (page/html5
@@ -130,6 +125,8 @@
 
 
 ;FIXME flash here suppose to be just the username but this view is redirected by also `login` POST perform endpoint which sends a flash message for wrong password..
+
+
 (defn login [{:keys [flash] :as request}]
   (page/html5
    (gen-page-head "Login")
@@ -144,37 +141,33 @@
        [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 
-
-
 (defn js-app [request]
   (page/html5
    (gen-page-head "js-app")
    (header-links request)
    [:div {:id "app"}]
    [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-           :integrity"sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+           :integrity "sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
            :crossorigin ""}]
    [:script {:src "https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-             :integrity"sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+             :integrity "sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
              :crossorigin ""}]
-   [:script {:src"https://unpkg.com/vega@3.2.1/build/vega.js"}]
-   [:script {:src"https://unpkg.com/regenerator-runtime@0.11.1/runtime.js"}]
+   [:script {:src "https://unpkg.com/vega@3.2.1/build/vega.js"}]
+   [:script {:src "https://unpkg.com/regenerator-runtime@0.11.1/runtime.js"}]
    [:script {:src "lvega/bundle.js"}]
-   [:script {:src "js/compiled/app.js" :type "text/javascript"}]
-   )
-  )
+   [:script {:src "js/compiled/app.js" :type "text/javascript"}]))
 
 (defn osm-page [request]
   (page/html5
-  [:head
-   [:meta {:charset "UTF-8"}]
-   [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
-   [:link {:rel "stylesheet" :href "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" :type "text/css"}]
-   [:script {:src "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js" :charset "utf-8"}]
-  [:body
-   [:div {:id "mapid"}]
-   [:div {:id "main-app-area"}]
-   [:script {:src "js/compiled/osm.js" :type "text/javascript"}]]]) )
+   [:head
+    [:meta {:charset "UTF-8"}]
+    [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+    [:link {:rel "stylesheet" :href "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" :type "text/css"}]
+    [:script {:src "http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js" :charset "utf-8"}]
+    [:body
+     [:div {:id "mapid"}]
+     [:div {:id "main-app-area"}]
+     [:script {:src "js/compiled/osm.js" :type "text/javascript"}]]]))
 
 ;; (insert-to-db-results {:params {"street" "Kookoo"}})
 ;;(list-of-entries)

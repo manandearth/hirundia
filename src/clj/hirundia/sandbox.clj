@@ -6,8 +6,7 @@
    [honeysql.core :as sql]
    [honeysql.helpers :as helpers :refer :all :exclude [update]]
    [java-time :refer :all
-     :exclude [format update contains? iterate range min max zero?]
-    ]
+    :exclude [format update contains? iterate range min max zero?]]
    [clojure.string :as string]))
 
 (def today (sql-date (local-date)))
@@ -18,7 +17,7 @@
 
 ;HERE db connection before component
 (def conn {:dbtype "postgresql"
-           :dbname "postgres"
+           :dbname "hirundia_dev"
            :host "localhost"
            :user "postgres"
            :password "postgres"})
@@ -27,22 +26,20 @@
 
 
 ;HERE the db uri-connection string that JDBC is happy eith
-  (def dbspec "postgresql://postgres:postgres@localhost:5432/postgres")
+(def dbspec "postgresql://postgres:postgres@localhost:5432/postgres")
 
 ;;HERE (unencessary) make the uri string from request-map since I don't know how to use the PG component yet...
 (defn extract-uri [db]
   (let [p db
         p-vec (clojure.string/split (:url p)  #"/")]
-    (str (first p-vec) "//" (get p-vec 3) ":" (get p-vec 3) "@" (get p-vec 2) "/" (get p-vec 3) )))
+    (str (first p-vec) "//" (get p-vec 3) ":" (get p-vec 3) "@" (get p-vec 2) "/" (get p-vec 3))))
 
 ;;HERE simplest db-query, just to wire regardless of PG component
 (defn comp-db-q [db]
   (let [uri (extract-uri db)]
     (jdbc/query uri (sql/format {:select [:*]
                                  :from [:nests]
-                                 :where [:= :species "penguin"]
-                                 }))))
-
+                                 :where [:= :species "penguin"]}))))
 
 (defn create-nest-table []
   (jdbc/db-do-commands conn
@@ -62,9 +59,6 @@
 
 ;;TODO check that all the types above are correct and re create the table.
 #_(create-nest-table)
-
-
-
 
 (defn add-nest [entry]
   (jdbc/insert! conn :nests entry))
@@ -109,11 +103,10 @@
 
 ;; (jdbc/query conn (sql/format sqlmap))
 
-#_ (insert-nest! {:street "Doop" :species "unicorn"})
-#_ (count (jdbc/query conn ["SELECT * FROM nests WHERE (species = 'unicorn')"]))
+#_(insert-nest! {:street "Doop" :species "unicorn"})
+#_(count (jdbc/query conn ["SELECT * FROM nests WHERE (species = 'unicorn')"]))
 
 #_(-> sqlmap (select :*))
-
 
 (def test-map (-> (insert-into :nests)
                   (columns :street :number :gps :species :height :facing :type :date :destroyed :destroyed-date)
@@ -167,12 +160,10 @@
                     ["Juan Bueno" 1 (pg/point 36.25238, -5.96424) "swallow" 5 "N" "crack" today false nil]])
                   sql/format))
 
-
 #_(jdbc/with-db-transaction [db conn] ;makes sure that the transaction is carried only if there are no errors, cool!
-                      (jdbc/execute!
-                       db
-                       test-map))
-
+    (jdbc/execute!
+     db
+     test-map))
 
 (def select-all-query
   (jdbc/query conn (sql/format  {:select [:*]
@@ -189,11 +180,11 @@
 (defn insert-entry [address]
   (let [results
         (jdbc/execute! conn
-                      (-> (insert-into :nests)
-                          (columns :address)
-                          (values [[address]])
-                          sql/format)
-                      {:return-keys ["id" "address"]})]
+                       (-> (insert-into :nests)
+                           (columns :address)
+                           (values [[address]])
+                           sql/format)
+                       {:return-keys ["id" "address"]})]
     (assert (= (count results) 2))
     results))
 

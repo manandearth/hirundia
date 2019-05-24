@@ -85,6 +85,7 @@
                         :pretty-print true}}
             {:id "min"
              :source-paths ["src/cljs"]
+             :externs ["externs.js"]
              :compiler     {:main            hirundia.core
                             :output-to       "resources/public/js/compiled/app.js"
                             :optimizations   :simple

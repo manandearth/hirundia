@@ -123,6 +123,13 @@
                        :fillOpacity 0.2
                        :radius      5}))))
 
+(defn popup [entry]
+  (let [street (:street entry)
+        number (:number entry)
+        height (:height entry)
+        facing (:facing entry)]
+    (str "<b>Address: </b> <br>" street " " number)))
+
 (def vejer-map {:lat 36.253
                 :ln -5.965
                 :zoom 17})
@@ -136,6 +143,7 @@
                                 (doseq [e (transform-df response)]
                                   (js/console.log "beep")
                                   (-> (circle e)
+                                      (.bindPopup (popup e))
                                       (.addTo m))))}))
 
 (defn ajax-did-mount []

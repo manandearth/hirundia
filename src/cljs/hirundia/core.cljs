@@ -127,8 +127,22 @@
   (let [street (:street entry)
         number (:number entry)
         height (:height entry)
-        facing (:facing entry)]
-    (str "<b>Address: </b> <br>" street " " number)))
+        facing (:facing entry)
+        type-of (:type entry)
+        date (.toDateString (:date entry))]
+    (str "<table>
+<tr><td><b>Address: </b>" street " "  number "</td></tr>
+<tr><td><b>Height: </b>" height " m</td></tr>
+<tr><td><b>Aspect: </b>" facing "</td></tr>
+<tr><td><b>Type of nest: </b>" type-of "</td></tr>
+<tr><td><b>First recorded: </b>" date "</td></tr>
+</table>")))
+
+(defn tooltip [entry]
+  (let [lat (:latitude entry)
+        lon (:longitude entry)
+        gps (str "(" lat ", " lon ")")]
+    (str "gps -> " gps)))
 
 (def vejer-map {:lat 36.253
                 :ln -5.965
@@ -144,6 +158,7 @@
                                   (js/console.log "beep")
                                   (-> (circle e)
                                       (.bindPopup (popup e))
+                                      (.bindTooltip (tooltip e))
                                       (.addTo m))))}))
 
 (defn ajax-did-mount []

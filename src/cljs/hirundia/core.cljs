@@ -1,8 +1,6 @@
 (ns hirundia.core ^:figwheel-always
     (:require-macros [cljs.core.async.macros :refer [go]])
     (:require
-     #_[cljs-http.client :as http]
-     #_[cljs.core.async :refer [<! >! chan put! take!]]
      [reagent.core :as r]
      [re-frame.core :as re-frame :refer [subscribe dispatch]]
      [ajax.core :refer [GET POST]]
@@ -16,8 +14,7 @@
      [hirundia.config :as config]
      [oz.core :as oz]
      [oops.core :refer [oget oset! ocall oapply ocall! oapply!
-                        oget+ oset!+ ocall+ oapply+ ocall!+ oapply!+]]
-     #_[cljsjs.leaflet]))
+                        oget+ oset!+ ocall+ oapply+ ocall!+ oapply!+]]))
 
 ;;upon startup
 
@@ -26,21 +23,6 @@
   (when config/debug?
     (enable-console-print!))
   (println "dev mode"))
-
-(js/console.log "232")
-
-(def test-atom (r/atom 1))
-;(swap! test-atom inc)
-
-(defn base-element []
-  [:div [:h2 (str  "test-atom value is: " (swap! test-atom inc))]
-   [:p (str "the id's are: "
-            (map :id  (:data db/default-db)))]
-   [:p (str "the gps points are: " (map :gps  (:data db/default-db)))]
-   [:p (str "the heights are: " (map :height  (:data db/default-db)))]])
-
-;;THE DATAFRAME ATOM
-(defonce df (r/atom nil))
 
 ;;parse ps string to :lat and :lon floats
 (defn coords-helper [entry]
@@ -62,19 +44,6 @@
   (GET "/transit" {:response-format    :json
                    :keywords? true
                    :handler   (fn [response] (reset! a (transform-df response)))}))
-
-;;trial -> see if updating a global atom works
-
-
-(defn get-data! []
-  (GET "/transit" {:response-format    :json
-                   :keywords? true
-                   :handler   (fn [response] (reset! df (transform-df response)))})
-  #_(fn []
-      [:div
-       (for [d @df]
-         [:p (str "Entry: " (.indexOf @df d) " -> " d)])]))
-
 
 ;;;SANDBOX FOR VEGA-LITE;;;;;;;;;;;
 
@@ -130,9 +99,6 @@
 
 (defn oz-viz2 []
   (let [d (r/atom nil)]
-    #_(GET "/transit" {:response-format :json
-                       :keywords?       true
-                       :handler         (fn [response] (reset! df (transform-df response)))})
     (fetch-data! d)
     (fn []
       [:div
@@ -140,53 +106,6 @@
 
 (def URL-OSM   "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
 (def attribution "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors")
-#_(defn create-osm []
-    (let [m (-> js/L
-                (.map "mapid2")
-                (.setView (array -33.8675 151.2070) 9))       ;; Sidney
-          tile1 (-> js/L (.tileLayer URL-OSM
-                                     #js{:maxZoom     16
-                                         :attribution "OOGIS RL, OpenStreetMap &copy;"}))
-          base (clj->js {"OpenStreetMap" tile1})
-          ctrl (-> js/L (.control.layers base nil))]
-      (.addTo tile1 m)
-      (.addTo ctrl m)))
-
-#_(defn home-render []
-    [:div#map {:style {:height "10px" :width "10px"}}])
-(def mock-dist
-  [{:id 1 :street "Altozano" :number 1 :username "sophie" :height 7 :facing "NW" :longitude -5.96626 :latitude 36.25359 :destroyed false :destroyed_date nil :date nil :species "swallow" :type "gable"}
-   {:id 2 :street "Altozano" :number 1 :username "sophie" :height 7 :facing "NW" :longitude -5.96626 :latitude 36.25159 :destroyed false :destroyed_date nil :date nil :species "swallow" :type "gable"}
-   {:id 3 :street "Altozano" :number 3 :username "noah" :height 8 :facing "NW" :longitude -5.96531 :latitude 36.25259 :destroyed false :destroyed_date nil :date nil :species "swift" :type "window"}
-   {:id 4 :street "Juan Bueno" :number 1 :username "noah" :height 6 :facing "N" :longitude -5.96424 :latitude 36.2532 :destroyed false :destroyed_date nil :date nil :species "swallow" :type "window"}
-   {:id 5 :street "Juan Bueno" :number 2 :username "robin" :height 6 :facing "N" :longitude -5.96454 :latitude 36.2528 :destroyed false :destroyed_date nil :date nil :species "martin" :type "cornice"}])
-
-(def my-list (quote ({:date           #inst "2019-04-04T22:00:00.000-00:00"
-                      :number         4
-                      :author       "robin"
-                      :species        "swift"
-                      :facing         "NW"
-                      :type           "balcony"
-                      :longitude      -5.96599
-                      :street         "Altozano"
-                      :id             711
-                      :latitude       36.25368
-                      :destroyed_date nil
-                      :destroyed      false
-                      :height         7}
-                     {:date           #inst "2019-04-04T22:00:00.000-00:00"
-                      :number         9
-                      :author       "robin"
-                      :species        "swift"
-                      :facing         "N"
-                      :type           "window"
-                      :longitude      -5.96548
-                      :street         "Altozano"
-                      :id             716,
-                      :latitude       36.25359
-                      :destroyed_date nil
-                      :destroyed      false
-                      :height         12})))
 
 (defn circle [entry]
   (let [lon  (:longitude   entry)
@@ -208,20 +127,7 @@
                 :ln -5.965
                 :zoom 17})
 
-
-
-;;a simple one circle try that works
-
-
-(defn home-did-mount []
-  (let [map (.setView (.map js/L "map") #js [36.253 -5.965] 17)
-        centered (-> (.tileLayer js/L  URL-OSM
-                                 (clj->js {:attribution attribution
-                                           :maxZoom     19}))
-                     (.addTo map))]
-    (->  (circle {:id 5 :street "Juan Bueno" :number 2 :author "robin" :height 6 :facing "N" :longitude -5.96454 :latitude 36.2528 :destroyed false :destroyed_date nil :date nil :species "martin" :type "cornice"})
-         (.addTo map))))
-
+;;the creation of the marker must happen in the ajax call, otherwise it happens before the call returns resulting in no markers...
 (defn ajax-map-call [m]
   (GET "/transit" {:response-format    :json
                    :keywords? true
@@ -240,7 +146,7 @@
                                    (clj->js {:attribution attribution
                                              :maxZoom     19}))
                        (.addTo map))]
-      (ajax-map-call map))))
+      (ajax-map-call map))));important that the .addTo and `ajax-map-call` is for the base element `map`, and not to `cenetered` ( will produce errors)
 
 (defn home []
   (fn []
@@ -269,8 +175,6 @@
 
 ;;Entry point for dev
 
-
-i
 
 (defn ^:export main []
   #_(re-frame/dispatch-sync [::events/initialize-db])

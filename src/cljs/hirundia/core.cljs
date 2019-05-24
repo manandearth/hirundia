@@ -65,44 +65,73 @@
 ;;---------VEGA-VIZ----------
 
 ;;---------------------------
-(defn schema [data] {:schema "https://vega.github.io/schema/vega-lite/v3.json"
-                     :width  1024
-                     :height 640
-                     :config
-                     {:autosize "none" ;default is pad and it doesn't crop a too lage an object
-                      }
-                     :layer
-                     [{:data       {:url "json/vejer-geoshape.json"
-                                    :format {:type "json" :feature "features"}}
-                       :projection {:type "albers"}
-                       :mark       {:type "geoshape" :fill "lightgray" :stroke "transparent"}}
+(defn map-schema [data] {:schema "https://vega.github.io/schema/vega-lite/v3.json"
+                         :width  1024
+                         :height 640
+                         :config
+                         {:autosize "none" ;default is pad and it doesn't crop a too lage an object
+                          }
+                         :layer
+                         [{:data       {:url "json/vejer-geoshape.json"
+                                        :format {:type "json" :feature "features"}}
+                           :projection {:type "albers"}
+                           :mark       {:type "geoshape" :fill "lightgray" :stroke "transparent"}}
 
-                      {:data       {:values data}
-                       :projection {:type "albers"}
-                       :mark       "circle"
-                       :encoding   {:longitude {:field "longitude" :type "quantitative"}
-                                    :latitude  {:field "latitude" :type "quantitative"}
-                                    :size      {:field "height" :type "quantitative"}
-                                    :color     {:field  "species"
-                                                :type   "nominal"
-                                                :legend {:title  nil,
-                                                         :orient "bottom-right"
-                                                         :offset 0}}
+                          {:data       {:values data}
+                           :projection {:type "albers"}
+                           :mark       "circle"
+                           :encoding   {:longitude {:field "longitude" :type "quantitative"}
+                                        :latitude  {:field "latitude" :type "quantitative"}
+                                        :size      {:field "height" :type "quantitative"}
+                                        :color     {:field  "species"
+                                                    :type   "nominal"
+                                                    :legend {:title  nil,
+                                                             :orient "bottom-right"
+                                                             :offset 0}}
 
-                                    :tooltip [{:field "street" :type "nominal"}
-                                              {:field "number" :type "quantitative"}
-                                              {:field "facing" :type "nominal"}
-                                              {:field "type" :type "nominal"}
-                                              {:field "username" :type "nominal"}]}
-                       :config {:view  {:stroke "transparent"}
-                                :style {:cell {:stroke "transparent"}}}}]})
+                                        :tooltip [{:field "street" :type "nominal"}
+                                                  {:field "number" :type "quantitative"}
+                                                  {:field "facing" :type "nominal"}
+                                                  {:field "type" :type "nominal"}
+                                                  {:field "username" :type "nominal"}]}
+                           :config {:view  {:stroke "transparent"}
+                                    :style {:cell {:stroke "transparent"}}}}]})
+
+(defn nest-height-schema [data] {:width 600
+                                 :data {:values data}
+                                 :encoding {:x {:field "species" :type "nominal"}
+                                            :y {:aggregate "count"
+                                                :type "quantitative"
+                                                :stack "normalize"}
+                                            :color {:field "height" :type "nominal"
+                                                    :scale {:domain ["12" "11" "10" "9" "8" "7" "6" "5" "4" "3" "2" "1"]
+                                                            :range  ["#D5D8DD" "#BECDE0" "#AEC7E5" "#99B9E1" "#6098DC" "#4B8AD8" "#2D75CD" "#1D6FD3" "#0F5DBD" "#0C4B97" "#063F84" "#04254E"]}}}
+                                 :legend {:title "height by species"}
+                                 :mark "bar"})
+
+(defn scatter-schema [data] {;:schema "https://vega.github.io/schema/vega-lite/v3.json"
+                             :width 500
+                             :description "A scatter plot to show height in relation to latitude"
+                             :data {:values data}
+                             :mark "point"
+                             :encoding {:x     {:field "height", :type "quantitative"}
+                                        :y     {:field "latitude" :type "quantitative" :scale {:domain [36.252 36.255]}}
+                                        :color {:field "species" :type "nominal"}
+                                        :shape  {:field "species" :type "nominal"}}})
 
 (defn oz-viz2 []
   (let [d (r/atom nil)]
     (fetch-data! d)
     (fn []
       [:div
-       [oz/vega (schema @d)]])))
+       [oz/vega (nest-height-schema @d)]])))
+
+(defn oz-viz3 []
+  (let [d (r/atom nil)]
+    (fetch-data! d)
+    (fn []
+      [:div
+       [oz/vega (scatter-schema @d)]])))
 
 (def URL-OSM   "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
 (def attribution "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors")
@@ -168,7 +197,6 @@
                    :error-handler (fn [] (js/console.log "problem boss.."))
                    :handler   (fn [response]
                                 (doseq [e (transform-df response)]
-                                  (js/console.log "beep")
                                   (-> (circle e)
                                       (.bindPopup (popup e))
                                       (.bindTooltip (tooltip e))
@@ -192,9 +220,7 @@
       ;; :component-did-update update
       :reagent-render      (fn [] [:div#map {:style {:height "640px" :width "1024px"}}])})))
 
-
-
-;;THE TEMP VIEW
+;;View
 
 
 (defn mount-root []
@@ -204,8 +230,10 @@
     [:div
      [home]
      [legend]
-     [:h1 "Distibution of nests:"]
-     [oz-viz2]]]
+     [:h1 "Nest height by species:"]
+     [oz-viz2]
+     [:h1 "Height / Latitude / species:"]
+     [oz-viz3]]]
 
    (.getElementById js/document "app")))
 

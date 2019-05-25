@@ -30,9 +30,7 @@
      " |"
      [:a {:href "/nests"} "View all nests"]
      " | "
-     [:a {:href "/nests-viz"} "Viz"]
-     " | "
-     [:a {:href "/js-app"} "js-app"]
+     [:a {:href "/js-app"} "Dashboard"]
      " | "
      [:a {:href "/nests-insert"} "Add a nest"]
      " | Logged in as " (get-in session [:identity :username])
@@ -47,9 +45,7 @@
      " |"
      [:a {:href "/nests"} "View all nests"]
      " | "
-     [:a {:href "/nests-viz"} "Viz"]
-     " | "
-     [:a {:href "/js-app"} "js-app"]
+     [:a {:href "/js-app"} "Dashboard"]
      " | "
      [:a {:href "/login"} "Login"]
      " | "

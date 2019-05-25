@@ -1,6 +1,12 @@
+@font-face {
+    font-family: "LatinModernRomanWOFF";
+    /*src: url('https://www.albany.edu/~hammond/webfonts/lmroman12-regular.woff');*/
+    src: url('/fonts/lmroman12-regular.woff');
+}
+
 body {
     background-color: white;
-    font-family: "Roboto", sans-serif;
+    font-family: "LatinModernRomanWOFF", sans-serif;
     line-height: 1.25;
 }
 
@@ -18,7 +24,7 @@ h1 {
     justify-content: space-between;
     align-items: left;
     flex-wrap: wrap;
-    font-family: "Roboto", sans-serif;
+    font-family: "LatinModernRomanWOFF", sans-serif;
     font-size: 1.5rem;
 }
 
@@ -95,7 +101,7 @@ h2 {
     color: #777;
 }
 p {
-    font-family: "Roboto", sans-serif;
+    font-family: "LatinModernRomanWOFF", sans-serif;
     font-size: 1.3em;
     padding: .5em;
 }

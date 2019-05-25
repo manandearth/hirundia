@@ -246,15 +246,16 @@
 (defn mount-root []
   (r/render
    [:div
-    [:h1 "Distribution of nests:"]
+    [:h1 "Dashboard"]
+    [:h2 "Distribution of nests:"]
     [:div
      [home]
      [legend]
-     [:h1 "Nest height by species:"]
+     [:h2 "Nest height by species:"]
      [oz-nest-height]
-     [:h1 "Height / Latitude / Species:"]
+     [:h2 "Height / Latitude / Species:"]
      [oz-scatter]
-     [:h1 "Address / Number of nests"]
+     [:h2 "Address / Number of nests"]
      [oz-nests-per-address]]]
 
    (.getElementById js/document "app")))

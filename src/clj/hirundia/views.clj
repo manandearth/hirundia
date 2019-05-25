@@ -68,9 +68,11 @@
   (page/html5
    (gen-page-head "About")
    (header-links request)
-   [:div
-    [:h1 "About this project"]
-    [:p "The Hirundia project is a tool exploring the relations of Swallows, Swifts, and House Martins with humans for conservation."]]))
+   (if (authenticated? (:session request))
+     (pages/intro)
+     [:div
+      [:h1 "About this project"]
+      [:p "The Hirundia project is a tool exploring the relations of Swallows, Swifts, and House Martins with humans for conservation."]])))
 
 (defn greet [{:keys [session] :as request}]
   (page/html5

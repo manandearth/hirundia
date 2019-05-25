@@ -30,7 +30,7 @@
      " |"
      [:a {:href "/nests"} "View all nests"]
      " | "
-     [:a {:href "/js-app"} "Dashboard"]
+     [:a {:href "/dashboard"} "Dashboard"]
      " | "
      [:a {:href "/nests-insert"} "Add a nest"]
      " | Logged in as " (get-in session [:identity :username])
@@ -45,7 +45,7 @@
      " |"
      [:a {:href "/nests"} "View all nests"]
      " | "
-     [:a {:href "/js-app"} "Dashboard"]
+     [:a {:href "/dashboard"} "Dashboard"]
      " | "
      [:a {:href "/login"} "Login"]
      " | "
@@ -137,9 +137,9 @@
        [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 
-(defn js-app [request]
+(defn dashboard [request]
   (page/html5
-   (gen-page-head "js-app")
+   (gen-page-head "Dashboard")
    (header-links request)
    [:div {:id "app"}]
    [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"

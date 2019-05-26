@@ -21,49 +21,10 @@
    [io.pedestal.http :as http]
    [io.pedestal.http.route :as route]
    [io.pedestal.http.route.definition.table :refer [table-routes]]
-   [figwheel-sidecar.repl-api :as figwheel]
    [hirundia.server]
-   [hirundia.service]))
+   [hirundia.service]
+   [hirundia.figwheel]))
 
-#_(def figwheel
-    (figwheel/server
-     {:css-dirs ["resources/public/css"]
-      :cljsbuild {:builds
-                  [{:source-paths ["src/cljs"]
-                    :build-options
-                    {:output-to     "target/figwheel/public/main.js"
-                     :output-dir    "target/figwheel/public"
-                     :optimizations :none}}]}}))
-
-(def figwheel-config
-  {:figwheel-options {} ;; <-- figwheel server config goes here 
-   :build-ids ["dev"]   ;; <-- a vector of build ids to start autobuilding
-   :all-builds          ;; <-- supply your build configs here
-   [{:id "dev"
-     :figwheel true
-     :source-paths ["src/cljs"]
-     :compiler {:main "hirundia.core"
-                 ;;:asset-path "/out"
-                :output-to "resources/public/js/compiled/app.js"
-                :output-dir "resources/public/js/compiled/out"
-                :asset-path "js/compiled/out"
-                :optimizations :none
-                :pretty-print true}}]})
-
-(defrecord Figwheel []
-  component/Lifecycle
-  (start [config]
-    (figwheel/start-figwheel! config)
-    config)
-  (stop [config]
-    ;; you may want to restart other components but not Figwheel
-    ;; consider commenting out this next line if that is the case
-    ;; (figwheel/stop-figwheel!)
-    config))
-
-(defn env [name]
-  {:post [(seq %)]}
-  (System/getenv name))
 
 (defn dev-system
   []
@@ -72,11 +33,11 @@
    ;; :background-processor (background-processor/new :queue-name "cljtest")
    ;; :enqueuer (enqueuer/new :queue-name "cljtest")
    :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:hirundia_dev"
-                                        :user (env "MANANDEARTH_HIRUNDIA_USER")
-                                        :password (env "MANANDEARTH_HIRUNDIA_PASSWORD")})
+                                        :user (hirundia.server/env "MANANDEARTH_HIRUNDIA_USER")
+                                        :password (hirundia.server/env "MANANDEARTH_HIRUNDIA_PASSWORD")})
    :pedestal (component/using (pedestal-component/pedestal (constantly hirundia.server/dev-map))
                               hirundia.service/components-to-inject)
-   :figwheel (map->Figwheel figwheel-config)))
+   :figwheel (hirundia.figwheel/map->Figwheel hirundia.figwheel/figwheel-config)))
 
 (set-init (fn [_]
             (dev-system)))

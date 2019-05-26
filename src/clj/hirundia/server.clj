@@ -6,11 +6,16 @@
    [io.pedestal.http.route :as route]
    [io.pedestal.http :as http]
    [hirundia.service :as service]
+   [hirundia.figwheel]
    [com.grzm.component.pedestal :as pedestal-component]
    [ring.middleware.session.cookie :as cookie]))
 
 (def dev-http-port 8080)
 (def test-http-port 59800)
+
+(defn env [name]
+  {:post [(seq %)]}
+  (System/getenv name))
 
 (def dev-map
   (-> service/service ;; start with production configuration
@@ -32,15 +37,16 @@
   (let [production-map (-> service/service
                            (merge {:env :production
                                    ::http/enable-session {:store (cookie/cookie-store)}})
-                     (server/default-interceptors))]
+                           (server/default-interceptors))]
     (component/system-map
      :service-map production-map
      :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:hirundia_dev"
-                                          :user "postgres"
-                                          :password "postgres"})
+                                          :user (env "MANANDEARTH_HIRUNDIA_USER")
+                                          :password (env "MANANDEARTH_HIRUNDIA_PASSWORD")})
      :pedestal (component/using (pedestal-component/pedestal (constantly production-map))
-                                service/components-to-inject))))
-
+                                service/components-to-inject)
+     :figwheel (hirundia.figwheel/map->Figwheel hirundia.figwheel/figwheel-config))
+    ))
 
 (defn -main
   "The entry-point for 'lein run'"

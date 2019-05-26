@@ -1,8 +1,8 @@
 (ns hirundia.coerce
-  (:require
-   [hirundia.spec-utils :refer [check!]]
-   [spec-coerce.core :as coerce]
-   [clojure.spec.alpha :as spec]))
+     (:require
+      [hirundia.spec-utils :refer [check!]]
+      [spec-coerce.core :as coerce]
+      [clojure.spec.alpha :as spec]))
 
 (defn coerce
   ([v]

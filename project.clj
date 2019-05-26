@@ -67,7 +67,7 @@
 
                    :source-paths ["dev" "src/clj" "src/cljs"]
                    :repl-options {:init-ns user}}
-             :production {:env {:production true}}}
+             :production {:env {:production true}}
              :uberjar {:aot [hirundia.server]}}
   :cljsbuild
   {:builds [{:id "dev"

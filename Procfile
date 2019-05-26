@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/hirundia.jar clojure.main -m hirundia.server

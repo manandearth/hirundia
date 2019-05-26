@@ -167,8 +167,3 @@
      [:div {:id "main-app-area"}]
      [:script {:src "js/compiled/osm.js" :type "text/javascript"}]]]))
 
-;; (insert-to-db-results {:params {"street" "Kookoo"}})
-;;(list-of-entries)
-
-
-;; (table/to-table1d (list {:age 3 :name "Jo"} {:age 2 :name "Bob"}) [:age "Age" :name "Name"] )

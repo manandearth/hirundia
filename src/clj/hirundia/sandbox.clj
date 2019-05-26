@@ -11,10 +11,6 @@
 
 (def today (sql-date (local-date)))
 
-;; (java-time.convert  )
-;; (clojure.java.jdbc)
-;; (clj-time.jdbc )
-
 ;HERE db connection before component
 (def conn {:dbtype "postgresql"
            :dbname "hirundia_dev"
@@ -98,15 +94,6 @@
 (def sqlmap {:select [:id :street :number]
              :from [:nests]
              :where [:> :id 1]})
-
-#_(sql/format sqlmap)
-
-;; (jdbc/query conn (sql/format sqlmap))
-
-#_(insert-nest! {:street "Doop" :species "unicorn"})
-#_(count (jdbc/query conn ["SELECT * FROM nests WHERE (species = 'unicorn')"]))
-
-#_(-> sqlmap (select :*))
 
 (def test-map (-> (insert-into :nests)
                   (columns :street :number :gps :species :height :facing :type :date :destroyed :destroyed-date)

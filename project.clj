@@ -75,7 +75,13 @@
                        :cljsbuild {:builds [{:source-paths ["src/cljs"]
                                              :compiler {:output-to "resources/public/js/script.js"
                                                         :optimizations :simple
-                                                        :pretty-print false}}]}}}
+                                                        :pretty-print false}}]}}
+             :production {:dependencies [[figwheel-sidecar "0.5.18"]
+                                         [cider/piggieback "0.4.0"]]
+                          :cljsbuild {:builds [{:source-paths ["src/cljs"]
+                                                :compiler {:output-to "resources/public/js/script.js"
+                                                           :optimizations :simple
+                                                           :pretty-print false}}]}}}
   :cljsbuild
   {:builds [{:id "dev"
              ;;TODO check if this path actually makes a difference.

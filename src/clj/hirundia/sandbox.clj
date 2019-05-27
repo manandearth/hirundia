@@ -149,9 +149,9 @@
      db
      test-map))
 
-(def select-all-query
-  (jdbc/query conn (sql/format  {:select [:*]
-                                 :from [:nests]})))
+;; (def select-all-query
+;;   (jdbc/query conn (sql/format  {:select [:*]
+;;                                  :from [:nests]})))
 
 (defn insert-entry [address]
   (let [results

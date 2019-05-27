@@ -5,6 +5,7 @@
    [io.pedestal.http :as server]
    [io.pedestal.http.route :as route]
    [io.pedestal.http :as http]
+   [modular.postgres]
    [hirundia.service :as service]
    [hirundia.figwheel]
    [com.grzm.component.pedestal :as pedestal-component]

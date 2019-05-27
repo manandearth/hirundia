@@ -48,7 +48,7 @@
                  [joplin.jdbc "0.3.11"]]
   :repl-options {:port 41234}
   :min-lein-version "2.0.0"
-  :source-paths ["dev" "src/clj" "src/cljs"]
+  :source-paths ["src/clj" "src/cljs"]
   :resource-paths ["config" "resources"]
   :plugins [[lein-cljsbuild "1.1.7"]
             [cider/cider-nrepl "0.21.1"]]
@@ -58,6 +58,7 @@
             "reset" ["run" "-m" "joplin.alias/reset" "joplin.edn"]
             "pending" ["run" "-m" "joplin.alias/pending" "joplin.edn"]
             "create" ["run" "-m" "joplin.alias/create" "joplin.edn"]}
+
                                         ;:figwheel {:css-dirs ["resources/public/css"]}
   :profiles {:dev {:dependencies [[io.pedestal/pedestal.service-tools "0.5.3"]
                                   [com.stuartsierra/component.repl "0.2.0"]
@@ -65,17 +66,12 @@
                                   [org.clojure/tools.nrepl "0.2.13" :exclusions [org.clojure/clojure]]
                                   [figwheel-sidecar "0.5.18"]
                                   [cider/piggieback "0.4.0"]]
-
                    :source-paths ["dev" "src/clj" "src/cljs"]
                    :repl-options {:init-ns user}}
              :uberjar {:aot [hirundia.server]
-                       :dependencies [[io.pedestal/pedestal.service-tools "0.5.3"]
-                                      [com.stuartsierra/component.repl "0.2.0"]
-                                      [org.clojure/tools.namespace "0.3.0-alpha4"]
-                                      [org.clojure/tools.nrepl "0.2.13" :exclusions [org.clojure/clojure]]
-                                      [figwheel-sidecar "0.5.18"]
+
+                       :dependencies [[figwheel-sidecar "0.5.18"]
                                       [cider/piggieback "0.4.0"]]
-                       :source-paths ["dev" "src/clj" "src/cljs"]
                        :cljsbuild {:builds [{:source-paths ["src/cljs"]
                                              :compiler {:output-to "resources/public/js/script.js"
                                                         :optimizations :simple

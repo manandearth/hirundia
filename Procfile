@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -cp target/hirundia.jar clojure.main -m hirundia.server
+web: java $JVM_OPTS -cp target/hirundia-0.0.1-SNAPSHOT-standalone.jar clojure.main -m hirundia.server $PORT

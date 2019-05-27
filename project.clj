@@ -94,6 +94,7 @@
              :externs ["externs.js"]
              :compiler     {:main            hirundia.core
                             :output-to       "resources/public/js/compiled/app.js"
+                            :asset-path "js/compiled/out"
                             :optimizations   :simple
                             :closure-defines {goog.DEBUG false}
                             :pretty-print    false}}]}

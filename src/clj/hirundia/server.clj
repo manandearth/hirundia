@@ -42,7 +42,7 @@
                            (server/default-interceptors))]
     (component/system-map
      :service-map production-map
-     :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:ec2-107-21-98-144.compute-1.amazonaws.com/dfmhdhcld7uc2u"
+     :db (modular.postgres/map->Postgres {:url "jdbc:postgresql://ec2-107-21-98-144.compute-1.amazonaws.com:5432/dfmhdhcld7uc2u"
                                           :user "bbjzhqiihlvsii"
                                           :password "655f84e3ed1232ab5b2da752cebe0c3bd186ce6934a355bc4b05d9aa13153c54"})
      :pedestal (component/using (pedestal-component/pedestal (constantly production-map))

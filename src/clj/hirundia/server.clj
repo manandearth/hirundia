@@ -11,7 +11,7 @@
    [com.grzm.component.pedestal :as pedestal-component]
    [ring.middleware.session.cookie :as cookie]))
 
-(def dev-http-port 8080)
+(def dev-http-port (Integer. (or (System/getenv "PORT") "8080")))
 (def test-http-port 59800)
 
 (defn env [name]

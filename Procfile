@@ -1,1 +1,1 @@
-web: lein run -m hrundia.server
+web: lein run -m hirundia.server

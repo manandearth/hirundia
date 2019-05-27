@@ -1,1 +1,1 @@
-web: lein run -m hirundia.server
+web: lein run -m hirundia.server $PORT

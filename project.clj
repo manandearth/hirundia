@@ -80,7 +80,7 @@
                                  :output-to       "resources/public/js/compiled/app.js"
                                  :output-dir      "resources/public/js/compiled-min/out"
                                  :asset-path      "js/compiled-min/out"
-                                 :optimizations   :advanced
+                                 :optimizations   :simple
                                  :closure-defines {goog.DEBUG false}
                                  :pretty-print    false}}}}
 
@@ -96,12 +96,12 @@
              :uberjar {:aot [hirundia.server]
                        :dependencies [[figwheel-sidecar "0.5.18"]
                                       [cider/piggieback "0.4.0"]]
-                       :cljsbuild {:builds {:min {:compiler {:optimizations :advanced
+                       :cljsbuild {:builds {:min {:compiler {:optimizations :simple
                                                              :asset-path      "js/compiled-min/out"}}}}}
              ;;Heroku requires a production environment
              :production {:dependencies [[figwheel-sidecar "0.5.18"]
                                          [cider/piggieback "0.4.0"]]
-                          :cljsbuild {:builds {:min {:compiler {:optimizations :advanced
+                          :cljsbuild {:builds {:min {:compiler {:optimizations :simple
                                                                 :asset-path      "js/compiled-min/out"}}}}}
              }
 

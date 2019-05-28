@@ -59,28 +59,6 @@
             "pending" ["run" "-m" "joplin.alias/pending" "joplin.edn"]
             "create" ["run" "-m" "joplin.alias/create" "joplin.edn"]}
 
-                                        ;:figwheel {:css-dirs ["resources/public/css"]}
-  :profiles {:dev {:dependencies [[io.pedestal/pedestal.service-tools "0.5.3"]
-                                  [com.stuartsierra/component.repl "0.2.0"]
-                                  [org.clojure/tools.namespace "0.3.0-alpha4"]
-                                  [org.clojure/tools.nrepl "0.2.13" :exclusions [org.clojure/clojure]]
-                                  [figwheel-sidecar "0.5.18"]
-                                  [cider/piggieback "0.4.0"]]
-                   :source-paths ["dev" "src/clj" "src/cljs"]
-                   :repl-options {:init-ns user}}
-             :uberjar {:aot [hirundia.server]
-
-                       :dependencies [[figwheel-sidecar "0.5.18"]
-                                      [cider/piggieback "0.4.0"]]
-                       :cljsbuild {:builds [{:source-paths ["src/cljs"]
-                                             :compiler {:output-to "resources/public/js/script.js"
-                                                        :optimizations :simple
-                                                        :pretty-print false}}]}}
-             ;;Heroku requires a production environment
-             :production {:dependencies [[figwheel-sidecar "0.5.18"]
-                                         [cider/piggieback "0.4.0"]]
-                          :cljsbuild {:builds {:min {:compiler {:optimizations :advanced}}}}}
-             }
   :cljsbuild
   {:builds {:dev {
                      ;;TODO check if this path actually makes a difference.
@@ -99,11 +77,31 @@
             :min {:source-paths ["src/cljs"]
                   :externs      ["externs.js"]
                   :compiler     {:main            hirundia.core
-                                 :output-to       "resources/public/js/compiled/app.js"
+                                 :output-to       "resources/public/js/compiled-min/app.js"
                                  :output-dir      "resources/public/js/compiled-min/out"
                                  :asset-path      "js/compiled-min/out"
                                  :optimizations   :advanced
                                  :closure-defines {goog.DEBUG false}
                                  :pretty-print    false}}}}
+
+                                        ;:figwheel {:css-dirs ["resources/public/css"]}
+  :profiles {:dev {:dependencies [[io.pedestal/pedestal.service-tools "0.5.3"]
+                                  [com.stuartsierra/component.repl "0.2.0"]
+                                  [org.clojure/tools.namespace "0.3.0-alpha4"]
+                                  [org.clojure/tools.nrepl "0.2.13" :exclusions [org.clojure/clojure]]
+                                  [figwheel-sidecar "0.5.18"]
+                                  [cider/piggieback "0.4.0"]]
+                   :source-paths ["dev" "src/clj" "src/cljs"]
+                   :repl-options {:init-ns user}}
+             :uberjar {:aot [hirundia.server]
+
+                       :dependencies [[figwheel-sidecar "0.5.18"]
+                                      [cider/piggieback "0.4.0"]]
+                       :cljsbuild {:builds {:min {:compiler {:optimizations :advanced}}}}}
+             ;;Heroku requires a production environment
+             :production {:dependencies [[figwheel-sidecar "0.5.18"]
+                                         [cider/piggieback "0.4.0"]]
+                          :cljsbuild {:builds {:min {:compiler {:optimizations :advanced}}}}}
+             }
 
   :main ^{:skip-aot true} hirundia.server)

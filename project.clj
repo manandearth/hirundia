@@ -104,7 +104,7 @@
                   :compiler     {:main            hirundia.core
                                  :output-to       "resources/public/js/compiled/app.js"
                                  :output-dir      "resources/public/js/compiled-min/out"
-                                 :asset-path      "js/compiled/out"
+                                 :asset-path      "js/compiled-min/out"
                                  :optimizations   :advanced
                                  :closure-defines {goog.DEBUG false}
                                  :pretty-print    false}}}}

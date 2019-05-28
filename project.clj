@@ -79,10 +79,7 @@
              ;;Heroku requires a production environment
              :production {:dependencies [[figwheel-sidecar "0.5.18"]
                                          [cider/piggieback "0.4.0"]]
-                          :cljsbuild {:builds [{:source-paths ["src/cljs"]
-                                                :compiler {:output-to "resources/public/js/script.js"
-                                                           :optimizations :simple
-                                                           :pretty-print false}}]}}
+                          :cljsbuild {:builds {:min {:compiler {:optimizations :advanced}}}}}
              }
   :cljsbuild
   {:builds {:dev {

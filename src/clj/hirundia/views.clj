@@ -152,7 +152,7 @@
    [:script {:src "https://unpkg.com/vega@3.2.1/build/vega.js"}]
    [:script {:src "https://unpkg.com/regenerator-runtime@0.11.1/runtime.js"}]
    [:script {:src "lvega/bundle.js"}]
-   [:script {:src "js/compiled/app.js" :type "text/javascript"}]))
+   [:script {:src "js/compiled-min/app.js" :type "text/javascript"}]))
 
 (defn osm-page [request]
   (page/html5

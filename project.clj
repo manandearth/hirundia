@@ -77,7 +77,7 @@
             :min {:source-paths ["src/cljs"]
                   :externs      ["externs.js"]
                   :compiler     {:main            hirundia.core
-                                 :output-to       "resources/public/js/compiled/app.js"
+                                 :output-to       "resources/public/js/compiled-min/app.js"
                                  :output-dir      "resources/public/js/compiled-min/out"
                                  :asset-path      "js/compiled-min/out"
                                  :optimizations   :advanced

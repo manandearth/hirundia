@@ -806,8 +806,12 @@ var L = {
   "multiPolygon": function () {},
   "Rectangle": function () {},
   "rectangle": function () {},
-  "Circle": function () {},
-  "circle": function () {},
+	"Circle": function () {},
+	"circle": {
+		"addTo": function () {},
+		"bindPopup": function () {},
+		"bindTooltip": function () {}
+	},
   "CircleMarker": function () {},
   "circleMarker": function () {},
   "GeoJSON": function () {},

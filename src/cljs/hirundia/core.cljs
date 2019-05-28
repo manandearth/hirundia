@@ -20,9 +20,11 @@
 
 
 (defn dev-setup []
-  (when config/debug?
-    (enable-console-print!))
-  (println "dev mode"))
+  (if config/debug?
+    (do (enable-console-print!)
+        (println "dev mode"))
+    (js/console.log "production")
+        ))
 
 ;;parse ps string to :lat and :lon floats
 (defn coords-helper [entry]

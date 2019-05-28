@@ -96,13 +96,13 @@
              :uberjar {:aot [hirundia.server]
                        :dependencies [[figwheel-sidecar "0.5.18"]
                                       [cider/piggieback "0.4.0"]]
-                       :cljsbuild {:builds {:min {:compiler {:optimizations :advanced}
-                                                  :asset-path      "js/compiled-min/out"}}}}
+                       :cljsbuild {:builds {:min {:compiler {:optimizations :advanced
+                                                             :asset-path      "js/compiled-min/out"}}}}}
              ;;Heroku requires a production environment
              :production {:dependencies [[figwheel-sidecar "0.5.18"]
                                          [cider/piggieback "0.4.0"]]
-                          :cljsbuild {:builds {:min {:compiler {:optimizations :advanced}
-                                                     :asset-path      "js/compiled-min/out"}}}}
+                          :cljsbuild {:builds {:min {:compiler {:optimizations :advanced
+                                                                :asset-path      "js/compiled-min/out"}}}}}
              }
 
   :main ^{:skip-aot true} hirundia.server)

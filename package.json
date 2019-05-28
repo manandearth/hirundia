@@ -1,0 +1,27 @@
+{
+  "name": "hirundia",
+  "version": "1.0.0",
+  "description": "This project is based on [reducecombine/playground](https://github.com/reducecombine/playground)",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manandearth/hirundia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manandearth/hirundia/issues"
+  },
+  "homepage": "https://github.com/manandearth/hirundia#readme",
+  "dependencies": {
+    "leaflet-vega": "^0.8.6",
+    "vega-spec-injector": "0.0.2"
+  }
+}

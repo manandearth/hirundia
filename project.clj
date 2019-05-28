@@ -85,29 +85,28 @@
                                                            :pretty-print false}}]}}
              }
   :cljsbuild
-  {:builds [{:id "dev"
-             ;;TODO check if this path actually makes a difference.
-             ;; :ring-handler "hirundia.service/js-app-page"  ;;;;seems to produce an error in figwheel
-             ;; The path to the top-level ClojureScript source directory:
-             :source-paths ["src/cljs"]
-             ;; The standard ClojureScript compiler options:
-             ;; (See the ClojureScript compiler documentation for details.)
-             :compiler {:main hirundia.core
-                        :output-to "resources/public/js/compiled/app.js"
-                        :output-dir "resources/public/js/compiled/out"
-                        :asset-path "js/compiled/out"
-                        ;;:cache-analysis false
-                        :optimizations :none
-                        :pretty-print true}}
-            {:id "min"
-             :source-paths ["src/cljs"]
-             :externs ["externs.js"]
-             :compiler     {:main            hirundia.core
-                            :output-to       "resources/public/js/compiled/app.js"
-                            :output-dir "resources/public/js/compiled/out"
-                            :asset-path "js/compiled/out"
-                            :optimizations   :simple
-                            :closure-defines {goog.DEBUG false}
-                            :pretty-print    false}}]}
+  {:builds {:dev {
+                     ;;TODO check if this path actually makes a difference.
+                  ;; :ring-handler "hirundia.service/js-app-page"  ;;;;seems to produce an error in figwheel
+                  ;; The path to the top-level ClojureScript source directory:
+                  :source-paths ["src/cljs"]
+                  ;; The standard ClojureScript compiler options:
+                  ;; (See the ClojureScript compiler documentation for details.)
+                  :compiler     {:main          hirundia.core
+                                 :output-to     "resources/public/js/compiled/app.js"
+                                 :output-dir    "resources/public/js/compiled/out"
+                                 :asset-path    "js/compiled/out"
+                                 ;;:cache-analysis false
+                                 :optimizations :none
+                                 :pretty-print  true}}
+            :min {:source-paths ["src/cljs"]
+                  :externs      ["externs.js"]
+                  :compiler     {:main            hirundia.core
+                                 :output-to       "resources/public/js/compiled/app.js"
+                                 :output-dir      "resources/public/js/compiled-min/out"
+                                 :asset-path      "js/compiled/out"
+                                 :optimizations   :advanced
+                                 :closure-defines {goog.DEBUG false}
+                                 :pretty-print    false}}}}
 
   :main ^{:skip-aot true} hirundia.server)

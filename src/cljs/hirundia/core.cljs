@@ -167,11 +167,11 @@
                                       "swallow" "crimson"
                                       "martin" "steelblue"
                                       "swift" "seagreen")
-                       :fillColor   (case species
+                       :fill-color   (case species
                                       "swallow" "red"
                                       "martin" "dodgerblue"
                                       "swift" "green")
-                       :fillOpacity 0.2
+                       :fill-opacity 0.2
                        :radius      5}))))
 
 (defn popup [entry]

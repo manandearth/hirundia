@@ -96,6 +96,7 @@
              :uberjar {:aot [hirundia.server]
                        :dependencies [[figwheel-sidecar "0.5.18"]
                                       [cider/piggieback "0.4.0"]]
+                       :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
                        :cljsbuild {:builds {:min {:compiler {:optimizations :simple
                                                              :asset-path      "js/compiled-min/out"}}}}}
              ;;Heroku requires a production environment

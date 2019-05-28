@@ -13,6 +13,7 @@
      [hirundia.events :as events]
      [hirundia.config :as config]
      [oz.core :as oz]
+     [cljsjs.leaflet]
      [oops.core :refer [oget oset! ocall oapply ocall! oapply!
                         oget+ oset!+ ocall+ oapply+ ocall!+ oapply!+]]))
 
@@ -167,11 +168,11 @@
                                       "swallow" "crimson"
                                       "martin" "steelblue"
                                       "swift" "seagreen")
-                       :fill-color   (case species
+                       :fillColor   (case species
                                       "swallow" "red"
                                       "martin" "dodgerblue"
                                       "swift" "green")
-                       :fill-opacity 0.2
+                       :fillOpacity 0.2
                        :radius      5}))))
 
 (defn popup [entry]

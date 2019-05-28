@@ -36,7 +36,7 @@
                  [cljsjs/vega "5.3.2-0"]
                  [cljsjs/vega-lite "3.0.2-0"]
                  [metasoarous/oz "1.6.0-alpha2"]
-                 #_[cljsjs/leaflet "1.4.0-0"]
+                 [cljsjs/leaflet "1.4.0-0"]
                  [reagent "0.8.1"]
                  [re-frame "0.10.6"]
                  [day8.re-frame/http-fx "0.1.6"]
@@ -69,18 +69,17 @@
                   ;; (See the ClojureScript compiler documentation for details.)
                   :compiler     {:main          hirundia.core
                                  :output-to     "resources/public/js/compiled/app.js"
-                                 :output-dir    "resources/public/js/compiled/out"
-                                 :asset-path    "js/compiled/out"
+                                 :output-dir    "resources/public/js/compiled/dev"
+                                 :asset-path    "js/compiled/dev"
                                  ;;:cache-analysis false
                                  :optimizations :none
                                  :pretty-print  true}}
-            :min {:source-paths ["src/cljs"]
+            :prod {:source-paths ["src/cljs"]
                   :externs      ["externs.js"]
                   :compiler     {:main            hirundia.core
                                  :output-to       "resources/public/js/compiled/app.js"
-                                 :output-dir      "resources/public/js/compiled-min/out"
-                                 :asset-path      "js/compiled-min/out"
-                                 :optimizations   :whitespace
+                                 :output-dir      "resources/public/js/compiled/prod"
+                                 :optimizations   :advanced
                                  :closure-defines {goog.DEBUG false}
                                  :pretty-print    false}}}}
 

@@ -4,6 +4,10 @@ var L = {
     },
     "tileLayer": {
 	"addTo": function(){}
-    }
-
+    },
+	"circle": {
+		"addTo": function(){},
+		"bindTooltip": function(){},
+		"bindPopup": function(){}
+	}
 };

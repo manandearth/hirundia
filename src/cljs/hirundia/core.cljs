@@ -13,6 +13,7 @@
      [hirundia.events :as events]
      [hirundia.config :as config]
      [oz.core :as oz]
+     [cljsjs.leaflet]
      [oops.core :refer [oget oset! ocall oapply ocall! oapply!
                         oget+ oset!+ ocall+ oapply+ ocall!+ oapply!+]]))
 
@@ -20,11 +21,14 @@
 
 
 (defn dev-setup []
-  (when config/debug?
-    (enable-console-print!))
-  (println "dev mode"))
+  (if config/debug?
+    (do (enable-console-print!)
+        (println "dev mode"))
+    (js/console.log "production")))
 
 ;;parse ps string to :lat and :lon floats
+
+
 (defn coords-helper [entry]
   (let [split (clojure.string/split (:gps entry) #"[(),]")
         lat (js/parseFloat (second split))

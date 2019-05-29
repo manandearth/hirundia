@@ -36,14 +36,14 @@
                  [cljsjs/vega "5.3.2-0"]
                  [cljsjs/vega-lite "3.0.2-0"]
                  [metasoarous/oz "1.6.0-alpha2"]
-                 #_[cljsjs/leaflet "1.4.0-0"]
+                 [cljsjs/leaflet "1.4.0-0"]
                  [reagent "0.8.1"]
                  [re-frame "0.10.6"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [com.cognitect/transit-clj "0.8.313"]
                  [cljs-ajax "0.8.0"]
                  [funcool/promesa "2.0.1"]
-                 [binaryage/oops "0.5.6"]
+                 [binaryage/oops "0.7.0"]
                  [joplin.core "0.3.11"]
                  [joplin.jdbc "0.3.11"]]
   :repl-options {:port 41234}
@@ -59,6 +59,29 @@
             "pending" ["run" "-m" "joplin.alias/pending" "joplin.edn"]
             "create" ["run" "-m" "joplin.alias/create" "joplin.edn"]}
 
+  :cljsbuild
+  {:builds {:dev {;;TODO check if this path actually makes a difference.
+                  ;; :ring-handler "hirundia.service/js-app-page"  ;;;;seems to produce an error in figwheel
+                  ;; The path to the top-level ClojureScript source directory:
+                  :source-paths ["src/cljs"]
+                  ;; The standard ClojureScript compiler options:
+                  ;; (See the ClojureScript compiler documentation for details.)
+                  :compiler     {:main          hirundia.core
+                                 :output-to     "resources/public/js/compiled/app.js"
+                                 :output-dir    "resources/public/js/compiled/dev"
+                                 :asset-path    "js/compiled/dev"
+                                 ;;:cache-analysis false
+                                 :optimizations :none
+                                 :pretty-print  true}}
+            :prod {:source-paths ["src/cljs"]
+                   :compiler     {:main            hirundia.core
+                                  :output-to       "resources/public/js/compiled/app.js"
+                                  :output-dir      "resources/public/js/compiled/prod"
+                                  :externs      ["externs.js"]
+                                  :optimizations   :advanced
+                                  :closure-defines {goog.DEBUG false}
+                                  :pretty-print    false}}}}
+
                                         ;:figwheel {:css-dirs ["resources/public/css"]}
   :profiles {:dev {:dependencies [[io.pedestal/pedestal.service-tools "0.5.3"]
                                   [com.stuartsierra/component.repl "0.2.0"]
@@ -69,36 +92,15 @@
                    :source-paths ["dev" "src/clj" "src/cljs"]
                    :repl-options {:init-ns user}}
              :uberjar {:aot [hirundia.server]
-
                        :dependencies [[figwheel-sidecar "0.5.18"]
                                       [cider/piggieback "0.4.0"]]
-                       :cljsbuild {:builds [{:source-paths ["src/cljs"]
-                                             :compiler {:output-to "resources/public/js/script.js"
-                                                        :optimizations :simple
-                                                        :pretty-print false}}]}}}
-  :cljsbuild
-  {:builds [{:id "dev"
-             ;;TODO check if this path actually makes a difference.
-             ;; :ring-handler "hirundia.service/js-app-page"  ;;;;seems to produce an error in figwheel
-             ;; The path to the top-level ClojureScript source directory:
-             :source-paths ["src/cljs"]
-             ;; The standard ClojureScript compiler options:
-             ;; (See the ClojureScript compiler documentation for details.)
-             :compiler {:main hirundia.core
-                        :output-to "resources/public/js/compiled/app.js"
-                        :output-dir "resources/public/js/compiled/out"
-                        :asset-path "js/compiled/out"
-                        ;;:cache-analysis false
-                        :optimizations :none
-                        :pretty-print true}}
-            {:id "min"
-             :source-paths ["src/cljs"]
-             :externs ["externs.js"]
-             :compiler     {:main            hirundia.core
-                            :output-to       "resources/public/js/compiled/app.js"
-                            :asset-path "js/compiled/out"
-                            :optimizations   :simple
-                            :closure-defines {goog.DEBUG false}
-                            :pretty-print    false}}]}
+                       :prep-tasks ["compile" ["cljsbuild" "once" "prod"]]
+                       :cljsbuild {:builds {:min {:compiler {:optimizations :advanced
+                                                             :asset-path      "js/compiled/out"}}}}}
+             ;;Heroku requires a production environment
+             :production {:dependencies [[figwheel-sidecar "0.5.18"]
+                                         [cider/piggieback "0.4.0"]]
+                          :cljsbuild {:builds {:prod {:compiler {:optimizations :advanced
+                                                                 :asset-path      "js/compiled/out"}}}}}}
 
   :main ^{:skip-aot true} hirundia.server)

@@ -11,7 +11,7 @@
    [com.grzm.component.pedestal :as pedestal-component]
    [ring.middleware.session.cookie :as cookie]))
 
-(def dev-http-port 8080)
+(def dev-http-port (Integer. (or (System/getenv "PORT") "8080")))
 (def test-http-port 59800)
 
 (defn env [name]
@@ -42,9 +42,9 @@
                            (server/default-interceptors))]
     (component/system-map
      :service-map production-map
-     :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:hirundia_dev"
-                                          :user (env "MANANDEARTH_HIRUNDIA_USER")
-                                          :password (env "MANANDEARTH_HIRUNDIA_PASSWORD")})
+     :db (modular.postgres/map->Postgres {:url "jdbc:postgresql://ec2-107-21-98-144.compute-1.amazonaws.com:5432/dfmhdhcld7uc2u"
+                                          :user (env "JDBC_DATABASE_USERNAME")
+                                          :password (env "JDBC_DATABASE_PASSWORD")})
      :pedestal (component/using (pedestal-component/pedestal (constantly production-map))
                                 service/components-to-inject))))
 

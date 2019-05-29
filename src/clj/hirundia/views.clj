@@ -7,7 +7,6 @@
    [java-time :refer :all :exclude [contains? iterate max zero? format min max range]]
    [clojure.java.io :as io]
    [buddy.auth :refer [authenticated?]]
-   [hirundia.sandbox :as records]
    [hirundia.pages :as pages]))
 
 (defn gen-page-head
@@ -118,7 +117,7 @@
      [:form {:action "/register" :method "POST"}
       [:div
        [:p [:label.justify "Username: " [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
+       [:p [:label.justify "Password: " [:input {:type "password" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Register"}]]]]]]]))
 
 
@@ -136,7 +135,7 @@
       [:div
        [:p [:label.justify "Username: "
             [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
+       [:p [:label.justify "Password: " [:input {:type "password" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 
 (defn dashboard [request]
@@ -147,12 +146,12 @@
    [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
            :integrity "sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
            :crossorigin ""}]
-   [:script {:src "https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-             :integrity "sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-             :crossorigin ""}]
-   [:script {:src "https://unpkg.com/vega@3.2.1/build/vega.js"}]
-   [:script {:src "https://unpkg.com/regenerator-runtime@0.11.1/runtime.js"}]
-   [:script {:src "lvega/bundle.js"}]
+   ;; [:script {:src "https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+   ;;           :integrity "sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+   ;;           :crossorigin ""}]
+   ;; [:script {:src "https://unpkg.com/vega@3.2.1/build/vega.js"}]
+   ;; [:script {:src "https://unpkg.com/regenerator-runtime@0.11.1/runtime.js"}]
+   ;; [:script {:src "lvega/bundle.js"}]
    [:script {:src "js/compiled/app.js" :type "text/javascript"}]))
 
 (defn osm-page [request]

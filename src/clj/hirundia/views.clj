@@ -117,7 +117,7 @@
      [:form {:action "/register" :method "POST"}
       [:div
        [:p [:label.justify "Username: " [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
+       [:p [:label.justify "Password: " [:input {:type "password" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Register"}]]]]]]]))
 
 
@@ -135,7 +135,7 @@
       [:div
        [:p [:label.justify "Username: "
             [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify "Password: " [:input {:type "text" :name "password"}]]]
+       [:p [:label.justify "Password: " [:input {:type "password" :name "password"}]]]
        [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
 
 (defn dashboard [request]

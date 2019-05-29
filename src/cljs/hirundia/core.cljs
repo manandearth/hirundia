@@ -24,10 +24,11 @@
   (if config/debug?
     (do (enable-console-print!)
         (println "dev mode"))
-    (js/console.log "production")
-        ))
+    (js/console.log "production")))
 
 ;;parse ps string to :lat and :lon floats
+
+
 (defn coords-helper [entry]
   (let [split (clojure.string/split (:gps entry) #"[(),]")
         lat (js/parseFloat (second split))

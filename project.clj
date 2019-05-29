@@ -43,7 +43,7 @@
                  [com.cognitect/transit-clj "0.8.313"]
                  [cljs-ajax "0.8.0"]
                  [funcool/promesa "2.0.1"]
-                 [binaryage/oops "0.5.6"]
+                 [binaryage/oops "0.7.0"]
                  [joplin.core "0.3.11"]
                  [joplin.jdbc "0.3.11"]]
   :repl-options {:port 41234}
@@ -60,8 +60,7 @@
             "create" ["run" "-m" "joplin.alias/create" "joplin.edn"]}
 
   :cljsbuild
-  {:builds {:dev {
-                     ;;TODO check if this path actually makes a difference.
+  {:builds {:dev {;;TODO check if this path actually makes a difference.
                   ;; :ring-handler "hirundia.service/js-app-page"  ;;;;seems to produce an error in figwheel
                   ;; The path to the top-level ClojureScript source directory:
                   :source-paths ["src/cljs"]
@@ -75,13 +74,13 @@
                                  :optimizations :none
                                  :pretty-print  true}}
             :prod {:source-paths ["src/cljs"]
-                  :externs      ["externs.js"]
-                  :compiler     {:main            hirundia.core
-                                 :output-to       "resources/public/js/compiled/app.js"
-                                 :output-dir      "resources/public/js/compiled/prod"
-                                 :optimizations   :advanced
-                                 :closure-defines {goog.DEBUG false}
-                                 :pretty-print    false}}}}
+                   :compiler     {:main            hirundia.core
+                                  :output-to       "resources/public/js/compiled/app.js"
+                                  :output-dir      "resources/public/js/compiled/prod"
+                                  :externs      ["externs.js"]
+                                  :optimizations   :advanced
+                                  :closure-defines {goog.DEBUG false}
+                                  :pretty-print    false}}}}
 
                                         ;:figwheel {:css-dirs ["resources/public/css"]}
   :profiles {:dev {:dependencies [[io.pedestal/pedestal.service-tools "0.5.3"]
@@ -102,7 +101,6 @@
              :production {:dependencies [[figwheel-sidecar "0.5.18"]
                                          [cider/piggieback "0.4.0"]]
                           :cljsbuild {:builds {:min {:compiler {:optimizations :whitespace
-                                                                :asset-path      "js/compiled-min/out"}}}}}
-             }
+                                                                :asset-path      "js/compiled-min/out"}}}}}}
 
   :main ^{:skip-aot true} hirundia.server)

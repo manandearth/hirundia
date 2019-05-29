@@ -1,11 +1,67 @@
-
+//My externs version
 // Externs for Leaflet
 // <http://leafletjs.com>
 // This extern is written by hand, do not replace with a generated file!
 
 var eventsKey = {};
 
+
+
 var L = {
+	"Map": function () {},
+	"map": {
+    "addLayer": function () {},
+    "hasLayer": function () {},
+    "eachLayer": function () {},
+    "openPopup": function () {},
+    "closePopup": function () {},
+    "addControl": function () {},
+    "removeControl": function () {},
+    "setView": function () {},
+    "setZoom": function () {},
+    "setZoomIn": function () {},
+    "setZoomOut": function () {},
+    "setZoomAround": function () {},
+    "fitBounds": function () {},
+    "fitWorld": function () {},
+    "flyToBounds": function () {},
+    "panTo": function () {},
+    "panInsideBounds": function () {},
+    "panBy": function () {},
+    "panInside": function () {},
+    "invalidateSize": function () {},
+    "setMaxBounds": function () {},
+    "locate": function () {},
+    "latLngToContainerPoint": function(){},
+    "containerPointToLatLng": function(){},
+    "stopLocate": function () {},
+    "remove": function () {},
+    "removeLayer": function () {},
+    "getCenter": function () {},
+    "getZoom": function () {},
+    "getMinZoom": function () {},
+    "getMaxZoom": function () {},
+    "getBounds": function () {},
+    "getBoundsZoom": function () {},
+    "getSize": function () {},
+    "getPixelBounds": function () {},
+      "getPixelOrigin": function () {},
+      "attributionControl": {
+          "setPrefix": function () {},
+      },
+      "dragging": {
+          "disable": function () {},
+      },
+      "scrollWheelZoom": {
+          "disable": function () {},
+      },
+      "touchZoom": {
+          "disable": function () {},
+      },
+      "doubleClickZoom": {
+          "disable": function () {},
+      },
+  },
   "version": {},
   "noConflict": function () {},
   "Util": {
@@ -631,60 +687,7 @@ var L = {
       }
     }
   },
-  "Map": function () {},
-  "map": {
-    "addLayer": function () {},
-    "hasLayer": function () {},
-    "eachLayer": function () {},
-    "openPopup": function () {},
-    "closePopup": function () {},
-    "addControl": function () {},
-    "removeControl": function () {},
-    "setView": function () {},
-    "setZoom": function () {},
-    "setZoomIn": function () {},
-    "setZoomOut": function () {},
-    "setZoomAround": function () {},
-    "fitBounds": function () {},
-    "fitWorld": function () {},
-    "flyToBounds": function () {},
-    "panTo": function () {},
-    "panInsideBounds": function () {},
-    "panBy": function () {},
-    "panInside": function () {},
-    "invalidateSize": function () {},
-    "setMaxBounds": function () {},
-    "locate": function () {},
-    "latLngToContainerPoint": function(){},
-    "containerPointToLatLng": function(){},
-    "stopLocate": function () {},
-    "remove": function () {},
-    "removeLayer": function () {},
-    "getCenter": function () {},
-    "getZoom": function () {},
-    "getMinZoom": function () {},
-    "getMaxZoom": function () {},
-    "getBounds": function () {},
-    "getBoundsZoom": function () {},
-    "getSize": function () {},
-    "getPixelBounds": function () {},
-      "getPixelOrigin": function () {},
-      "attributionControl": {
-          "setPrefix": function () {},
-      },
-      "dragging": {
-          "disable": function () {},
-      },
-      "scrollWheelZoom": {
-          "disable": function () {},
-      },
-      "touchZoom": {
-          "disable": function () {},
-      },
-      "doubleClickZoom": {
-          "disable": function () {},
-      },
-  },
+  
   "TileLayer": function () {},
   "tileLayer": {
     "bringToFront": function () {},
@@ -692,7 +695,8 @@ var L = {
     "setOpacity": function () {},
     "setZIndex": function () {},
     "redraw": function () {},
-    "setUrl": function () {},
+      "setUrl": function () {},
+	  "addTo": function () {}
   },
   "ImageOverlay": function () {},
   "imageOverlay": function () {},

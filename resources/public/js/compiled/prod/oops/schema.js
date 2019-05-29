@@ -9,9 +9,11 @@ oops.schema.unescape_modifiers = (function oops$schema$unescape_modifiers(s){
 return s.replace(/^\\([?!])/,"$1");
 });
 oops.schema.parse_selector_element_BANG_ = (function oops$schema$parse_selector_element_BANG_(element_str,arr){
-if((!(cljs.core.empty_QMARK_(element_str)))){
-var G__43145 = cljs.core.first(element_str);
-switch (G__43145) {
+if(cljs.core.empty_QMARK_(element_str)){
+return null;
+} else {
+var G__38293 = cljs.core.first(element_str);
+switch (G__38293) {
 case "?":
 arr.push((1));
 
@@ -30,8 +32,6 @@ arr.push((0));
 return arr.push(oops.schema.unescape_modifiers(element_str));
 
 }
-} else {
-return null;
 }
 });
 oops.schema.unescape_dots = (function oops$schema$unescape_dots(s){
@@ -44,8 +44,8 @@ while(true){
 if(items){
 oops.schema.parse_selector_element_BANG_(oops.schema.unescape_dots(cljs.core.first(items)),arr);
 
-var G__43147 = cljs.core.next(items);
-items = G__43147;
+var G__38295 = cljs.core.next(items);
+items = G__38295;
 continue;
 } else {
 return null;
@@ -68,8 +68,8 @@ if(cljs.core.sequential_QMARK_(item)){
 oops.schema.coerce_key_dynamically_BANG_(item,arr);
 }
 
-var G__43148 = cljs.core.next(items);
-items = G__43148;
+var G__38296 = cljs.core.next(items);
+items = G__38296;
 continue;
 } else {
 return null;
@@ -98,8 +98,8 @@ oops.schema.merge_standalone_modifier_BANG_(arr,finger);
 } else {
 }
 
-var G__43149 = finger;
-i = G__43149;
+var G__38297 = finger;
+i = G__38297;
 continue;
 }
 break;
@@ -117,11 +117,11 @@ oops.schema.has_invalid_path_access_mode_QMARK_ = (function oops$schema$has_inva
 var items = cljs.core.seq(path);
 while(true){
 if(items){
-if(cljs.core.truth_((function (){var G__43150 = cljs.core.first(items);
-return (is_valid_QMARK_.cljs$core$IFn$_invoke$arity$1 ? is_valid_QMARK_.cljs$core$IFn$_invoke$arity$1(G__43150) : is_valid_QMARK_.call(null,G__43150));
+if(cljs.core.truth_((function (){var G__38298 = cljs.core.first(items);
+return (is_valid_QMARK_.cljs$core$IFn$_invoke$arity$1 ? is_valid_QMARK_.cljs$core$IFn$_invoke$arity$1(G__38298) : is_valid_QMARK_.call(null,G__38298));
 })())){
-var G__43151 = cljs.core.next(cljs.core.next(items));
-items = G__43151;
+var G__38299 = cljs.core.next(cljs.core.next(items));
+items = G__38299;
 continue;
 } else {
 return true;
@@ -138,13 +138,13 @@ oops.schema.check_dynamic_path_BANG_ = (function oops$schema$check_dynamic_path_
 if(cljs.core.empty_QMARK_(path)){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$unexpected_DASH_empty_DASH_selector], null);
 } else {
-var G__43154 = op;
-switch (G__43154) {
+var G__38302 = op;
+switch (G__38302) {
 case (0):
-if(cljs.core.truth_(oops.schema.has_invalid_path_access_mode_QMARK_(path,((function (G__43154){
-return (function (p1__43152_SHARP_){
-return cljs.core.not_EQ_.cljs$core$IFn$_invoke$arity$2(p1__43152_SHARP_,(2));
-});})(G__43154))
+if(cljs.core.truth_(oops.schema.has_invalid_path_access_mode_QMARK_(path,((function (G__38302){
+return (function (p1__38300_SHARP_){
+return cljs.core.not_EQ_.cljs$core$IFn$_invoke$arity$2(p1__38300_SHARP_,(2));
+});})(G__38302))
 ))){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$unexpected_DASH_punching_DASH_selector], null);
 } else {
@@ -153,10 +153,10 @@ return null;
 
 break;
 case (1):
-if(cljs.core.truth_(oops.schema.has_invalid_path_access_mode_QMARK_(path,((function (G__43154){
-return (function (p1__43153_SHARP_){
-return cljs.core.not_EQ_.cljs$core$IFn$_invoke$arity$2(p1__43153_SHARP_,(1));
-});})(G__43154))
+if(cljs.core.truth_(oops.schema.has_invalid_path_access_mode_QMARK_(path,((function (G__38302){
+return (function (p1__38301_SHARP_){
+return cljs.core.not_EQ_.cljs$core$IFn$_invoke$arity$2(p1__38301_SHARP_,(1));
+});})(G__38302))
 ))){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$unexpected_DASH_soft_DASH_selector], null);
 } else {
@@ -165,7 +165,7 @@ return null;
 
 break;
 default:
-throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__43154)].join('')));
+throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__38302)].join('')));
 
 }
 }

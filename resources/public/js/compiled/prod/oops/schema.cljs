@@ -1,12 +1,12 @@
 (ns oops.schema
   "The code for runtime conversion of selectors to paths. Note: we prefer hand-written loops for performance reasons."
   (:require-macros [oops.schema]
-                   [oops.constants :refer [get-dot-access get-soft-access get-punch-access
-                                           gen-op-get gen-op-set]]
-                   [oops.debug :refer [debug-assert]]))
+                   [oops.helpers :refer [unchecked-aget]]
+                   [oops.debug :refer [debug-assert]]
+                   [oops.constants :refer [get-dot-access get-soft-access get-punch-access gen-op-get gen-op-set]]))
 
 ; implementation here should mimic static versions in schema.clj
-; for perfomance reasons we don't reuse the same code on cljs side
+; for performance reasons we don't reuse the same code on cljs side
 
 ; --- path utils ------------------------------------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@
   (.replace s #"^\\([?!])" "$1"))
 
 (defn parse-selector-element! [element-str arr]
-  (if-not (empty? element-str)
+  (when-not (empty? element-str)
     (case (first element-str)
       "?" (do
             (.push arr (get-soft-access))
@@ -46,7 +46,7 @@
 
 (defn collect-coerced-keys-into-array! [coll arr]
   (loop [items (seq coll)]                                                                                                    ; note: items is either a seq or nil
-    (if-not (nil? items)
+    (when (some? items)
       (let [item (-first items)]
         (if (sequential? item)
           (collect-coerced-keys-into-array! item arr)
@@ -54,11 +54,11 @@
         (recur (next items))))))
 
 (defn standalone-modifier? [arr i]
-  (and (pos? (aget arr i))
-       (= "" (aget arr (inc i)))))
+  (and (pos? (unchecked-aget arr i))
+       (= "" (unchecked-aget arr (inc i)))))
 
 (defn merge-standalone-modifier! [arr i]
-  (aset arr (+ i 2) (aget arr i))                                                                                             ; transfer modifier
+  (aset arr (+ i 2) (unchecked-aget arr i))                                                                                   ; transfer modifier
   (.splice arr i 2))                                                                                                          ; remove standalone item
 
 (defn merge-standalone-modifiers! [arr]
@@ -68,7 +68,7 @@
         (if (neg? finger)
           arr
           (do
-            (if (standalone-modifier? arr finger)
+            (when (standalone-modifier? arr finger)
               (merge-standalone-modifier! arr finger))
             (recur finger)))))))
 
@@ -93,7 +93,7 @@
   (if (empty? path)
     [:unexpected-empty-selector]
     (case op
-      0 (if (has-invalid-path-access-mode? path #(not= % (get-punch-access)))
+      0 (when (has-invalid-path-access-mode? path #(not= % (get-punch-access)))
           [:unexpected-punching-selector])
-      1 (if (has-invalid-path-access-mode? path #(not= % (get-soft-access)))
+      1 (when (has-invalid-path-access-mode? path #(not= % (get-soft-access)))
           [:unexpected-soft-selector]))))

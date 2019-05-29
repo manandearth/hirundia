@@ -43,8 +43,8 @@
     (component/system-map
      :service-map production-map
      :db (modular.postgres/map->Postgres {:url "jdbc:postgresql://ec2-107-21-98-144.compute-1.amazonaws.com:5432/dfmhdhcld7uc2u"
-                                          :user "bbjzhqiihlvsii"
-                                          :password "655f84e3ed1232ab5b2da752cebe0c3bd186ce6934a355bc4b05d9aa13153c54"})
+                                          :user (env "JDBC_DATABASE_USERNAME")
+                                          :password (env "JDBC_DATABASE_PASSWORD")})
      :pedestal (component/using (pedestal-component/pedestal (constantly production-map))
                                 service/components-to-inject))))
 

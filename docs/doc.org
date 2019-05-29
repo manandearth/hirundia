@@ -65,3 +65,31 @@ So I need to automate the cljs startup and find a way to add it to reharden-rese
   `pg_ctl -D /var/lib/postgres/data/ -l logfile start`
 
 
+* Deployment 
+
+
+** cljs 
+There's a `:prod` cljsbuild profile. and an externs.js file in root
+(for Leaflet, as vega-lite is wrapped in Oz))
+
+** TODO uberjar
+An experimental :uberjar profile :
+potentially can hold `:prep-tasks ["compile" ["cljsbuild" "once" "prod"]]
+** Heroku
+set an Heroku git remote,
+
+
+*Example:* a git branch named `heroku-deployment`:
+
+/Heroku accepts push only to master./
+
+Delete manually `app.js`:
+`rm resources/public/js/compiled/app.js`
+
+`lein clean`
+
+`lein cljsbuild once prod`
+
+`git push heroku herokudeployment master`
+
+

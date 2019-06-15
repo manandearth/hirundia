@@ -113,13 +113,20 @@
                                  :legend {:title "height by species"}
                                  :mark "bar"})
 
+(defn latitude-helper
+  "extract the min and max latitude for the scatter dynamic schema"
+  [data]
+  (let [lat-max (apply Math/max (map :latitude data))
+        lat-min (apply Math/min (map :latitude data))]
+    {:min lat-min :max lat-max}))
+
 (defn scatter-schema [data] {;:schema "https://vega.github.io/schema/vega-lite/v3.json"
                              :width 500
                              :description "A scatter plot to show height in relation to latitude"
                              :data {:values data}
                              :mark "point"
                              :encoding {:x     {:field "height", :type "quantitative"}
-                                        :y     {:field "latitude" :type "quantitative" :scale {:domain [36.252 36.255]}}
+                                        :y     {:field "latitude" :type "quantitative" :scale {:domain [(:min (latitude-helper data)) (:max (latitude-helper data))]}}
                                         :color {:field "species" :type "nominal"}
                                         :shape  {:field "species" :type "nominal"}}})
 (defn gps-helper [lat lon]

@@ -79,7 +79,7 @@ potentially can hold `:prep-tasks ["compile" ["cljsbuild" "once" "prod"]]
 set an Heroku git remote,
 
 
-*Example:* a git branch named `heroku-deployment`:
+*Example:* checkout to a git branch named something like `heroku-deployment`:
 
 /Heroku accepts push only to master./
 
@@ -90,6 +90,11 @@ Delete manually `app.js`:
 
 `lein cljsbuild once prod`
 
-`git push heroku herokudeployment master`
+stage and commit all changes.
+
+
+
+`git push heroku herokudeployment:master`
+might need to force (using -f)
 
 

@@ -6,7 +6,7 @@
 (defn to-update [entry id]
   (-> (hh/update :nests)
       (hh/sset  {:street (:street entry)
-                 :number (:number entry)
+                 :house_number_name (:house_number_name entry)
                  :gps (:gps entry)
                  :species (:species entry)
                  :height (:height entry)
@@ -18,10 +18,10 @@
       (hh/where [:= :id id])))
 
 #_(def to-query
-  {:select   [:id :email]
-   :from     [:users]
-   :order-by [[:id :desc]]
-   :limit    1})
+    {:select   [:id :email]
+     :from     [:users]
+     :order-by [[:id :desc]]
+     :limit    1})
 
 #_(defn to-serialize [results]
-  (-> results first (select-keys [:id :email])))
+    (-> results first (select-keys [:id :email])))

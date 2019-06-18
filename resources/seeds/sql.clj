@@ -19,14 +19,14 @@
                    (h/format))]
     (do (j/execute! db insert)
         (j/insert-multi! db :nests
-                         [{:street "Altozano" :number 1  :gps (pg/point 36.25371 -5.96582) :species "swallow" :height 6 :facing "NW" :type "window" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 1  :gps (pg/point 36.25371 -5.96582) :species "swallow" :height 6 :facing "NW" :type "window" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 1  :gps (pg/point 36.25371 -5.96582) :species "swallow" :height 6 :facing "NW" :type "window" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 4  :gps (pg/point 36.25368 -5.96599) :species "swift" :height 7 :facing "NW" :type "balcony" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 3  :gps (pg/point 36.25379 -5.96626) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 3  :gps (pg/point 36.25379 -5.96626) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 3  :gps (pg/point 36.25379 -5.96626) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 3  :gps (pg/point 36.25379 -5.96626) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 9  :gps (pg/point 36.25359 -5.96548) :species "swift" :height 12 :facing "N" :type "window" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 2  :gps (pg/point 36.25359 -5.96531) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
-                          {:street "Altozano" :number 2  :gps (pg/point 36.25359 -5.96531) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}]))))
+                         [{:street "Altozano" :house_number_name "1"  :gps (pg/point 36.25371 -5.96582) :species "swallow" :height 6 :facing "NW" :type "window" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "1"  :gps (pg/point 36.25371 -5.96582) :species "swallow" :height 6 :facing "NW" :type "window" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "1"  :gps (pg/point 36.25371 -5.96582) :species "swallow" :height 6 :facing "NW" :type "window" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "4"  :gps (pg/point 36.25368 -5.96599) :species "swift" :height 7 :facing "NW" :type "balcony" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "3"  :gps (pg/point 36.25379 -5.96626) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "3"  :gps (pg/point 36.25379 -5.96626) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "3"  :gps (pg/point 36.25379 -5.96626) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "3"  :gps (pg/point 36.25379 -5.96626) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "9"  :gps (pg/point 36.25359 -5.96548) :species "swift" :height 12 :facing "N" :type "window" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "2"  :gps (pg/point 36.25359 -5.96531) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}
+                          {:street "Altozano" :house_number_name "2"  :gps (pg/point 36.25359 -5.96531) :species "swallow" :height 6 :facing "NW" :type "gable" :date today :destroyed false :destroyed_date nil :author "admin"}]))))

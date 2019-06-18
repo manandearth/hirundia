@@ -23,7 +23,7 @@
              extended-records
              [:id "ID"
               :street "Street"
-              :number "No."
+              :house_number_name "No./Name"
               :gps "GPS"
               :species "Species"
               :facing "Facing"

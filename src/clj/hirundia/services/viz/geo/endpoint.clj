@@ -10,15 +10,14 @@
             [clj-postgresql.core :as pg]
             [clojure.string :as string]
             [clojure.java.io :as io]
-            [cheshire.core :as cheshire]
-            ))
+            [cheshire.core :as cheshire]))
 
 (defn play-data [& names]
   (for [n names
         i (range 20)]
     {:time i :item n :quantity (+ (Math/pow (* i (count n)) 0.8) (rand-int (count n)))}))
 
-(def line-plot 
+(def line-plot
   {:data {:values (play-data "monkey" "slipper" "broom")}
    :encoding {:x {:field "time"}
               :y {:field "quantity"}
@@ -26,15 +25,15 @@
    :mark "line"})
 
 #_(defn zip-helper [seq]
-  (let [tuples (map #(rest (string/split (:gps  %) #"[,()]")) seq)
-        parsed (map #(hash-map :longitude (Double/parseDouble (first %)) :latitude (Double/parseDouble (second %))) tuples)
-        assembled ( )]
-     parsed))
+    (let [tuples (map #(rest (string/split (:gps  %) #"[,()]")) seq)
+          parsed (map #(hash-map :longitude (Double/parseDouble (first %)) :latitude (Double/parseDouble (second %))) tuples)
+          assembled ()]
+      parsed))
 
 (defn zipper [seq]
   (for [entry seq]
     (let [tuple (#(rest (string/split (:gps  %) #"[,()]")) entry)
-          parsed (#(hash-map :latitude (Double/parseDouble (first %)) :longitude (Double/parseDouble (second %)))tuple)
+          parsed (#(hash-map :latitude (Double/parseDouble (first %)) :longitude (Double/parseDouble (second %))) tuple)
           drop-gps (dissoc entry :gps)]
       (conj drop-gps parsed))))
 
@@ -45,8 +44,9 @@
 
 ;(zipper seq-try)
 
+
 (defn map-plot [all-entries]
-  
+
   {:schema "https://vega.github.io/schema/vega-lite/v3.json"
    :width  800
    :height 500
@@ -56,7 +56,7 @@
    :layer
    [{:data       {:values (slurp "resources/public/json/vejer-geoshape.json")
                   :format {:type "json" :feature "features"}}
-      :projection {:type "albers"}
+     :projection {:type "albers"}
      :mark       {:type "geoshape" :fill "lightgray" :stroke "transparent"}}
 
     {:data       {:values all-entries}
@@ -69,18 +69,15 @@
                               :type  "nominal"
                               :legend {:title nil,
                                        :orient "bottom-right"
-                                       :offset 0
-                                       }}
-                  
+                                       :offset 0}}
+
                   :tooltip  [{:field "street" :type "nominal"}
-                             {:field "number" :type "quantitative"}
+                             {:field "house_number_name" :type "nominal"}
                              {:field "facing" :type "nominal"}
                              {:field "type" :type "nominal"}
-                             {:field "username" :type "nominal"}]
-                  }
+                             {:field "username" :type "nominal"}]}
      :config     {:view  {:stroke "transparent"}
                   :style {:cell {:stroke "transparent"}}}}]})
-
 
 (defn perform [{:keys [db] :as request}]
   (let [db (->> db :pool (hash-map :datasource))
@@ -90,6 +87,5 @@
     (ring-resp/response #_(zip-helper coordinates)
                         (view/try-viz request (map-plot (zipper coordinates))))))
 
-
 #_(defn perform [request]
-  (ring-resp/response (view/try-viz request map-plot)))
+    (ring-resp/response (view/try-viz request map-plot)))

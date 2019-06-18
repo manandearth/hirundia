@@ -94,7 +94,7 @@
                                                                :offset 0}}
 
                                           :tooltip [{:field "street" :type "nominal"}
-                                                    {:field "number" :type "quantitative"}
+                                                    {:field "house_number_name" :type "nominal"}
                                                     {:field "facing" :type "nominal"}
                                                     {:field "type" :type "nominal"}
                                                     {:field "username" :type "nominal"}]}
@@ -140,7 +140,7 @@
                                        :encoding {:x {:field "gps" :type "nominal"}
                                                   :y {:aggregate "count" :type "quantitative" :stack "normalize"}
                                                   :tooltip [{:field "street" :type "nominal"}
-                                                            {:field "number" :type "nominal"}]}})
+                                                            {:field "house_number_name" :type "nominal"}]}})
 
 (defn oz-nest-height []
   (let [d (r/atom nil)]
@@ -185,13 +185,13 @@
 
 (defn popup [entry]
   (let [street (:street entry)
-        number (:number entry)
+        house_number_name (:house_number_name entry)
         height (:height entry)
         facing (:facing entry)
         type-of (:type entry)
         date (.toDateString (:date entry))]
     (str "<table>
-<tr><td><b>Address: </b>" street " "  number "</td></tr>
+<tr><td><b>Address: </b>" street " "  house_number_name  "</td></tr>
 <tr><td><b>Height: </b>" height " m</td></tr>
 <tr><td><b>Aspect: </b>" facing "</td></tr>
 <tr><td><b>Type of nest: </b>" type-of "</td></tr>

@@ -13,7 +13,7 @@
    [clojure.java.io :as io]))
 
 (spec/def ::street         string?)
-(spec/def ::number         nat-int?)
+(spec/def ::house_number_name         string?)
 (spec/def ::lat            double?)
 (spec/def ::lon            double?)
 (spec/def ::species        #{"swallow" "swift" "martin"})
@@ -25,11 +25,11 @@
 (spec/def ::destroyed_date (spec/or :inst inst? :empty empty?))
 #_(spec/valid? ::date (sql-date (local-date)))
 
-(spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::number ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
+(spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::house_number_name ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
 
-(defn perform [{{:keys [street number lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db session] :as request}]
+(defn perform [{{:keys [street house_number_name lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db session] :as request}]
   (let [parsed-map {:street         street
-                    :number         number
+                    :house_number_name         house_number_name
                     :gps            (pg/point (list lat lon))
                     :species        species
                     :height         height

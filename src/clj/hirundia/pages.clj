@@ -3,7 +3,7 @@
             [hiccup.form :as form]
             [hiccup.table :as table]))
 
-(def sample-entry (vector (zipmap [:id :street :number :gps :species :height :facing :type :date :destroyed :destroyed_date :delete "delete 23"] [23 "Juan Bueno" 1 "(32.677 0.201)" "swallow" 5 "N" "crack" "2019-04-04" false nil])))
+(def sample-entry (vector (zipmap [:id :street :house_number_name :gps :species :height :facing :type :date :destroyed :destroyed_date :delete "delete 23"] [23 "Juan Bueno" 1 "(32.677 0.201)" "swallow" 5 "N" "crack" "2019-04-04" false nil])))
 
 (defn intro []
   [:div
@@ -12,7 +12,7 @@
    [:h2 "The project"]
    [:p "Hirundia is a data collection tool for investigating the effects of humans on the populations of migrating birds. Users have to register an account in order to update the database. "]
    [:p "Each nest makes an entry, like a row in an excel sheet"]
-   [:p "The species has to be identified, the street name and house number as well as the GPS coordinates (longitude and latitude), the direction the nest is facing, the height from ground level, the type of construction (balcony, window, cornice, gable, crack, electric cables), and the date the data was collected"]
+   [:p "The species has to be identified, the street name and house number (or name)  as well as the GPS coordinates (longitude and latitude), the direction the nest is facing, the height from ground level, the type of construction (balcony, window, cornice, gable, crack, electric cables), and the date the data was collected"]
    [:p "Once a nest has beed destroyed it can be updated in the db, clicking on the entry id and changing the destroyed column value to `true` as well as marking the date of registry as `destroyed_date`"]
    [:div
     [:h2 "Example entry:"]
@@ -20,7 +20,7 @@
      sample-entry
      [:id "ID"
       :street "Street"
-      :number "No."
+      :house_number_name "No./name"
       :gps "GPS"
       :species "Species"
       :facing "Facing"
@@ -40,7 +40,7 @@
        ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
      [:div
       [:p [:label.justify "Street: " [:input {:type "text" :name "street"}]]]
-      [:p [:label.justify "Number: " [:input {:type "int" :name "number"}]]]
+      [:p [:label.justify "No./name: " [:input {:type "text" :name "house_number_name"}]]]
       [:p [:label.justify "Latitude: " [:input {:type "int" :name "lat"}]]]
       [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
       [:p [:label.justify "Species: " (form/drop-down "species" ["swallow" "swift" "martin"])]]

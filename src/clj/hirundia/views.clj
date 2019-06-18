@@ -94,7 +94,7 @@
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
      [:div
       [:p [:label.justify "Street: "    [:input {:type "text" :name "street"}]]]
-      [:p [:label.justify "Number: "    [:input {:type "int" :name "number"}]]]
+      [:p [:label.justify "No./name: "    [:input {:type "text" :name "house_number_name"}]]]
       [:p [:label.justify "Latitude: "  [:input {:type "int" :name "lat"}]]]
       [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
       [:p [:label.justify "Species: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin")]]

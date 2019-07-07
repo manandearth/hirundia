@@ -102,6 +102,8 @@
       [:p [:label.justify "Facing: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
       [:p [:label.justify "Type: "      (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] "window")]]
       [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
+      [:p "Every nest creates an entry in the database. In the case of multiple nests with the same specifications update this value:"]
+      [:p [:label.justify "Qty: "       [:input {:type "int" :name "qty" :value 1}]]]
       [:p "If the nest is no longer there fill in the following and include the day recorded:"]
       [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" [true false] false)]]
       [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]

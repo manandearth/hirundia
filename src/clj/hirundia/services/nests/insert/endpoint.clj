@@ -27,7 +27,7 @@
 
 (spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::house_number_name ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
 
-(defn perform [{{:keys [street house_number_name lon lat species height facing type-of date destroyed destroyed_date]} :form-params :keys [db session] :as request}]
+(defn perform [{{:keys [street house_number_name lon lat species height facing type-of date qty destroyed destroyed_date]} :form-params :keys [db session] :as request}]
   (let [parsed-map {:street         street
                     :house_number_name         house_number_name
                     :gps            (pg/point (list lat lon))
@@ -43,10 +43,11 @@
                                       nil
                                       (sql-date destroyed_date))
                     :author (get-in session [:identity :username])}
+
         db     (->> db :pool (hash-map :datasource))
         insert (-> (logic/to-insert parsed-map)
                    (h/format))]
-    (jdbc/execute! db insert)
+    (doseq [q (range (Integer/parseInt qty))] (jdbc/execute! db insert))
     (-> (ring-resp/redirect (url-for :nests))
         (assoc :flash "Entry added to db"))))
 

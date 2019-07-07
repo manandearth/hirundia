@@ -21,11 +21,12 @@
 (spec/def ::facing         #{"N" "NW" "W" "SW" "S" "SE" "E" "NE"})
 (spec/def ::type-of        #{"balcony" "window" "cornice" "gable" "cables" "crack"})
 (spec/def ::date           inst?)
+(spec/def ::qty            int?)
 (spec/def ::destroyed      (spec/or :bool boolean? :empty empty?))
 (spec/def ::destroyed_date (spec/or :inst inst? :empty empty?))
 #_(spec/valid? ::date (sql-date (local-date)))
 
-(spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::house_number_name ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
+(spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::house_number_name ::destroyed ::species ::qty ::date #_::destroyed_date])) ;TODO need to extend
 
 (defn perform [{{:keys [street house_number_name lon lat species height facing type-of date qty destroyed destroyed_date]} :form-params :keys [db session] :as request}]
   (let [parsed-map {:street         street
@@ -47,7 +48,7 @@
         db     (->> db :pool (hash-map :datasource))
         insert (-> (logic/to-insert parsed-map)
                    (h/format))]
-    (doseq [q (range (Integer/parseInt qty))] (jdbc/execute! db insert))
+    (doseq [q (range qty)] (jdbc/execute! db insert))
     (-> (ring-resp/redirect (url-for :nests))
         (assoc :flash "Entry added to db"))))
 

@@ -35,7 +35,8 @@
        [:id "ID"
         :name "NAME"])]
    [:div
-    [:h2 "example form:"]
+    [:h2 "An example form:"]
+    [:h2 "Note that this form is disabled and that entries should be submitted once logged in via the `Add a nest` link above. "]
     [:form {:action "/" :method "GET"}
        ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
      [:div
@@ -48,6 +49,8 @@
       [:p [:label.justify "Facing: " (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"])]]
       [:p [:label.justify "Type: " (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"])]]
       [:p [:label.justify "Date: " [:input {:type "date" :name "date"}]]]
+      [:p "Every nest creates an entry in the database. In the case of multiple nests with the same specifications update this value:"]
+      [:p [:label.justify "Qty: "       [:input {:type "int" :name "qty" :value 1}]]]
       [:p "If the nest is no longer there fill in the following and include the day recorded:"]
       [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"])]]
       [:p [:label.justify "Destroyed date: " [:input {:type "date" :name "destroyed_date"}]]]

@@ -3,53 +3,57 @@
             [hiccup.form :as form]
             [hiccup.table :as table]))
 
-(def sample-entry (vector (zipmap [:id :street :house_number_name :gps :species :height :facing :type :date :destroyed :destroyed_date :delete "delete 23"] [23 "Juan Bueno" 1 "(32.677 0.201)" "swallow" 5 "N" "crack" "2019-04-04" false nil])))
+(def sample-entry (vector (zipmap [:id :street :house_number_name :gps :species :height :facing :type :date :destroyed :destroyed_date :delete "borrar 23"] [23 "Juan Bueno" 1 "(32.677 0.201)" "Golondrina Común" 5 "norte" "grieta" "2019-04-04" "No" nil])))
 
 (defn intro []
   [:div
-   [:h2 "The project"]
-   [:p "Hirundia is a data collection tool for investigating the effects of humans on the populations of migrating birds. Users have to register an account in order to update the database. "]
-   [:p "Each nest makes an entry, like a row in an excel sheet"]
-   [:p "The species has to be identified, the street name and house number (or name)  as well as the GPS coordinates (longitude and latitude), the direction the nest is facing, the height from ground level, the type of construction (balcony, window, cornice, gable, crack, electric cables), and the date the data was collected"]
-   [:p "Once a nest has beed destroyed it can be updated in the db, clicking on the entry id and changing the destroyed column value to `true` as well as marking the date of registry as `destroyed_date`"]
+   [:h2 "El proyecto"]
+   [:p "El proyecto Hirundia es una herramienta que explora las relacion entre especies de aves urbanos golondrinas, vencejos y aviones comunes con los humanos para la conservación.
+"]
+   [:p "Hirundia es un instrumento de recopilación de datos para investigar los efectos de los seres humanos en las poblaciones de aves insectívoro migratorias. Los usuarios deben registrar una cuenta para actualizar la base de datos."]
+   [:p "Cada nido hace una entrada, como una fila en una hoja de Excel."]
+   [:p "La especie debe ser identificada, el nombre de la calle y el número de la casa (o el nombre) así como las coordenadas GPS (longitud y latitud), la orientación del nido, la altura desde el nivel del suelo, el tipo de construcción (balcón, ventana, cornisa, tejado, grieta, cable, y la fecha en que se recogieron los datos"]
+   [:p "Una vez que un nido ha sido destruido puede ser actualizado en la base de datos, haciendo clic en el ID de la entrada y cambiando el valor de la columna destruida a 'verdadero', así como marcando la fecha de registro como 'fecha_destruida' ."]
    [:div
-    [:h2 "Example entry:"]
+    [:h2 "Formulario de entrada:"]
     (table/to-table1d
      sample-entry
      [:id "ID"
-      :street "Street"
-      :house_number_name "No./name"
+      :street "Calle"
+      :house_number_name "No./nombre"
       :gps "GPS"
-      :species "Species"
-      :facing "Facing"
-      :height "Height"
-      :type "Type"
-      :date "Date"
-      :destroyed "Destroyed?"
-      :destroyed_date "Date destroyed"
-      :delete "Delete Entry"])
+      :species "Especie"
+      :facing "Orientación"
+      :height "Altura"
+      :type "Construcción"
+      :date "Fecha"
+      :destroyed "Destrosado?"
+      :destroyed_date "Fecha destrosado"
+      :delete "Borrar entrada"])
     #_(table/to-table1d
        {:id 1 :name "boy"}
        [:id "ID"
         :name "NAME"])]
    [:div
-    [:h2 "An example form:"]
-    [:h2 "Note that this form is disabled and that entries should be submitted once logged in via the `Add a nest` link above. "]
+    [:h2 "Formulario de ejemplo:"]
+    [:h2 "Tenga en cuenta que este formulario está desactivado y que las entradas deben ser enviadas una vez que se haya iniciado la sesión a través del enlace 'Añadir un nido' de arriba.
+"]
     [:form {:action "/" :method "GET"}
        ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
      [:div
-      [:p [:label.justify "Street: " [:input {:type "text" :name "street"}]]]
-      [:p [:label.justify "No./name: " [:input {:type "text" :name "house_number_name"}]]]
-      [:p [:label.justify "Latitude: " [:input {:type "int" :name "lat"}]]]
-      [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
-      [:p [:label.justify "Species: " (form/drop-down "species" ["swallow" "swift" "martin"])]]
-      [:p [:label.justify "Height: " (form/drop-down "height" (map inc (range 20)))]]
-      [:p [:label.justify "Facing: " (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"])]]
-      [:p [:label.justify "Type: " (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"])]]
-      [:p [:label.justify "Date: " [:input {:type "date" :name "date"}]]]
-      [:p "Every nest creates an entry in the database. In the case of multiple nests with the same specifications update this value:"]
-      [:p [:label.justify "Qty: "       [:input {:type "int" :name "qty" :value 1}]]]
-      [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-      [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" ["true" "false"])]]
-      [:p [:label.justify "Destroyed date: " [:input {:type "date" :name "destroyed_date"}]]]
-      [:p [:label.justify "λ ->" [:input {:type "submit" :value "Update"}]]]]]]])
+      [:p [:label.justify "Calle: " [:input {:type "text" :name "street"}]]]
+      [:p [:label.justify "No./nombre: " [:input {:type "text" :name "house_number_name"}]]]
+      [:p [:label.justify "Latitud: " [:input {:type "int" :name "lat"}]]]
+      [:p [:label.justify "Longitud: " [:input {:type "int" :name "lon"}]]]
+      [:p [:label.justify "Especie: " (form/drop-down "species" ["golondrina común" "vencejo común" "avión común"])]]
+      [:p [:label.justify "Altura: " (form/drop-down "height" (map inc (range 20)))]]
+      [:p [:label.justify "Orientación: " (form/drop-down "facing" ["norte" "noretoeste" "oeste" "sudoeste" "sur" "sudeste" "este" "norteste"])]]
+      [:p [:label.justify "Construcción: " (form/drop-down "type-of" ["balcón" "ventana" "cornisa" "tejado" "cable" "grieta"])]]
+      [:p [:label.justify "Fecha: " [:input {:type "date" :name "date"}]]]
+      [:p  "Cada nido crea una entrada en la base de datos. En el caso de múltiples nidos con las mismas especificaciones se actualiza este valor:
+"]
+      [:p [:label.justify "Cantidad: "       [:input {:type "int" :name "qty" :value 1}]]]
+      [:p "Si el nido ya no está allí, rellene lo siguiente e incluya el día registrado:"]
+      [:p [:label.justify "Destruida: " (form/drop-down "destroyed" ["true" "false"])]]
+      [:p [:label.justify "Fecha de destrucción: " [:input {:type "date" :name "destroyed_date"}]]]
+      [:p [:label.justify "λ ->" [:input {:type "submit" :value "Actualiza"}]]]]]]])

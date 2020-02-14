@@ -7,8 +7,6 @@
 
 (defn intro []
   [:div
-   [:h2 "From Wikipedia " [:a {:href "https://en.wikipedia.org/wiki/Swallow"} "Swallow:"]]
-   [:p "The swallows, martins and saw-wings, or Hirundinidae, are a family of passerine birds found around the world on all continents, including occasionally in Antarctica. Highly adapted to aerial feeding, they have a distinctive appearance. The term Swallow is used colloquially in Europe as a synonym for the barn swallow. There are around 90 species of Hirundinidae, divided into 19 genera, with the greatest diversity found in Africa, which is also thought to be where they evolved as hole-nesters. They also occur on a number of oceanic islands. A number of European and North American species are long-distance migrants by contrast, the West and South African swallows are non-migratory."]
    [:h2 "The project"]
    [:p "Hirundia is a data collection tool for investigating the effects of humans on the populations of migrating birds. Users have to register an account in order to update the database. "]
    [:p "Each nest makes an entry, like a row in an excel sheet"]

@@ -1,8 +1,8 @@
-@font-face {
-    font-family: "LatinModernRomanWOFF";
+/* @font-face { */
+    /* font-family: "LatinModernRomanWOFF"; */
     /*src: url('https://www.albany.edu/~hammond/webfonts/lmroman12-regular.woff');*/
-    src: url('/fonts/lmroman12-regular.woff');
-}
+    /* src: url('/fonts/lmroman12-regular.woff'); */
+/* } */
 
 body {
     background-color: white;

@@ -6,14 +6,14 @@
 (def sample-entry (vector (zipmap [:id :street :house_number_name :gps :species :height :facing :type :date :destroyed :destroyed_date :delete "borrar 23"] [23 "Juan Bueno" 1 "(32.677 0.201)" "Golondrina Común" 5 "norte" "grieta" "2019-04-04" "No" nil])))
 
 (defn intro []
-  [:div
+  [:div {:class "container"}
    [:h2 "El proyecto"]
    [:p "El proyecto Hirundia es una herramienta que explora las relacion entre especies de aves urbanos golondrinas, vencejos y aviones comunes con los humanos para la conservación.
 "]
    [:p "Hirundia es un instrumento de recopilación de datos para investigar los efectos de los seres humanos en las poblaciones de aves insectívoro migratorias. Los usuarios deben registrar una cuenta para actualizar la base de datos."]
    [:p "Cada nido hace una entrada, como una fila en una hoja de Excel."]
    [:p "La especie debe ser identificada, el nombre de la calle y el número de la casa (o el nombre) así como las coordenadas GPS (longitud y latitud), la orientación del nido, la altura desde el nivel del suelo, el tipo de construcción (balcón, ventana, cornisa, tejado, grieta, cable, y la fecha en que se recogieron los datos"]
-   [:p "Una vez que un nido ha sido destruido puede ser actualizado en la base de datos, haciendo clic en el ID de la entrada y cambiando el valor de la columna destruida a 'verdadero', así como marcando la fecha de registro como 'fecha_destruida' ."]
+   [:p "Una vez que un nido ha sido destruido puede ser actualizado en la base de datos, haciendo clic en el ID de la entrada y cambiando el valor de la columna destruida a 'si', así como marcando la fecha de registro como 'fecha_destruida' ."]
    [:div
     [:h2 "Formulario de entrada:"]
     (table/to-table1d
@@ -27,8 +27,8 @@
       :height "Altura"
       :type "Construcción"
       :date "Fecha"
-      :destroyed "Destrosado?"
-      :destroyed_date "Fecha destrosado"
+      :destroyed "Destruida?"
+      :destroyed_date "Fecha destruida"
       :delete "Borrar entrada"])
     #_(table/to-table1d
        {:id 1 :name "boy"}
@@ -54,6 +54,6 @@
 "]
       [:p [:label.justify "Cantidad: "       [:input {:type "int" :name "qty" :value 1}]]]
       [:p "Si el nido ya no está allí, rellene lo siguiente e incluya el día registrado:"]
-      [:p [:label.justify "Destruida: " (form/drop-down "destroyed" ["true" "false"])]]
+      [:p [:label.justify "Destruida: " (form/drop-down "destroyed" ["si" "no"])]]
       [:p [:label.justify "Fecha de destrucción: " [:input {:type "date" :name "destroyed_date"}]]]
       [:p [:label.justify "λ ->" [:input {:type "submit" :value "Actualiza"}]]]]]]])

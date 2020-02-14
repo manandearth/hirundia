@@ -27,33 +27,35 @@
 (defn header-links
   [{:keys [session] :as request}]
   (if  (:identity session)
-    [:div {:class "navbar navbar-light" :style "background-color: #e3f2fd;"}
-     [:a {:class "nav-link" :href "/"} "Home"]
-     [:a {:href "/about"} "About"]
-     [:a {:href "/nests"} "View all nests"]
-     [:a {:href "/dashboard"} "Dashboard"]
-     [:a {:href "/nests-insert"} "Add a nest"]
-     "  Logged in as " (get-in session [:identity :username])
-     [:a {:href "/logout"} "Logout"]]
-    [:div {:class "navbar navbar-light" :style "background-color: #e3f2fd;"}
+    [:div {:class "container"}
+     [:div {:class "navbar navbar-light" :style "background-color: #e3f2fd;"}
+      [:a {:class "nav-link" :href "/"} "principal"]
+      [:a {:href "/about"} "sobre el proyecto"]
+      [:a {:href "/nests"} "listado"]
+      [:a {:href "/dashboard"} "panel de control"]
+      [:a {:href "/nests-insert"} "añadir nidos"]
+      "  Logado como " (get-in session [:identity :username])
+      [:a {:href "/logout"} "cerrar"]]]
+    [:div {:class "container"}
+     [:div {:class "navbar navbar-light" :style "background-color: #e3f2fd;"}
 
-     [:a {:href "/"} "Home"]
-     [:a {:href "/about"} "About"]
-     [:a {:href "/nests"} "View all nests"]
-     [:a {:href "/dashboard"} "Dashboard"]
-     [:a {:href "/login"} "Login"]
-     [:a {:href "/register"} "Register"]]))
+      [:a {:href "/"} "principal"]
+      [:a {:href "/about"} "sobre el proyecto"]
+      [:a {:href "/nests"} "listado"]
+      [:a {:href "/dashboard"} "panel de control"]
+      [:a {:href "/login"} "acceso"]
+      [:a {:href "/register"} "registrarse"]]]))
 
 (defn home [request]
   (page/html5
    (gen-page-head "Home")
    (header-links request)
    (if (authenticated? (:session request))
-     [:div
-      [:h1 "Welcome to Hirundia Project."]
-      [:button {:class "btn btn-primary"} "test"]
-      [:p "Access the database or add data with the links above"]]
-     [:div [:h1 "Welcome to Hirundia Project."]
+     [:div {:class "container"}
+      [:div
+       [:h1 "Bienvenido/a al proyecto 'Convivencia'."]
+       [:p "Accede el base de datos o añada entradas por la barra de navegación"]]]
+     [:div {:class "container"} [:h1 "Bienvenido/a a proyecto 'Convivencia'."]
       (pages/intro)])
    (bootstrap-scripts)))
 
@@ -63,9 +65,11 @@
    (header-links request)
    (if (authenticated? (:session request))
      (pages/intro)
-     [:div
-      [:h1 "About this project"]
-      [:p "The Hirundia project is a tool exploring the relations of Swallows, Swifts, and House Martins with humans for conservation."]])))
+     [:div {:class "container"}
+      [:div
+       [:h1 "El proyecto"]
+       [:p "El proyecto Hirundia es una herramienta que explora las relacion entre especies de aves urbanos golondrinas, vencejos y aviones comunes con los humanos para la conservación.
+"]]])))
 
 (defn greet [{:keys [session] :as request}]
   (page/html5
@@ -82,39 +86,40 @@
   (page/html5
    (gen-page-head "add a nest to the database")
    (header-links request)
-   [:div
-    [:h1 "Add a nest to the database"]
+   [:div {:class "container"}
+    [:h1 "Añada nido al base de datos"]
     [:form {:action "/nests-insert" :method "POST"}
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
      [:div
-      [:p [:label.justify "Street: "    [:input {:type "text" :name "street"}]]]
-      [:p [:label.justify "No./name: "    [:input {:type "text" :name "house_number_name"}]]]
-      [:p [:label.justify "Latitude: "  [:input {:type "int" :name "lat"}]]]
-      [:p [:label.justify "Longitude: " [:input {:type "int" :name "lon"}]]]
-      [:p [:label.justify "Species: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin")]]
-      [:p [:label.justify "Height: "    (form/drop-down "height" (map inc (range 20)) 5)]]
-      [:p [:label.justify "Facing: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
-      [:p [:label.justify "Type: "      (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] "window")]]
-      [:p [:label.justify "Date: "      [:input {:type "date" :name "date"}]]]
-      [:p "Every nest creates an entry in the database. In the case of multiple nests with the same specifications update this value:"]
-      [:p [:label.justify "Qty: "       [:input {:type "int" :name "qty" :value 1}]]]
-      [:p "If the nest is no longer there fill in the following and include the day recorded:"]
-      [:p [:label.justify "Destroyed: " (form/drop-down "destroyed" [true false] false)]]
-      [:p [:label.justify "Destroyed Date: " [:input {:type "date" :name "destroyed_date"}]]]
+      [:p [:label.justify "Calle: "    [:input {:type "text" :name "street"}]]]
+      [:p [:label.justify "No./nombre: "    [:input {:type "text" :name "house_number_name"}]]]
+      [:p [:label.justify "Latitud: "  [:input {:type "int" :name "lat"}]]]
+      [:p [:label.justify "Longitud: " [:input {:type "int" :name "lon"}]]]
+      [:p [:label.justify "Especie: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin")]]
+      [:p [:label.justify "Altura: "    (form/drop-down "height" (map inc (range 20)) 5)]]
+      [:p [:label.justify "Orientación: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
+      [:p [:label.justify "Construcción: "      (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] "window")]]
+      [:p [:label.justify "Fecha: "      [:input {:type "date" :name "date"}]]]
+      [:p "Cada nido crea una entrada en la base de datos. En el caso de múltiples nidos con las mismas especificaciones se actualiza este valor:
+"]
+      [:p [:label.justify "Cantidad: "       [:input {:type "int" :name "qty" :value 1}]]]
+      [:p "Si el nido ya no está allí, rellene lo siguiente e incluya el día registrado:"]
+      [:p [:label.justify "Destruido: " (form/drop-down "destroyed" [true false] false)]]
+      [:p [:label.justify "fecha de destrucción: " [:input {:type "date" :name "destroyed_date"}]]]
       [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
 
 (defn register [{:keys [flash] :as request}]
   (page/html5
    (gen-page-head "Register")
    (header-links request)
-   [:div (when (seq flash) [:h2.flash flash])
+   [:div {:class "container"} (when (seq flash) [:h2.flash flash])
     [:div
-     [:h1 "Register"]
+     [:h1 "Registararse"]
      [:form {:action "/register" :method "POST"}
       [:div
-       [:p [:label.justify "Username: " [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify "Password: " [:input {:type "password" :name "password"}]]]
-       [:p [:label.justify "" [:input {:type "submit" :value "Register"}]]]]]]]))
+       [:p [:label.justify "Usuario: " [:input {:type "text" :name "username"}]]]
+       [:p [:label.justify "Contraseña: " [:input {:type "password" :name "password"}]]]
+       [:p [:label.justify "" [:input {:type "submit" :value "Regisrarse"}]]]]]]]))
 
 
 ;FIXME flash here suppose to be just the username but this view is redirected by also `login` POST perform endpoint which sends a flash message for wrong password..
@@ -124,21 +129,21 @@
   (page/html5
    (gen-page-head "Login")
    (header-links request)
-   [:div (when (seq flash) [:h2.flash flash])
+   [:div {:class "container"} (when (seq flash) [:h2.flash flash])
     [:div
-     [:h1 "Login"]
+     [:h1 "Entrada"]
      [:form {:action "/login" :method "POST"}
       [:div
-       [:p [:label.justify "Username: "
+       [:p [:label.justify "Usuario: "
             [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify "Password: " [:input {:type "password" :name "password"}]]]
-       [:p [:label.justify "" [:input {:type "submit" :value "Login"}]]]]]]]))
+       [:p [:label.justify "Contraseña: " [:input {:type "password" :name "password"}]]]
+       [:p [:label.justify "" [:input {:type "submit" :value "Entrar"}]]]]]]]))
 
 (defn dashboard [request]
   (page/html5
    (gen-page-head "Dashboard")
    (header-links request)
-   [:div {:id "app"}]
+   [:div {:class "container" :id "app"}]
    [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
            :integrity "sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
            :crossorigin ""}]

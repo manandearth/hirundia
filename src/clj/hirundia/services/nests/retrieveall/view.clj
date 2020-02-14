@@ -6,11 +6,11 @@
 
 (defn all-nests [{:keys [flash] :as request} records]
   (page/html5
-   (views/gen-page-head "Complete List of Entries")
+   (views/gen-page-head "Listado de entradas")
    (views/header-links request)
-   [:div
+   [:div {:class "container"}
     [:h2.flash (when (seq flash) flash)]
-    [:h1 "Complete List Of Entries"]
+    [:h1 "Listado de entradas"]
     [:div (let [attr-fns {:data-value-transform (fn [label-key v]
                                                   (if (= :id label-key)
                                                     [:a {:href (url-for :nests/:id :path-params {:id v})} v]

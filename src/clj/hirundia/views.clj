@@ -112,7 +112,7 @@
   (page/html5
    (gen-page-head "Register")
    (header-links request)
-   [:div {:class "container"} (when (seq flash) [:h2.flash flash])
+   [:div {:class "container"} (when (seq flash) [:div {:class "alert alert-success"} flash])
     [:div
      [:h1 "Registararse"]
      [:form {:action "/register" :method "POST"}
@@ -129,7 +129,7 @@
   (page/html5
    (gen-page-head "Login")
    (header-links request)
-   [:div {:class "container"} (when (seq flash) [:h2.flash flash])
+   [:div {:class "container"} (when (seq flash) [:div {:class "alert alert-success"} flash])
     [:div
      [:h1 "Entrada"]
      [:form {:action "/login" :method "POST"}

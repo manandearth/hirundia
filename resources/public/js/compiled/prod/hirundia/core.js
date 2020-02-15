@@ -31,25 +31,25 @@ var lon = parseFloat(cljs.core.last(split));
 return new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$latitude,lat,cljs.core.cst$kw$longitude,lon], null);
 });
 hirundia.core.transform_df = (function hirundia$core$transform_df(data){
-return cljs.core.vec((function (){var iter__4523__auto__ = (function hirundia$core$transform_df_$_iter__39797(s__39798){
+return cljs.core.vec((function (){var iter__4523__auto__ = (function hirundia$core$transform_df_$_iter__53355(s__53356){
 return (new cljs.core.LazySeq(null,(function (){
-var s__39798__$1 = s__39798;
+var s__53356__$1 = s__53356;
 while(true){
-var temp__5720__auto__ = cljs.core.seq(s__39798__$1);
+var temp__5720__auto__ = cljs.core.seq(s__53356__$1);
 if(temp__5720__auto__){
-var s__39798__$2 = temp__5720__auto__;
-if(cljs.core.chunked_seq_QMARK_(s__39798__$2)){
-var c__4521__auto__ = cljs.core.chunk_first(s__39798__$2);
+var s__53356__$2 = temp__5720__auto__;
+if(cljs.core.chunked_seq_QMARK_(s__53356__$2)){
+var c__4521__auto__ = cljs.core.chunk_first(s__53356__$2);
 var size__4522__auto__ = cljs.core.count(c__4521__auto__);
-var b__39800 = cljs.core.chunk_buffer(size__4522__auto__);
-if((function (){var i__39799 = (0);
+var b__53358 = cljs.core.chunk_buffer(size__4522__auto__);
+if((function (){var i__53357 = (0);
 while(true){
-if((i__39799 < size__4522__auto__)){
-var e = cljs.core._nth.cljs$core$IFn$_invoke$arity$2(c__4521__auto__,i__39799);
-cljs.core.chunk_append(b__39800,cljs.core.dissoc.cljs$core$IFn$_invoke$arity$2(cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(cljs.core.conj.cljs$core$IFn$_invoke$arity$2(e,hirundia.core.coords_helper(e)),cljs.core.cst$kw$date,(new Date(cljs.core.cst$kw$date.cljs$core$IFn$_invoke$arity$1(e)))),cljs.core.cst$kw$destroyed_date,(((!(cljs.core.nil_QMARK_)))?(new Date(cljs.core.cst$kw$destroyed_date.cljs$core$IFn$_invoke$arity$1(e))):null)),cljs.core.cst$kw$gps));
+if((i__53357 < size__4522__auto__)){
+var e = cljs.core._nth.cljs$core$IFn$_invoke$arity$2(c__4521__auto__,i__53357);
+cljs.core.chunk_append(b__53358,cljs.core.dissoc.cljs$core$IFn$_invoke$arity$2(cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(cljs.core.conj.cljs$core$IFn$_invoke$arity$2(e,hirundia.core.coords_helper(e)),cljs.core.cst$kw$date,(new Date(cljs.core.cst$kw$date.cljs$core$IFn$_invoke$arity$1(e)))),cljs.core.cst$kw$destroyed_date,(((!(cljs.core.nil_QMARK_)))?(new Date(cljs.core.cst$kw$destroyed_date.cljs$core$IFn$_invoke$arity$1(e))):null)),cljs.core.cst$kw$gps));
 
-var G__39801 = (i__39799 + (1));
-i__39799 = G__39801;
+var G__53359 = (i__53357 + (1));
+i__53357 = G__53359;
 continue;
 } else {
 return true;
@@ -57,13 +57,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons(cljs.core.chunk(b__39800),hirundia$core$transform_df_$_iter__39797(cljs.core.chunk_rest(s__39798__$2)));
+return cljs.core.chunk_cons(cljs.core.chunk(b__53358),hirundia$core$transform_df_$_iter__53355(cljs.core.chunk_rest(s__53356__$2)));
 } else {
-return cljs.core.chunk_cons(cljs.core.chunk(b__39800),null);
+return cljs.core.chunk_cons(cljs.core.chunk(b__53358),null);
 }
 } else {
-var e = cljs.core.first(s__39798__$2);
-return cljs.core.cons(cljs.core.dissoc.cljs$core$IFn$_invoke$arity$2(cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(cljs.core.conj.cljs$core$IFn$_invoke$arity$2(e,hirundia.core.coords_helper(e)),cljs.core.cst$kw$date,(new Date(cljs.core.cst$kw$date.cljs$core$IFn$_invoke$arity$1(e)))),cljs.core.cst$kw$destroyed_date,(((!(cljs.core.nil_QMARK_)))?(new Date(cljs.core.cst$kw$destroyed_date.cljs$core$IFn$_invoke$arity$1(e))):null)),cljs.core.cst$kw$gps),hirundia$core$transform_df_$_iter__39797(cljs.core.rest(s__39798__$2)));
+var e = cljs.core.first(s__53356__$2);
+return cljs.core.cons(cljs.core.dissoc.cljs$core$IFn$_invoke$arity$2(cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(cljs.core.conj.cljs$core$IFn$_invoke$arity$2(e,hirundia.core.coords_helper(e)),cljs.core.cst$kw$date,(new Date(cljs.core.cst$kw$date.cljs$core$IFn$_invoke$arity$1(e)))),cljs.core.cst$kw$destroyed_date,(((!(cljs.core.nil_QMARK_)))?(new Date(cljs.core.cst$kw$destroyed_date.cljs$core$IFn$_invoke$arity$1(e))):null)),cljs.core.cst$kw$gps),hirundia$core$transform_df_$_iter__53355(cljs.core.rest(s__53356__$2)));
 }
 } else {
 return null;
@@ -82,14 +82,14 @@ return cljs.core.reset_BANG_(a,hirundia.core.transform_df(response));
 });
 hirundia.core.play_data = (function hirundia$core$play_data(var_args){
 var args__4736__auto__ = [];
-var len__4730__auto___39813 = arguments.length;
-var i__4731__auto___39814 = (0);
+var len__4730__auto___53371 = arguments.length;
+var i__4731__auto___53372 = (0);
 while(true){
-if((i__4731__auto___39814 < len__4730__auto___39813)){
-args__4736__auto__.push((arguments[i__4731__auto___39814]));
+if((i__4731__auto___53372 < len__4730__auto___53371)){
+args__4736__auto__.push((arguments[i__4731__auto___53372]));
 
-var G__39815 = (i__4731__auto___39814 + (1));
-i__4731__auto___39814 = G__39815;
+var G__53373 = (i__4731__auto___53372 + (1));
+i__4731__auto___53372 = G__53373;
 continue;
 } else {
 }
@@ -101,38 +101,38 @@ return hirundia.core.play_data.cljs$core$IFn$_invoke$arity$variadic(argseq__4737
 });
 
 hirundia.core.play_data.cljs$core$IFn$_invoke$arity$variadic = (function (names){
-var iter__4523__auto__ = (function hirundia$core$iter__39803(s__39804){
+var iter__4523__auto__ = (function hirundia$core$iter__53361(s__53362){
 return (new cljs.core.LazySeq(null,(function (){
-var s__39804__$1 = s__39804;
+var s__53362__$1 = s__53362;
 while(true){
-var temp__5720__auto__ = cljs.core.seq(s__39804__$1);
+var temp__5720__auto__ = cljs.core.seq(s__53362__$1);
 if(temp__5720__auto__){
 var xs__6277__auto__ = temp__5720__auto__;
 var n = cljs.core.first(xs__6277__auto__);
-var iterys__4519__auto__ = ((function (s__39804__$1,n,xs__6277__auto__,temp__5720__auto__){
-return (function hirundia$core$iter__39803_$_iter__39805(s__39806){
-return (new cljs.core.LazySeq(null,((function (s__39804__$1,n,xs__6277__auto__,temp__5720__auto__){
+var iterys__4519__auto__ = ((function (s__53362__$1,n,xs__6277__auto__,temp__5720__auto__){
+return (function hirundia$core$iter__53361_$_iter__53363(s__53364){
+return (new cljs.core.LazySeq(null,((function (s__53362__$1,n,xs__6277__auto__,temp__5720__auto__){
 return (function (){
-var s__39806__$1 = s__39806;
+var s__53364__$1 = s__53364;
 while(true){
-var temp__5720__auto____$1 = cljs.core.seq(s__39806__$1);
+var temp__5720__auto____$1 = cljs.core.seq(s__53364__$1);
 if(temp__5720__auto____$1){
-var s__39806__$2 = temp__5720__auto____$1;
-if(cljs.core.chunked_seq_QMARK_(s__39806__$2)){
-var c__4521__auto__ = cljs.core.chunk_first(s__39806__$2);
+var s__53364__$2 = temp__5720__auto____$1;
+if(cljs.core.chunked_seq_QMARK_(s__53364__$2)){
+var c__4521__auto__ = cljs.core.chunk_first(s__53364__$2);
 var size__4522__auto__ = cljs.core.count(c__4521__auto__);
-var b__39808 = cljs.core.chunk_buffer(size__4522__auto__);
-if((function (){var i__39807 = (0);
+var b__53366 = cljs.core.chunk_buffer(size__4522__auto__);
+if((function (){var i__53365 = (0);
 while(true){
-if((i__39807 < size__4522__auto__)){
-var i = cljs.core._nth.cljs$core$IFn$_invoke$arity$2(c__4521__auto__,i__39807);
-cljs.core.chunk_append(b__39808,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$time,i,cljs.core.cst$kw$item,n,cljs.core.cst$kw$quantity,((function (){var G__39809 = (i * cljs.core.count(n));
-var G__39810 = 0.8;
-return Math.pow(G__39809,G__39810);
+if((i__53365 < size__4522__auto__)){
+var i = cljs.core._nth.cljs$core$IFn$_invoke$arity$2(c__4521__auto__,i__53365);
+cljs.core.chunk_append(b__53366,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$time,i,cljs.core.cst$kw$item,n,cljs.core.cst$kw$quantity,((function (){var G__53367 = (i * cljs.core.count(n));
+var G__53368 = 0.8;
+return Math.pow(G__53367,G__53368);
 })() + cljs.core.rand_int(cljs.core.count(n)))], null));
 
-var G__39816 = (i__39807 + (1));
-i__39807 = G__39816;
+var G__53374 = (i__53365 + (1));
+i__53365 = G__53374;
 continue;
 } else {
 return true;
@@ -140,32 +140,32 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons(cljs.core.chunk(b__39808),hirundia$core$iter__39803_$_iter__39805(cljs.core.chunk_rest(s__39806__$2)));
+return cljs.core.chunk_cons(cljs.core.chunk(b__53366),hirundia$core$iter__53361_$_iter__53363(cljs.core.chunk_rest(s__53364__$2)));
 } else {
-return cljs.core.chunk_cons(cljs.core.chunk(b__39808),null);
+return cljs.core.chunk_cons(cljs.core.chunk(b__53366),null);
 }
 } else {
-var i = cljs.core.first(s__39806__$2);
-return cljs.core.cons(new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$time,i,cljs.core.cst$kw$item,n,cljs.core.cst$kw$quantity,((function (){var G__39811 = (i * cljs.core.count(n));
-var G__39812 = 0.8;
-return Math.pow(G__39811,G__39812);
-})() + cljs.core.rand_int(cljs.core.count(n)))], null),hirundia$core$iter__39803_$_iter__39805(cljs.core.rest(s__39806__$2)));
+var i = cljs.core.first(s__53364__$2);
+return cljs.core.cons(new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$time,i,cljs.core.cst$kw$item,n,cljs.core.cst$kw$quantity,((function (){var G__53369 = (i * cljs.core.count(n));
+var G__53370 = 0.8;
+return Math.pow(G__53369,G__53370);
+})() + cljs.core.rand_int(cljs.core.count(n)))], null),hirundia$core$iter__53361_$_iter__53363(cljs.core.rest(s__53364__$2)));
 }
 } else {
 return null;
 }
 break;
 }
-});})(s__39804__$1,n,xs__6277__auto__,temp__5720__auto__))
+});})(s__53362__$1,n,xs__6277__auto__,temp__5720__auto__))
 ,null,null));
-});})(s__39804__$1,n,xs__6277__auto__,temp__5720__auto__))
+});})(s__53362__$1,n,xs__6277__auto__,temp__5720__auto__))
 ;
 var fs__4520__auto__ = cljs.core.seq(iterys__4519__auto__(cljs.core.range.cljs$core$IFn$_invoke$arity$1((20))));
 if(fs__4520__auto__){
-return cljs.core.concat.cljs$core$IFn$_invoke$arity$2(fs__4520__auto__,hirundia$core$iter__39803(cljs.core.rest(s__39804__$1)));
+return cljs.core.concat.cljs$core$IFn$_invoke$arity$2(fs__4520__auto__,hirundia$core$iter__53361(cljs.core.rest(s__53362__$1)));
 } else {
-var G__39817 = cljs.core.rest(s__39804__$1);
-s__39804__$1 = G__39817;
+var G__53375 = cljs.core.rest(s__53362__$1);
+s__53362__$1 = G__53375;
 continue;
 }
 } else {
@@ -181,22 +181,30 @@ return iter__4523__auto__(names);
 hirundia.core.play_data.cljs$lang$maxFixedArity = (0);
 
 /** @this {Function} */
-hirundia.core.play_data.cljs$lang$applyTo = (function (seq39802){
+hirundia.core.play_data.cljs$lang$applyTo = (function (seq53360){
 var self__4718__auto__ = this;
-return self__4718__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq(seq39802));
+return self__4718__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq(seq53360));
 });
 
 hirundia.core.nest_height_schema = (function hirundia$core$nest_height_schema(data){
 return new cljs.core.PersistentArrayMap(null, 5, [cljs.core.cst$kw$width,(600),cljs.core.cst$kw$data,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$values,data], null),cljs.core.cst$kw$encoding,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$x,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"species",cljs.core.cst$kw$type,"nominal"], null),cljs.core.cst$kw$y,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$aggregate,"count",cljs.core.cst$kw$type,"quantitative",cljs.core.cst$kw$stack,"normalize"], null),cljs.core.cst$kw$color,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$field,"height",cljs.core.cst$kw$type,"nominal",cljs.core.cst$kw$scale,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$domain,new cljs.core.PersistentVector(null, 12, 5, cljs.core.PersistentVector.EMPTY_NODE, ["12","11","10","9","8","7","6","5","4","3","2","1"], null),cljs.core.cst$kw$range,new cljs.core.PersistentVector(null, 12, 5, cljs.core.PersistentVector.EMPTY_NODE, ["#D5D8DD","#BECDE0","#AEC7E5","#99B9E1","#6098DC","#4B8AD8","#2D75CD","#1D6FD3","#0F5DBD","#0C4B97","#063F84","#04254E"], null)], null)], null)], null),cljs.core.cst$kw$legend,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$title,"height by species"], null),cljs.core.cst$kw$mark,"bar"], null);
 });
+/**
+ * extract the min and max latitude for the scatter dynamic schema
+ */
+hirundia.core.latitude_helper = (function hirundia$core$latitude_helper(data){
+var lat_max = cljs.core.apply.cljs$core$IFn$_invoke$arity$2(Math.max,cljs.core.map.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$latitude,data));
+var lat_min = cljs.core.apply.cljs$core$IFn$_invoke$arity$2(Math.min,cljs.core.map.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$latitude,data));
+return new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$min,lat_min,cljs.core.cst$kw$max,lat_max], null);
+});
 hirundia.core.scatter_schema = (function hirundia$core$scatter_schema(data){
-return new cljs.core.PersistentArrayMap(null, 5, [cljs.core.cst$kw$width,(500),cljs.core.cst$kw$description,"A scatter plot to show height in relation to latitude",cljs.core.cst$kw$data,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$values,data], null),cljs.core.cst$kw$mark,"point",cljs.core.cst$kw$encoding,new cljs.core.PersistentArrayMap(null, 4, [cljs.core.cst$kw$x,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"height",cljs.core.cst$kw$type,"quantitative"], null),cljs.core.cst$kw$y,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$field,"latitude",cljs.core.cst$kw$type,"quantitative",cljs.core.cst$kw$scale,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$domain,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [36.252,36.255], null)], null)], null),cljs.core.cst$kw$color,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"species",cljs.core.cst$kw$type,"nominal"], null),cljs.core.cst$kw$shape,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"species",cljs.core.cst$kw$type,"nominal"], null)], null)], null);
+return new cljs.core.PersistentArrayMap(null, 5, [cljs.core.cst$kw$width,(500),cljs.core.cst$kw$description,"A scatter plot to show height in relation to latitude",cljs.core.cst$kw$data,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$values,data], null),cljs.core.cst$kw$mark,"point",cljs.core.cst$kw$encoding,new cljs.core.PersistentArrayMap(null, 4, [cljs.core.cst$kw$x,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"height",cljs.core.cst$kw$type,"quantitative"], null),cljs.core.cst$kw$y,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$field,"latitude",cljs.core.cst$kw$type,"quantitative",cljs.core.cst$kw$scale,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$domain,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$min.cljs$core$IFn$_invoke$arity$1(hirundia.core.latitude_helper(data)),cljs.core.cst$kw$max.cljs$core$IFn$_invoke$arity$1(hirundia.core.latitude_helper(data))], null)], null)], null),cljs.core.cst$kw$color,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"species",cljs.core.cst$kw$type,"nominal"], null),cljs.core.cst$kw$shape,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"species",cljs.core.cst$kw$type,"nominal"], null)], null)], null);
 });
 hirundia.core.gps_helper = (function hirundia$core$gps_helper(lat,lon){
 return [new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [lat,lon], null)];
 });
 hirundia.core.nests_per_address_schema = (function hirundia$core$nests_per_address_schema(data){
-return new cljs.core.PersistentArrayMap(null, 5, [cljs.core.cst$kw$width,(500),cljs.core.cst$kw$description,"A plot showing addresses ordered by number of nests",cljs.core.cst$kw$data,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$values,data], null),cljs.core.cst$kw$mark,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$type,"bar",cljs.core.cst$kw$tooltip,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$content,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"address",cljs.core.cst$kw$type,"nominal"], null)], null)], null)], null),cljs.core.cst$kw$encoding,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$x,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"gps",cljs.core.cst$kw$type,"nominal"], null),cljs.core.cst$kw$y,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$aggregate,"count",cljs.core.cst$kw$type,"quantitative",cljs.core.cst$kw$stack,"normalize"], null),cljs.core.cst$kw$tooltip,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"street",cljs.core.cst$kw$type,"nominal"], null),new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"number",cljs.core.cst$kw$type,"nominal"], null)], null)], null)], null);
+return new cljs.core.PersistentArrayMap(null, 5, [cljs.core.cst$kw$width,(500),cljs.core.cst$kw$description,"A plot showing addresses ordered by number of nests",cljs.core.cst$kw$data,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$values,data], null),cljs.core.cst$kw$mark,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$type,"bar",cljs.core.cst$kw$tooltip,new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$content,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"address",cljs.core.cst$kw$type,"nominal"], null)], null)], null)], null),cljs.core.cst$kw$encoding,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$x,new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"gps",cljs.core.cst$kw$type,"nominal"], null),cljs.core.cst$kw$y,new cljs.core.PersistentArrayMap(null, 3, [cljs.core.cst$kw$aggregate,"count",cljs.core.cst$kw$type,"quantitative",cljs.core.cst$kw$stack,"normalize"], null),cljs.core.cst$kw$tooltip,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"street",cljs.core.cst$kw$type,"nominal"], null),new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$field,"house_number_name",cljs.core.cst$kw$type,"nominal"], null)], null)], null)], null);
 });
 hirundia.core.oz_nest_height = (function hirundia$core$oz_nest_height(){
 var d = reagent.core.atom.cljs$core$IFn$_invoke$arity$1(null);
@@ -225,8 +233,8 @@ hirundia.core.fetch_data_BANG_(d);
 return ((function (d){
 return (function (){
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$div,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [oz.core.vega,hirundia.core.nests_per_address_schema(cljs.core.map.cljs$core$IFn$_invoke$arity$2(((function (d){
-return (function (p1__39818_SHARP_){
-return cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(p1__39818_SHARP_,cljs.core.cst$kw$gps,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$latitude.cljs$core$IFn$_invoke$arity$1(p1__39818_SHARP_),cljs.core.cst$kw$longitude.cljs$core$IFn$_invoke$arity$1(p1__39818_SHARP_)], null));
+return (function (p1__53376_SHARP_){
+return cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(p1__53376_SHARP_,cljs.core.cst$kw$gps,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$latitude.cljs$core$IFn$_invoke$arity$1(p1__53376_SHARP_),cljs.core.cst$kw$longitude.cljs$core$IFn$_invoke$arity$1(p1__53376_SHARP_)], null));
 });})(d))
 ,cljs.core.deref(d)))], null)], null);
 });
@@ -238,8 +246,8 @@ hirundia.core.circle = (function hirundia$core$circle(entry){
 var lon = cljs.core.cst$kw$longitude.cljs$core$IFn$_invoke$arity$1(entry);
 var lat = cljs.core.cst$kw$latitude.cljs$core$IFn$_invoke$arity$1(entry);
 var species = cljs.core.cst$kw$species.cljs$core$IFn$_invoke$arity$1(entry);
-return L.circle([lat,lon],cljs.core.clj__GT_js(new cljs.core.PersistentArrayMap(null, 4, [cljs.core.cst$kw$color,(function (){var G__39819 = species;
-switch (G__39819) {
+return L.circle([lat,lon],cljs.core.clj__GT_js(new cljs.core.PersistentArrayMap(null, 4, [cljs.core.cst$kw$color,(function (){var G__53377 = species;
+switch (G__53377) {
 case "swallow":
 return "crimson";
 
@@ -253,11 +261,11 @@ return "seagreen";
 
 break;
 default:
-throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__39819)].join('')));
+throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__53377)].join('')));
 
 }
-})(),cljs.core.cst$kw$fillColor,(function (){var G__39820 = species;
-switch (G__39820) {
+})(),cljs.core.cst$kw$fillColor,(function (){var G__53378 = species;
+switch (G__53378) {
 case "swallow":
 return "red";
 
@@ -271,19 +279,19 @@ return "green";
 
 break;
 default:
-throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__39820)].join('')));
+throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__53378)].join('')));
 
 }
 })(),cljs.core.cst$kw$fillOpacity,0.2,cljs.core.cst$kw$radius,(5)], null)));
 });
 hirundia.core.popup = (function hirundia$core$popup(entry){
 var street = cljs.core.cst$kw$street.cljs$core$IFn$_invoke$arity$1(entry);
-var number = cljs.core.cst$kw$number.cljs$core$IFn$_invoke$arity$1(entry);
+var house_number_name = cljs.core.cst$kw$house_number_name.cljs$core$IFn$_invoke$arity$1(entry);
 var height = cljs.core.cst$kw$height.cljs$core$IFn$_invoke$arity$1(entry);
 var facing = cljs.core.cst$kw$facing.cljs$core$IFn$_invoke$arity$1(entry);
 var type_of = cljs.core.cst$kw$type.cljs$core$IFn$_invoke$arity$1(entry);
 var date = cljs.core.cst$kw$date.cljs$core$IFn$_invoke$arity$1(entry).toDateString();
-return ["<table>\n<tr><td><b>Address: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(street)," ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(number),"</td></tr>\n<tr><td><b>Height: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(height)," m</td></tr>\n<tr><td><b>Aspect: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(facing),"</td></tr>\n<tr><td><b>Type of nest: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(type_of),"</td></tr>\n<tr><td><b>First recorded: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(date),"</td></tr>\n</table>"].join('');
+return ["<table>\n<tr><td><b>Address: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(street)," ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(house_number_name),"</td></tr>\n<tr><td><b>Height: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(height)," m</td></tr>\n<tr><td><b>Aspect: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(facing),"</td></tr>\n<tr><td><b>Type of nest: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(type_of),"</td></tr>\n<tr><td><b>First recorded: </b>",cljs.core.str.cljs$core$IFn$_invoke$arity$1(date),"</td></tr>\n</table>"].join('');
 });
 hirundia.core.tooltip = (function hirundia$core$tooltip(entry){
 var lat = cljs.core.cst$kw$latitude.cljs$core$IFn$_invoke$arity$1(entry);
@@ -301,53 +309,53 @@ hirundia.core.ajax_map_call = (function hirundia$core$ajax_map_call(m){
 return ajax.core.GET.cljs$core$IFn$_invoke$arity$variadic("/transit",cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([new cljs.core.PersistentArrayMap(null, 4, [cljs.core.cst$kw$response_DASH_format,cljs.core.cst$kw$json,cljs.core.cst$kw$keywords_QMARK_,true,cljs.core.cst$kw$error_DASH_handler,(function (){
 return console.log("problem boss..");
 }),cljs.core.cst$kw$handler,(function (response){
-var seq__39823 = cljs.core.seq(hirundia.core.transform_df(response));
-var chunk__39824 = null;
-var count__39825 = (0);
-var i__39826 = (0);
+var seq__53381 = cljs.core.seq(hirundia.core.transform_df(response));
+var chunk__53382 = null;
+var count__53383 = (0);
+var i__53384 = (0);
 while(true){
-if((i__39826 < count__39825)){
-var e = chunk__39824.cljs$core$IIndexed$_nth$arity$2(null,i__39826);
+if((i__53384 < count__53383)){
+var e = chunk__53382.cljs$core$IIndexed$_nth$arity$2(null,i__53384);
 hirundia.core.circle(e).bindPopup(hirundia.core.popup(e)).bindTooltip(hirundia.core.tooltip(e)).addTo(m);
 
 
-var G__39827 = seq__39823;
-var G__39828 = chunk__39824;
-var G__39829 = count__39825;
-var G__39830 = (i__39826 + (1));
-seq__39823 = G__39827;
-chunk__39824 = G__39828;
-count__39825 = G__39829;
-i__39826 = G__39830;
+var G__53385 = seq__53381;
+var G__53386 = chunk__53382;
+var G__53387 = count__53383;
+var G__53388 = (i__53384 + (1));
+seq__53381 = G__53385;
+chunk__53382 = G__53386;
+count__53383 = G__53387;
+i__53384 = G__53388;
 continue;
 } else {
-var temp__5720__auto__ = cljs.core.seq(seq__39823);
+var temp__5720__auto__ = cljs.core.seq(seq__53381);
 if(temp__5720__auto__){
-var seq__39823__$1 = temp__5720__auto__;
-if(cljs.core.chunked_seq_QMARK_(seq__39823__$1)){
-var c__4550__auto__ = cljs.core.chunk_first(seq__39823__$1);
-var G__39831 = cljs.core.chunk_rest(seq__39823__$1);
-var G__39832 = c__4550__auto__;
-var G__39833 = cljs.core.count(c__4550__auto__);
-var G__39834 = (0);
-seq__39823 = G__39831;
-chunk__39824 = G__39832;
-count__39825 = G__39833;
-i__39826 = G__39834;
+var seq__53381__$1 = temp__5720__auto__;
+if(cljs.core.chunked_seq_QMARK_(seq__53381__$1)){
+var c__4550__auto__ = cljs.core.chunk_first(seq__53381__$1);
+var G__53389 = cljs.core.chunk_rest(seq__53381__$1);
+var G__53390 = c__4550__auto__;
+var G__53391 = cljs.core.count(c__4550__auto__);
+var G__53392 = (0);
+seq__53381 = G__53389;
+chunk__53382 = G__53390;
+count__53383 = G__53391;
+i__53384 = G__53392;
 continue;
 } else {
-var e = cljs.core.first(seq__39823__$1);
+var e = cljs.core.first(seq__53381__$1);
 hirundia.core.circle(e).bindPopup(hirundia.core.popup(e)).bindTooltip(hirundia.core.tooltip(e)).addTo(m);
 
 
-var G__39835 = cljs.core.next(seq__39823__$1);
-var G__39836 = null;
-var G__39837 = (0);
-var G__39838 = (0);
-seq__39823 = G__39835;
-chunk__39824 = G__39836;
-count__39825 = G__39837;
-i__39826 = G__39838;
+var G__53393 = cljs.core.next(seq__53381__$1);
+var G__53394 = null;
+var G__53395 = (0);
+var G__53396 = (0);
+seq__53381 = G__53393;
+chunk__53382 = G__53394;
+count__53383 = G__53395;
+i__53384 = G__53396;
 continue;
 }
 } else {

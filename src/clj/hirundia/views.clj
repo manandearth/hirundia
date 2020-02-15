@@ -29,7 +29,7 @@
   [{:keys [session] :as request}]
   (if  (:identity session)
     [:div {:class "container"}
-     [:div {:class "navbar navbar-light" :style "background-color: #e3f2fd;"}
+     [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}
       [:a {:class "nav-link" :href "/"} (t/to-spanish :home)]
       [:a {:href "/about"} (t/to-spanish :about)]
       [:a {:href "/nests"} (t/to-spanish :nests)]
@@ -38,7 +38,7 @@
       "  Logado como " (get-in session [:identity :username])
       [:a {:href "/logout"} (t/to-spanish :logout)]]]
     [:div {:class "container"}
-     [:div {:class "navbar navbar-light" :style "background-color: #e3f2fd;"}
+     [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}
 
       [:a {:href "/"} (t/to-spanish :home)]
       [:a {:href "/about"} (t/to-spanish :about)]

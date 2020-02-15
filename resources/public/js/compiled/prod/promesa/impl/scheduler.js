@@ -5,7 +5,7 @@ goog.require('cljs.core.constants');
 goog.require('promesa.protocols');
 promesa.impl.scheduler.scheduled_task = (function promesa$impl$scheduler$scheduled_task(cur,done_QMARK_){
 var cancelled = cljs.core.volatile_BANG_(false);
-if((typeof promesa !== 'undefined') && (typeof promesa.impl !== 'undefined') && (typeof promesa.impl.scheduler !== 'undefined') && (typeof promesa.impl.scheduler.t_promesa$impl$scheduler37078 !== 'undefined')){
+if((typeof promesa !== 'undefined') && (typeof promesa.impl !== 'undefined') && (typeof promesa.impl.scheduler !== 'undefined') && (typeof promesa.impl.scheduler.t_promesa$impl$scheduler39142 !== 'undefined')){
 } else {
 
 /**
@@ -15,31 +15,31 @@ if((typeof promesa !== 'undefined') && (typeof promesa.impl !== 'undefined') && 
  * @implements {promesa.protocols.ICancellable}
  * @implements {cljs.core.IWithMeta}
 */
-promesa.impl.scheduler.t_promesa$impl$scheduler37078 = (function (cur,done_QMARK_,cancelled,meta37079){
+promesa.impl.scheduler.t_promesa$impl$scheduler39142 = (function (cur,done_QMARK_,cancelled,meta39143){
 this.cur = cur;
 this.done_QMARK_ = done_QMARK_;
 this.cancelled = cancelled;
-this.meta37079 = meta37079;
+this.meta39143 = meta39143;
 this.cljs$lang$protocol_mask$partition0$ = 393216;
 this.cljs$lang$protocol_mask$partition1$ = 1;
 });
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = ((function (cancelled){
-return (function (_37080,meta37079__$1){
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = ((function (cancelled){
+return (function (_39144,meta39143__$1){
 var self__ = this;
-var _37080__$1 = this;
-return (new promesa.impl.scheduler.t_promesa$impl$scheduler37078(self__.cur,self__.done_QMARK_,self__.cancelled,meta37079__$1));
+var _39144__$1 = this;
+return (new promesa.impl.scheduler.t_promesa$impl$scheduler39142(self__.cur,self__.done_QMARK_,self__.cancelled,meta39143__$1));
 });})(cancelled))
 ;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.prototype.cljs$core$IMeta$_meta$arity$1 = ((function (cancelled){
-return (function (_37080){
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.prototype.cljs$core$IMeta$_meta$arity$1 = ((function (cancelled){
+return (function (_39144){
 var self__ = this;
-var _37080__$1 = this;
-return self__.meta37079;
+var _39144__$1 = this;
+return self__.meta39143;
 });})(cancelled))
 ;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.prototype.cljs$core$IPending$_realized_QMARK_$arity$1 = ((function (cancelled){
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.prototype.cljs$core$IPending$_realized_QMARK_$arity$1 = ((function (cancelled){
 return (function (_){
 var self__ = this;
 var ___$1 = this;
@@ -47,9 +47,9 @@ return cljs.core.deref(self__.done_QMARK_);
 });})(cancelled))
 ;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.prototype.promesa$protocols$ICancellable$ = cljs.core.PROTOCOL_SENTINEL;
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.prototype.promesa$protocols$ICancellable$ = cljs.core.PROTOCOL_SENTINEL;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.prototype.promesa$protocols$ICancellable$_cancelled_QMARK_$arity$1 = ((function (cancelled){
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.prototype.promesa$protocols$ICancellable$_cancelled_QMARK_$arity$1 = ((function (cancelled){
 return (function (_){
 var self__ = this;
 var ___$1 = this;
@@ -57,7 +57,7 @@ return cljs.core.deref(self__.cancelled);
 });})(cancelled))
 ;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.prototype.promesa$protocols$ICancellable$_cancel$arity$1 = ((function (cancelled){
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.prototype.promesa$protocols$ICancellable$_cancel$arity$1 = ((function (cancelled){
 return (function (_){
 var self__ = this;
 var ___$1 = this;
@@ -71,37 +71,37 @@ return clearTimeout(self__.cur);
 });})(cancelled))
 ;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.getBasis = ((function (cancelled){
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.getBasis = ((function (cancelled){
 return (function (){
-return new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$sym$cur,cljs.core.cst$sym$done_QMARK_,cljs.core.cst$sym$cancelled,cljs.core.cst$sym$meta37079], null);
+return new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$sym$cur,cljs.core.cst$sym$done_QMARK_,cljs.core.cst$sym$cancelled,cljs.core.cst$sym$meta39143], null);
 });})(cancelled))
 ;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.cljs$lang$type = true;
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.cljs$lang$type = true;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.cljs$lang$ctorStr = "promesa.impl.scheduler/t_promesa$impl$scheduler37078";
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.cljs$lang$ctorStr = "promesa.impl.scheduler/t_promesa$impl$scheduler39142";
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37078.cljs$lang$ctorPrWriter = ((function (cancelled){
+promesa.impl.scheduler.t_promesa$impl$scheduler39142.cljs$lang$ctorPrWriter = ((function (cancelled){
 return (function (this__4374__auto__,writer__4375__auto__,opt__4376__auto__){
-return cljs.core._write(writer__4375__auto__,"promesa.impl.scheduler/t_promesa$impl$scheduler37078");
+return cljs.core._write(writer__4375__auto__,"promesa.impl.scheduler/t_promesa$impl$scheduler39142");
 });})(cancelled))
 ;
 
 /**
- * Positional factory function for promesa.impl.scheduler/t_promesa$impl$scheduler37078.
+ * Positional factory function for promesa.impl.scheduler/t_promesa$impl$scheduler39142.
  */
-promesa.impl.scheduler.__GT_t_promesa$impl$scheduler37078 = ((function (cancelled){
-return (function promesa$impl$scheduler$scheduled_task_$___GT_t_promesa$impl$scheduler37078(cur__$1,done_QMARK___$1,cancelled__$1,meta37079){
-return (new promesa.impl.scheduler.t_promesa$impl$scheduler37078(cur__$1,done_QMARK___$1,cancelled__$1,meta37079));
+promesa.impl.scheduler.__GT_t_promesa$impl$scheduler39142 = ((function (cancelled){
+return (function promesa$impl$scheduler$scheduled_task_$___GT_t_promesa$impl$scheduler39142(cur__$1,done_QMARK___$1,cancelled__$1,meta39143){
+return (new promesa.impl.scheduler.t_promesa$impl$scheduler39142(cur__$1,done_QMARK___$1,cancelled__$1,meta39143));
 });})(cancelled))
 ;
 
 }
 
-return (new promesa.impl.scheduler.t_promesa$impl$scheduler37078(cur,done_QMARK_,cancelled,cljs.core.PersistentArrayMap.EMPTY));
+return (new promesa.impl.scheduler.t_promesa$impl$scheduler39142(cur,done_QMARK_,cancelled,cljs.core.PersistentArrayMap.EMPTY));
 });
 promesa.impl.scheduler.scheduler = (function promesa$impl$scheduler$scheduler(){
-if((typeof promesa !== 'undefined') && (typeof promesa.impl !== 'undefined') && (typeof promesa.impl.scheduler !== 'undefined') && (typeof promesa.impl.scheduler.t_promesa$impl$scheduler37081 !== 'undefined')){
+if((typeof promesa !== 'undefined') && (typeof promesa.impl !== 'undefined') && (typeof promesa.impl.scheduler !== 'undefined') && (typeof promesa.impl.scheduler.t_promesa$impl$scheduler39145 !== 'undefined')){
 } else {
 
 /**
@@ -110,26 +110,26 @@ if((typeof promesa !== 'undefined') && (typeof promesa.impl !== 'undefined') && 
  * @implements {cljs.core.IMeta}
  * @implements {cljs.core.IWithMeta}
 */
-promesa.impl.scheduler.t_promesa$impl$scheduler37081 = (function (meta37082){
-this.meta37082 = meta37082;
+promesa.impl.scheduler.t_promesa$impl$scheduler39145 = (function (meta39146){
+this.meta39146 = meta39146;
 this.cljs$lang$protocol_mask$partition0$ = 393216;
 this.cljs$lang$protocol_mask$partition1$ = 0;
 });
-promesa.impl.scheduler.t_promesa$impl$scheduler37081.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (_37083,meta37082__$1){
+promesa.impl.scheduler.t_promesa$impl$scheduler39145.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (_39147,meta39146__$1){
 var self__ = this;
-var _37083__$1 = this;
-return (new promesa.impl.scheduler.t_promesa$impl$scheduler37081(meta37082__$1));
+var _39147__$1 = this;
+return (new promesa.impl.scheduler.t_promesa$impl$scheduler39145(meta39146__$1));
 });
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37081.prototype.cljs$core$IMeta$_meta$arity$1 = (function (_37083){
+promesa.impl.scheduler.t_promesa$impl$scheduler39145.prototype.cljs$core$IMeta$_meta$arity$1 = (function (_39147){
 var self__ = this;
-var _37083__$1 = this;
-return self__.meta37082;
+var _39147__$1 = this;
+return self__.meta39146;
 });
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37081.prototype.promesa$protocols$IScheduler$ = cljs.core.PROTOCOL_SENTINEL;
+promesa.impl.scheduler.t_promesa$impl$scheduler39145.prototype.promesa$protocols$IScheduler$ = cljs.core.PROTOCOL_SENTINEL;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37081.prototype.promesa$protocols$IScheduler$_schedule$arity$3 = (function (_,ms,func){
+promesa.impl.scheduler.t_promesa$impl$scheduler39145.prototype.promesa$protocols$IScheduler$_schedule$arity$3 = (function (_,ms,func){
 var self__ = this;
 var ___$1 = this;
 var done_QMARK_ = cljs.core.volatile_BANG_(false);
@@ -143,28 +143,28 @@ var cur = setTimeout(task,ms);
 return promesa.impl.scheduler.scheduled_task(cur,done_QMARK_);
 });
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37081.getBasis = (function (){
-return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$sym$meta37082], null);
+promesa.impl.scheduler.t_promesa$impl$scheduler39145.getBasis = (function (){
+return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$sym$meta39146], null);
 });
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37081.cljs$lang$type = true;
+promesa.impl.scheduler.t_promesa$impl$scheduler39145.cljs$lang$type = true;
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37081.cljs$lang$ctorStr = "promesa.impl.scheduler/t_promesa$impl$scheduler37081";
+promesa.impl.scheduler.t_promesa$impl$scheduler39145.cljs$lang$ctorStr = "promesa.impl.scheduler/t_promesa$impl$scheduler39145";
 
-promesa.impl.scheduler.t_promesa$impl$scheduler37081.cljs$lang$ctorPrWriter = (function (this__4374__auto__,writer__4375__auto__,opt__4376__auto__){
-return cljs.core._write(writer__4375__auto__,"promesa.impl.scheduler/t_promesa$impl$scheduler37081");
+promesa.impl.scheduler.t_promesa$impl$scheduler39145.cljs$lang$ctorPrWriter = (function (this__4374__auto__,writer__4375__auto__,opt__4376__auto__){
+return cljs.core._write(writer__4375__auto__,"promesa.impl.scheduler/t_promesa$impl$scheduler39145");
 });
 
 /**
- * Positional factory function for promesa.impl.scheduler/t_promesa$impl$scheduler37081.
+ * Positional factory function for promesa.impl.scheduler/t_promesa$impl$scheduler39145.
  */
-promesa.impl.scheduler.__GT_t_promesa$impl$scheduler37081 = (function promesa$impl$scheduler$scheduler_$___GT_t_promesa$impl$scheduler37081(meta37082){
-return (new promesa.impl.scheduler.t_promesa$impl$scheduler37081(meta37082));
+promesa.impl.scheduler.__GT_t_promesa$impl$scheduler39145 = (function promesa$impl$scheduler$scheduler_$___GT_t_promesa$impl$scheduler39145(meta39146){
+return (new promesa.impl.scheduler.t_promesa$impl$scheduler39145(meta39146));
 });
 
 }
 
-return (new promesa.impl.scheduler.t_promesa$impl$scheduler37081(cljs.core.PersistentArrayMap.EMPTY));
+return (new promesa.impl.scheduler.t_promesa$impl$scheduler39145(cljs.core.PersistentArrayMap.EMPTY));
 });
 /**
  * A default lazy scheduler instance.

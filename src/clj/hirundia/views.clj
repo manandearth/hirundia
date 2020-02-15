@@ -7,7 +7,8 @@
    [java-time :refer :all :exclude [contains? iterate max zero? format min max range]]
    [clojure.java.io :as io]
    [buddy.auth :refer [authenticated?]]
-   [hirundia.pages :as pages]))
+   [hirundia.pages :as pages]
+   [hirundia.translate :as t]))
 
 (defn gen-page-head
   [title]
@@ -29,22 +30,22 @@
   (if  (:identity session)
     [:div {:class "container"}
      [:div {:class "navbar navbar-light" :style "background-color: #e3f2fd;"}
-      [:a {:class "nav-link" :href "/"} "principal"]
-      [:a {:href "/about"} "sobre el proyecto"]
-      [:a {:href "/nests"} "listado"]
-      [:a {:href "/dashboard"} "panel de control"]
-      [:a {:href "/nests-insert"} "añadir nidos"]
+      [:a {:class "nav-link" :href "/"} (t/to-spanish :home)]
+      [:a {:href "/about"} (t/to-spanish :about)]
+      [:a {:href "/nests"} (t/to-spanish :nests)]
+      [:a {:href "/dashboard"} (t/to-spanish :dashboard)]
+      [:a {:href "/nests-insert"} (t/to-spanish :nests-insert)]
       "  Logado como " (get-in session [:identity :username])
-      [:a {:href "/logout"} "cerrar"]]]
+      [:a {:href "/logout"} (t/to-spanish :logout)]]]
     [:div {:class "container"}
      [:div {:class "navbar navbar-light" :style "background-color: #e3f2fd;"}
 
-      [:a {:href "/"} "principal"]
-      [:a {:href "/about"} "sobre el proyecto"]
-      [:a {:href "/nests"} "listado"]
-      [:a {:href "/dashboard"} "panel de control"]
-      [:a {:href "/login"} "acceso"]
-      [:a {:href "/register"} "registrarse"]]]))
+      [:a {:href "/"} (t/to-spanish :home)]
+      [:a {:href "/about"} (t/to-spanish :about)]
+      [:a {:href "/nests"} (t/to-spanish :nests)]
+      [:a {:href "/dashboard"} (t/to-spanish :dashboard)]
+      [:a {:href "/login"} (t/to-spanish :login)]
+      [:a {:href "/register"} (t/to-spanish :register)]]]))
 
 (defn home [request]
   (page/html5
@@ -91,22 +92,23 @@
     [:form {:action "/nests-insert" :method "POST"}
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
      [:div
-      [:p [:label.justify "Calle: "    [:input {:type "text" :name "street"}]]]
-      [:p [:label.justify "No./nombre: "    [:input {:type "text" :name "house_number_name"}]]]
-      [:p [:label.justify "Latitud: "  [:input {:type "int" :name "lat"}]]]
-      [:p [:label.justify "Longitud: " [:input {:type "int" :name "lon"}]]]
-      [:p [:label.justify "Especie: "   (form/drop-down "species" ["swallow" "swift" "martin"] "martin")]]
-      [:p [:label.justify "Altura: "    (form/drop-down "height" (map inc (range 20)) 5)]]
-      [:p [:label.justify "Orientación: "    (form/drop-down "facing" ["N" "NW" "W" "SW" "S" "SE" "E" "NE"] "N")]]
-      [:p [:label.justify "Construcción: "      (form/drop-down "type-of" ["balcony" "window" "cornice" "gable" "cables" "crack"] "window")]]
-      [:p [:label.justify "Fecha: "      [:input {:type "date" :name "date"}]]]
+      [:p [:label.justify [:input {:type "hidden" :name "language" :value "spanish"}]]]
+      [:p [:label.justify (t/to-spanish :street)    [:input {:type "text" :name "street"}]]]
+      [:p [:label.justify (t/to-spanish :house_number_name)    [:input {:type "text" :name "house_number_name"}]]]
+      [:p [:label.justify (t/to-spanish :lat)  [:input {:type "int" :name "lat"}]]]
+      [:p [:label.justify (t/to-spanish :lon) [:input {:type "int" :name "lon"}]]]
+      [:p [:label.justify (t/to-spanish :species)   (form/drop-down "species" [(t/to-spanish :swallow) (t/to-spanish :swift) (t/to-spanish :martin)] (t/to-spanish :swift))]]
+      [:p [:label.justify (t/to-spanish :height)    (form/drop-down "height" (map inc (range 20)) 5)]]
+      [:p [:label.justify (t/to-spanish :facing)   (form/drop-down "facing" [(t/to-spanish :N) (t/to-spanish :NE) (t/to-spanish :E) (t/to-spanish :SE) (t/to-spanish :S) (t/to-spanish :SW) (t/to-spanish :W) (t/to-spanish :NW)] (t/to-spanish :N))]]
+      [:p [:label.justify (t/to-spanish :type)      (form/drop-down "type-of" [(t/to-spanish :window) (t/to-spanish :cornice) (t/to-spanish :crack) (t/to-spanish :cables) (t/to-spanish :gable) (t/to-spanish :balcony)] (t/to-spanish :window))]]
+      [:p [:label.justify (t/to-spanish :date)      [:input {:type "date" :name "date"}]]]
       [:p "Cada nido crea una entrada en la base de datos. En el caso de múltiples nidos con las mismas especificaciones se actualiza este valor:
 "]
-      [:p [:label.justify "Cantidad: "       [:input {:type "int" :name "qty" :value 1}]]]
+      [:p [:label.justify (t/to-spanish :qty)       [:input {:type "int" :name "qty" :value 1}]]]
       [:p "Si el nido ya no está allí, rellene lo siguiente e incluya el día registrado:"]
-      [:p [:label.justify "Destruido: " (form/drop-down "destroyed" [true false] false)]]
-      [:p [:label.justify "fecha de destrucción: " [:input {:type "date" :name "destroyed_date"}]]]
-      [:p [:label.justify "λ ->"        [:input {:type "submit" :value "Submit"}]]]]]]))
+      [:p [:label.justify (t/to-spanish :destroyed) (form/drop-down "destroyed" [(t/to-spanish :false) (t/to-spanish :true)] (t/to-spanish :false))]]
+      [:p [:label.justify (t/to-spanish :destroyed_date) [:input {:type "date" :name "destroyed_date"}]]]
+      [:p [:label.justify "λ ->"        [:input {:type "submit" :value (t/to-spanish :submit)}]]]]]]))
 
 (defn register [{:keys [flash] :as request}]
   (page/html5
@@ -114,12 +116,12 @@
    (header-links request)
    [:div {:class "container"} (when (seq flash) [:div {:class "alert alert-success"} flash])
     [:div
-     [:h1 "Registararse"]
+     [:h1 (t/to-spanish :register)]
      [:form {:action "/register" :method "POST"}
       [:div
-       [:p [:label.justify "Usuario: " [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify "Contraseña: " [:input {:type "password" :name "password"}]]]
-       [:p [:label.justify "" [:input {:type "submit" :value "Regisrarse"}]]]]]]]))
+       [:p [:label.justify (t/to-spanish :username) [:input {:type "text" :name "username"}]]]
+       [:p [:label.justify (t/to-spanish :password) [:input {:type "password" :name "password"}]]]
+       [:p [:label.justify "" [:input {:type "submit" :value (t/to-spanish :register)}]]]]]]]))
 
 
 ;FIXME flash here suppose to be just the username but this view is redirected by also `login` POST perform endpoint which sends a flash message for wrong password..
@@ -129,15 +131,15 @@
   (page/html5
    (gen-page-head "Login")
    (header-links request)
-   [:div {:class "container"} (when (seq flash) [:div {:class "alert alert-success"} flash])
+   [:div {:class "container"} (when (seq flash) [:div {:class "alert alert-warning alert-dismissible fade show"} flash])
     [:div
      [:h1 "Entrada"]
      [:form {:action "/login" :method "POST"}
       [:div
-       [:p [:label.justify "Usuario: "
+       [:p [:label.justify (t/to-spanish :username)
             [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify "Contraseña: " [:input {:type "password" :name "password"}]]]
-       [:p [:label.justify "" [:input {:type "submit" :value "Entrar"}]]]]]]]))
+       [:p [:label.justify (t/to-spanish :password) [:input {:type "password" :name "password"}]]]
+       [:p [:label.justify "" [:input {:type "submit" :value (t/to-spanish :submit)}]]]]]]]))
 
 (defn dashboard [request]
   (page/html5

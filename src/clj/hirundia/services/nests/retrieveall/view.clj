@@ -9,7 +9,9 @@
    (views/gen-page-head "Listado de entradas")
    (views/header-links request)
    [:div {:class "container"}
-    [:h2.flash (when (seq flash) flash)]
+    (when (seq flash) [:div {:class "alert alert-warning alert-dismissible fade show" :role "alert"} flash
+                       [:button {:type "button" :class "close" :data-dismiss "alert" :aria-label "Close"}
+                        [:span {:aria-hidden "true"} "&times;"]]])
     [:h1 "Listado de entradas"]
     [:div (let [attr-fns {:data-value-transform (fn [label-key v]
                                                   (if (= :id label-key)

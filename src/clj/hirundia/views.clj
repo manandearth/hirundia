@@ -92,6 +92,7 @@
     [:form {:action "/nests-insert" :method "POST"}
      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
      [:div
+      ;;TODO language is hard coded for now
       [:p [:label.justify [:input {:type "hidden" :name "language" :value "spanish"}]]]
       [:p [:label.justify (t/to-spanish :street)    [:input {:type "text" :name "street"}]]]
       [:p [:label.justify (t/to-spanish :house_number_name)    [:input {:type "text" :name "house_number_name"}]]]

@@ -29,24 +29,19 @@
 
 (spec/def ::api  (spec/keys :req-un [::language ::facing ::street ::type-of ::height ::lat ::lon ::house_number_name ::destroyed ::species ::qty ::date #_::destroyed_date])) ;TODO need to extend
 
-(defn from-spanish
-  [word]
-  (let [dictionary t/to-spanish]
-    (name (first (filter (comp #{word} dictionary) (keys dictionary))))))
-
 (defn perform [{{:keys [language street house_number_name lon lat species height facing type-of date qty destroyed destroyed_date]} :form-params :keys [db session] :as request}]
   (let [spanish? (= language "spanish")
         parsed-map {:street         street
                     :house_number_name         house_number_name
                     :gps            (pg/point (list lat lon))
-                    :species        (if spanish? (from-spanish species) species)
+                    :species        (if spanish? (t/from-spanish species) species)
                     :height         height
-                    :facing         (if spanish? (from-spanish facing) facing)
-                    :type           (if spanish? (from-spanish type-of) type-of)
+                    :facing         (if spanish? (t/from-spanish facing) facing)
+                    :type           (if spanish? (t/from-spanish type-of) type-of)
                     :date           (sql-date date)
-                    :destroyed      (if spanish? (symbol (from-spanish destroyed)) (if (boolean? destroyed)
-                                                                                     destroyed
-                                                                                     false))
+                    :destroyed      (if spanish? (symbol (t/from-spanish destroyed)) (if (boolean? destroyed)
+                                                                                       destroyed
+                                                                                       false))
                     :destroyed_date (if (empty? destroyed_date)
                                       nil
                                       (sql-date destroyed_date))

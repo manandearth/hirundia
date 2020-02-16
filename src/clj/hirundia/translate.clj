@@ -4,6 +4,6 @@
 
 (defn from-spanish
   [word]
-  (let [dictionary t/to-spanish]
+  (let [dictionary to-spanish]
     (name (first (filter (comp #{word} dictionary) (keys dictionary))))))
 

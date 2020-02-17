@@ -98,7 +98,7 @@
       [:p [:label.justify (t/to-spanish :house_number_name)    [:input {:type "text" :name "house_number_name"}]]]
       [:p [:label.justify (t/to-spanish :lat)  [:input {:type "int" :name "lat"}]]]
       [:p [:label.justify (t/to-spanish :lon) [:input {:type "int" :name "lon"}]]]
-      [:p [:label.justify (t/to-spanish :species)   (form/drop-down "species" [(t/to-spanish :swallow) (t/to-spanish :swift) (t/to-spanish :martin)] (t/to-spanish :swift))]]
+      [:p [:label.justify (t/to-spanish :species)   (form/drop-down "species" (map #(t/to-spanish %) [:swallow :swift :martin :pallid_swift :red_rumped_swallow]))]]
       [:p [:label.justify (t/to-spanish :height)    (form/drop-down "height" (map inc (range 20)) 5)]]
       [:p [:label.justify (t/to-spanish :facing)   (form/drop-down "facing" [(t/to-spanish :N) (t/to-spanish :NE) (t/to-spanish :E) (t/to-spanish :SE) (t/to-spanish :S) (t/to-spanish :SW) (t/to-spanish :W) (t/to-spanish :NW)] (t/to-spanish :N))]]
       [:p [:label.justify (t/to-spanish :type)      (form/drop-down "type-of" [(t/to-spanish :window) (t/to-spanish :cornice) (t/to-spanish :crack) (t/to-spanish :cables) (t/to-spanish :gable) (t/to-spanish :balcony)] (t/to-spanish :window))]]

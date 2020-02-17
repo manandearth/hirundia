@@ -22,7 +22,7 @@
         [:p [:label.justify (t/to-spanish :house_number_name) [:input {:type "text" :name "house_number_name" :value (:house_number_name record)}]]]
         [:p [:label.justify (t/to-spanish :lat) [:input {:type "int" :name "lat" :value lat}]]]
         [:p [:label.justify (t/to-spanish :lon) [:input {:type "int" :name "lon" :value lon}]]]
-        [:p [:label.justify (t/to-spanish :species) (form/drop-down "species" (mapv #(t/to-spanish %) [:swallow :swift :martin]) (t/to-spanish (keyword (:species record))))]]
+        [:p [:label.justify (t/to-spanish :species) (form/drop-down "species" (mapv #(t/to-spanish %) [:swallow :swift :martin :pallid_swift :red_rumped_swallow]) (t/to-spanish (keyword (:species record))))]]
         [:p [:label.justify (t/to-spanish :height) (form/drop-down "height" (map inc (range 20)) (:height record))]]
         [:p [:label.justify (t/to-spanish :facing) (form/drop-down "facing" (mapv #(t/to-spanish %) [:N :NW :W :SW :S :SE :E :NE]) (t/to-spanish (keyword (:facing record))))]]
         [:p [:label.justify (t/to-spanish :type) (form/drop-down "type-of" (mapv #(t/to-spanish %) [:balcony :window :cornice :gable :cables :crack]) (t/to-spanish (keyword (:type record))))]]

@@ -28,29 +28,32 @@ h1 {
     font-size: 1.5rem;
 }
 
+.container {
+    padding-top: 2.5rem;
+}
 
 form {
     width: 80%;
     margin: 0 auto;
 }
 
-label, input {
-    display: inline-block;
-}
+/* label, input { */
+/*     display: inline-block; */
+/* } */
 
-label {
-    width: 30%;
-    text-align: right;
-}
+/* label { */
+/*     width: 30%; */
+/*     text-align: right; */
+/* } */
 
-label + input {
-    width: 50%;
-    margin: 0 10% 0 4%;
-}
+/* label + input { */
+/*     width: 50%; */
+/*     margin: 0 10% 0 4%; */
+/* } */
 
-input + input {
-    float: right;
-}
+/* input + input { */
+/*     float: right; */
+/* } */
     
     
 /* messes up with the tooltip of Oz, so dissabled for now */

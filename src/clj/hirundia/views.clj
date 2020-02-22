@@ -30,22 +30,22 @@
   (if  (:identity session)
     [:div {:class "container"}
      [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}
-      [:a {:class "nav-link" :href "/"} (t/to-spanish :home)]
-      [:a {:href "/about"} (t/to-spanish :about)]
-      [:a {:href "/nests"} (t/to-spanish :nests)]
-      [:a {:href "/dashboard"} (t/to-spanish :dashboard)]
-      [:a {:href "/nests-insert"} (t/to-spanish :nests-insert)
+      [:a {:class "nav-link" :href "/"} [:button  {:class "btn btn-info"} (t/to-spanish :home)]]
+      [:a {:href "/about"} [:button {:class "btn btn-info"} (t/to-spanish :about)]]
+      [:a {:href "/nests"} [:button  {:class "btn btn-info"}  (t/to-spanish :nests)]]
+      [:a {:href "/dashboard"} [:button {:class "btn btn-info"} (t/to-spanish :dashboard)]]
+      [:a {:href "/nests-insert"} [:button {:class "btn btn-primary"} (t/to-spanish :nests-insert)]
        [:a (t/to-spanish :logged_as)  [:span {:class "badge badge-secondary"} (get-in session [:identity :username])]]]
-      [:a {:href "/logout"} (t/to-spanish :logout)]]]
+      [:a {:href "/logout"} [:button {:class "btn btn-primary"} (t/to-spanish :logout)]]]]
     [:div {:class "container"}
      [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}
 
-      [:a {:href "/"} (t/to-spanish :home)]
-      [:a {:href "/about"} (t/to-spanish :about)]
-      [:a {:href "/nests"} (t/to-spanish :nests)]
-      [:a {:href "/dashboard"} (t/to-spanish :dashboard)]
-      [:a {:href "/login"} (t/to-spanish :login)]
-      [:a {:href "/register"} (t/to-spanish :register)]]]))
+      [:a {:href "/"} [:button  {:class "btn btn-info"} (t/to-spanish :home)]]
+      [:a {:href "/about"} [:button  {:class "btn btn-info"} (t/to-spanish :about)]]
+      [:a {:href "/nests"} [:button  {:class "btn btn-info"} (t/to-spanish :nests)]]
+      [:a {:href "/dashboard"} [:button  {:class "btn btn-info"} (t/to-spanish :dashboard)]]
+      [:a {:href "/login"} [:button  {:class "btn btn-secondary"}  (t/to-spanish :login)]]
+      [:a {:href "/register"} [:button {:class "btn btn-primary"} (t/to-spanish :register)]]]]))
 
 (defn home [request]
   (page/html5
@@ -89,27 +89,44 @@
    (header-links request)
    [:div {:class "container"}
     [:h1 "Añada nido al base de datos"]
-    [:form {:action "/nests-insert" :method "POST"}
-     ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
-     [:div
+    [:div {:class "card"}
+     [:form {:action "/nests-insert" :method "POST"}
+      ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
+
       ;;TODO language is hard coded for now
-      [:p [:label.justify [:input {:type "hidden" :name "language" :value "spanish"}]]]
-      [:p [:label.justify (t/to-spanish :street)    [:input {:type "text" :name "street"}]]]
-      [:p [:label.justify (t/to-spanish :house_number_name)    [:input {:type "text" :name "house_number_name"}]]]
-      [:p [:label.justify (t/to-spanish :lat)  [:input {:type "int" :name "lat"}]]]
-      [:p [:label.justify (t/to-spanish :lon) [:input {:type "int" :name "lon"}]]]
-      [:p [:label.justify (t/to-spanish :species)   (form/drop-down "species" (map #(t/to-spanish %) [:swallow :swift :martin :pallid_swift :red_rumped_swallow]))]]
-      [:p [:label.justify (t/to-spanish :height)    (form/drop-down "height" (map inc (range 20)) 5)]]
-      [:p [:label.justify (t/to-spanish :facing)   (form/drop-down "facing" [(t/to-spanish :N) (t/to-spanish :NE) (t/to-spanish :E) (t/to-spanish :SE) (t/to-spanish :S) (t/to-spanish :SW) (t/to-spanish :W) (t/to-spanish :NW)] (t/to-spanish :N))]]
-      [:p [:label.justify (t/to-spanish :type)      (form/drop-down "type-of" [(t/to-spanish :window) (t/to-spanish :cornice) (t/to-spanish :crack) (t/to-spanish :cables) (t/to-spanish :gable) (t/to-spanish :balcony)] (t/to-spanish :window))]]
-      [:p [:label.justify (t/to-spanish :date)      [:input {:type "date" :name "date"}]]]
-      [:p "Cada nido crea una entrada en la base de datos. En el caso de múltiples nidos con las mismas especificaciones se actualiza este valor:
-"]
-      [:p [:label.justify (t/to-spanish :qty)       [:input {:type "int" :name "qty" :value 1}]]]
-      [:p "Si el nido ya no está allí, rellene lo siguiente e incluya el día registrado:"]
-      [:p [:label.justify (t/to-spanish :destroyed) (form/drop-down "destroyed" [(t/to-spanish :false) (t/to-spanish :true)] (t/to-spanish :false))]]
-      [:p [:label.justify (t/to-spanish :destroyed_date) [:input {:type "date" :name "destroyed_date"}]]]
-      [:p [:label.justify "λ ->"        [:input {:type "submit" :value (t/to-spanish :submit)}]]]]]]))
+
+      [:p [:label [:input {:type "hidden" :name "language" :value "spanish"}]]]
+
+      [:div {:class "form-group row"}
+       [:div {:class "col-auto"} [:label {:class "my-1 mr-2"} (t/to-spanish :street)]
+        [:input {:class "form-control mx-sm-1" :type "text" :name "street"}]]
+       [:div {:class "col-auto"} [:label {:class "my-1 mr-2"} (t/to-spanish :house_number_name)]
+        [:input {:class "form-control mx-sm-1" :type "text" :name "house_number_name"}]]]
+
+      [:div {:class "form-group row"}
+       [:div {:class "col-auto"} [:label {:class "my-1 mr-2"} (t/to-spanish :lat)]
+        [:input {:class "form-control mx-sm-1" :type "int" :name "lat"}]]
+       [:div {:class "col-auto"} [:label {:class "my-1 mr-2"} (t/to-spanish :lon)]
+        [:input {:class "form-control mx-sm-1" :type "int" :name "lon"}]]]
+
+      [:div {:class "form-group row"}
+       [:div {:class "col-auto"} [:label (t/to-spanish :species)   (form/drop-down "species" (map #(t/to-spanish %) [:swallow :swift :martin :pallid_swift :red_rumped_swallow]))]]
+       [:div {:class "col-auto"} [:label (t/to-spanish :type)      (form/drop-down "type-of" [(t/to-spanish :window) (t/to-spanish :cornice) (t/to-spanish :crack) (t/to-spanish :cables) (t/to-spanish :gable) (t/to-spanish :balcony)] (t/to-spanish :window))]]]
+
+      [:div {:class "form-group row"}
+       [:div {:class "col-auto"} [:label (t/to-spanish :height)    (form/drop-down "height" (map inc (range 20)) 5)]]
+       [:div {:class "col-auto"} [:label (t/to-spanish :facing)   (form/drop-down "facing" [(t/to-spanish :N) (t/to-spanish :NE) (t/to-spanish :E) (t/to-spanish :SE) (t/to-spanish :S) (t/to-spanish :SW) (t/to-spanish :W) (t/to-spanish :NW)] (t/to-spanish :N))]]]
+
+      [:div [:label (t/to-spanish :date)      [:input {:type "date" :name "date"}]]]
+      [:div {:class "card"} [:div {:class "card-body" :style "background-color: #f5faff"}
+                             [:div {:class "card-subtitle mb-2 text-muted"} "Cada nido crea una entrada en la base de datos. "]
+                             [:div {:class "card-subtitle mb-2 text-muted"} "En el caso de múltiples nidos con las mismas especificaciones se actualiza este valor:"]
+                             [:div (:class "col-auto") [:label (t/to-spanish :qty)       [:input {:class "form-control ms-mx-1" :type "int" :name "qty" :value 1}]]]]]
+      [:div {:class "card"} [:div {:class "card-body" :style "background-color: #e3f2fd;"}
+                             [:div {:class "card-subtitle mb-2 text-muted"} "Si el nido ya no está allí, rellene lo siguiente e incluya el día registrado:"]
+                             [:div [:label (t/to-spanish :destroyed) (form/drop-down "destroyed" [(t/to-spanish :false) (t/to-spanish :true)] (t/to-spanish :false))]]
+                             [:div [:label (t/to-spanish :destroyed_date) [:input {:type "date" :name "destroyed_date"}]]]]]
+      [:div {:class "col-auto"} [:input {:type "submit" :class "btn btn-primary mb-2" :value (t/to-spanish :submit)}]]]]]))
 
 (defn register [{:keys [flash] :as request}]
   (page/html5
@@ -120,9 +137,9 @@
      [:h1 (t/to-spanish :register)]
      [:form {:action "/register" :method "POST"}
       [:div
-       [:p [:label.justify (t/to-spanish :username) [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify (t/to-spanish :password) [:input {:type "password" :name "password"}]]]
-       [:p [:label.justify "" [:input {:type "submit" :value (t/to-spanish :register)}]]]]]]]))
+       [:p [:label (t/to-spanish :username) [:input {:type "text" :name "username"}]]]
+       [:p [:label (t/to-spanish :password) [:input {:type "password" :name "password"}]]]
+       [:p [:label "" [:input {:type "submit" :value (t/to-spanish :register)}]]]]]]]))
 
 
 ;FIXME flash here suppose to be just the username but this view is redirected by also `login` POST perform endpoint which sends a flash message for wrong password..
@@ -137,10 +154,10 @@
      [:h1 "Entrada"]
      [:form {:action "/login" :method "POST"}
       [:div
-       [:p [:label.justify (t/to-spanish :username)
+       [:p [:label (t/to-spanish :username)
             [:input {:type "text" :name "username"}]]]
-       [:p [:label.justify (t/to-spanish :password) [:input {:type "password" :name "password"}]]]
-       [:p [:label.justify "" [:input {:type "submit" :value (t/to-spanish :submit)}]]]]]]]))
+       [:p [:label (t/to-spanish :password) [:input {:type "password" :name "password"}]]]
+       [:p [:label "" [:input {:type "submit" :value (t/to-spanish :submit)}]]]]]]]))
 
 (defn dashboard [request]
   (page/html5

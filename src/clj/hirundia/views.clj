@@ -30,7 +30,7 @@
   (if  (:identity session)
     [:div {:class "container"}
      [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}
-      [:a {:class "nav-link" :href "/"} [:button  {:class "btn btn-info"} (t/to-spanish :home)]]
+      [:a {:href "/"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]
       [:a {:href "/about"} [:button {:class "btn btn-info"} (t/to-spanish :about)]]
       [:a {:href "/nests"} [:button  {:class "btn btn-info"}  (t/to-spanish :nests)]]
       [:a {:href "/dashboard"} [:button {:class "btn btn-info"} (t/to-spanish :dashboard)]]
@@ -40,7 +40,7 @@
     [:div {:class "container"}
      [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}
 
-      [:a {:href "/"} [:button  {:class "btn btn-info"} (t/to-spanish :home)]]
+      [:a {:href "/"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]
       [:a {:href "/about"} [:button  {:class "btn btn-info"} (t/to-spanish :about)]]
       [:a {:href "/nests"} [:button  {:class "btn btn-info"} (t/to-spanish :nests)]]
       [:a {:href "/dashboard"} [:button  {:class "btn btn-info"} (t/to-spanish :dashboard)]]
@@ -132,14 +132,14 @@
   (page/html5
    (gen-page-head "Register")
    (header-links request)
-   [:div {:class "container"} (when (seq flash) [:div {:class "alert alert-success"} flash])
-    [:div
+   [:div {:class "container" :style "text-align: center;"} (when (seq flash) [:div {:class "alert alert-success"} flash])
+    [:div {:class "card"}
      [:h1 (t/to-spanish :register)]
      [:form {:action "/register" :method "POST"}
       [:div
-       [:p [:label (t/to-spanish :username) [:input {:type "text" :name "username"}]]]
-       [:p [:label (t/to-spanish :password) [:input {:type "password" :name "password"}]]]
-       [:p [:label "" [:input {:type "submit" :value (t/to-spanish :register)}]]]]]]]))
+       [:label {:class "sr-only" :for "inputUsername"} (t/to-spanish :username)] [:input {:class "form-control" :id "inputUsername" :type "text" :name "username" :placeholder (t/to-spanish :username)}]
+       [:label {:class "sr-only" :for "inputPassword"} (t/to-spanish :password)] [:input {:class "form-control" :id "inputPassword" :type "password" :name "password" :placeholder (t/to-spanish :password)}]
+       [:label "" [:input {:type "submit" :value (t/to-spanish :register)}]]]]]]))
 
 
 ;FIXME flash here suppose to be just the username but this view is redirected by also `login` POST perform endpoint which sends a flash message for wrong password..
@@ -149,15 +149,16 @@
   (page/html5
    (gen-page-head "Login")
    (header-links request)
-   [:div {:class "container"} (when (seq flash) [:div {:class "alert alert-warning alert-dismissible fade show"} flash])
-    [:div
+   [:div {:class "container" :style "text-align: center;"} (when (seq flash) [:div {:class "alert alert-warning alert-dismissible fade show"} flash])
+    [:div {:class "card"}
      [:h1 "Entrada"]
      [:form {:action "/login" :method "POST"}
       [:div
-       [:p [:label (t/to-spanish :username)
-            [:input {:type "text" :name "username"}]]]
-       [:p [:label (t/to-spanish :password) [:input {:type "password" :name "password"}]]]
-       [:p [:label "" [:input {:type "submit" :value (t/to-spanish :submit)}]]]]]]]))
+       [:label {:class "sr-only" :for "inputUsername"} (t/to-spanish :username)]
+       [:input {:class "form-control" :type "text" :name "username" :id "inputUsername" :placeholder (t/to-spanish :username)}]
+       [:label {:class "sr-only" :for "inputPassword"} (t/to-spanish :password)]
+       [:input {:class "form-control" :type "password" :name "password" :id "inputPassword" :placeholder (t/to-spanish :password)}]
+       [:label "" [:input {:type "submit" :value (t/to-spanish :submit)}]]]]]]))
 
 (defn dashboard [request]
   (page/html5

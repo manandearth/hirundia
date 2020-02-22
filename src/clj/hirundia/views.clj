@@ -34,8 +34,8 @@
       [:a {:href "/about"} (t/to-spanish :about)]
       [:a {:href "/nests"} (t/to-spanish :nests)]
       [:a {:href "/dashboard"} (t/to-spanish :dashboard)]
-      [:a {:href "/nests-insert"} (t/to-spanish :nests-insert)]
-      "  Logado como " (get-in session [:identity :username])
+      [:a {:href "/nests-insert"} (t/to-spanish :nests-insert)
+       [:a (t/to-spanish :logged_as)  [:span {:class "badge badge-secondary"} (get-in session [:identity :username])]]]
       [:a {:href "/logout"} (t/to-spanish :logout)]]]
     [:div {:class "container"}
      [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}

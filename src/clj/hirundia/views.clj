@@ -29,23 +29,23 @@
   [{:keys [session] :as request}]
   (if  (:identity session)
     [:div {:class "container"}
-     [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}
-      [:a {:href "/"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]
-      [:a {:href "/about"} [:button {:class "btn btn-info"} (t/to-spanish :about)]]
-      [:a {:href "/nests"} [:button  {:class "btn btn-info"}  (t/to-spanish :nests)]]
-      [:a {:href "/dashboard"} [:button {:class "btn btn-info"} (t/to-spanish :dashboard)]]
-      [:a {:href "/nests-insert"} [:button {:class "btn btn-primary"} (t/to-spanish :nests-insert)]
-       [:a (t/to-spanish :logged_as)  [:span {:class "badge badge-secondary"} (get-in session [:identity :username])]]]
-      [:a {:href "/logout"} [:button {:class "btn btn-primary"} (t/to-spanish :logout)]]]]
+     [:ul {:class "nav fixed-top justify-content-center nav-pills" :style "background-color: #e3f2fd;"}
+      [:li {:class "nav-item"} [:a {:class "nav-link" :href "/"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]]
+      [:li {:class "nav-item"} [:a {:href "/about" :class "nav-link"}  (t/to-spanish :about)]]
+      [:li {:class "nav-item"} [:a {:href "/nests" :class "nav-link"} (t/to-spanish :nests)]]
+      [:li {:class "nav-item"} [:a {:href "/dashboard" :class "nav-link"} (t/to-spanish :dashboard)]]
+      [:li {:class "nav-item"} [:a {:href "/nests-insert" :class "nav-link"} (t/to-spanish :nests-insert)]]
+      [:li {:class "nav-item"} [:a (t/to-spanish :logged_as)  [:span {:class "badge badge-secondary"} (get-in session [:identity :username])]]]
+      [:li {:class "nav-item"} [:a {:href "/logout" :class "nav-link"} (t/to-spanish :logout)]]]]
     [:div {:class "container"}
-     [:div {:class "navbar navbar-light fixed-top" :style "background-color: #e3f2fd;"}
+     [:ul {:class "nav fixed-top justify-content-center" :style "background-color: #e3f2fd;"}
 
-      [:a {:href "/"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]
-      [:a {:href "/about"} [:button  {:class "btn btn-info"} (t/to-spanish :about)]]
-      [:a {:href "/nests"} [:button  {:class "btn btn-info"} (t/to-spanish :nests)]]
-      [:a {:href "/dashboard"} [:button  {:class "btn btn-info"} (t/to-spanish :dashboard)]]
-      [:a {:href "/login"} [:button  {:class "btn btn-secondary"}  (t/to-spanish :login)]]
-      [:a {:href "/register"} [:button {:class "btn btn-primary"} (t/to-spanish :register)]]]]))
+      [:li {:class "nav-item"} [:a {:href "/" :class "nav-link"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]]
+      [:li {:class "nav-item"} [:a {:href "/about" :class "nav-link"} (t/to-spanish :about)]]
+      [:li {:class "nav-item"} [:a {:href "/nests" :class "nav-link"} (t/to-spanish :nests)]]
+      [:li {:class "nav-item"} [:a {:href "/dashboard" :class "nav-link"} (t/to-spanish :dashboard)]]
+      [:li {:class "nav-item"} [:a {:href "/login" :class "nav-link"} (t/to-spanish :login)]]
+      [:li {:class "nav-item"} [:a {:href "/register" :class "nav-link"} (t/to-spanish :register)]]]]))
 
 (defn home [request]
   (page/html5

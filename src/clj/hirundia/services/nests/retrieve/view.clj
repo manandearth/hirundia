@@ -46,5 +46,5 @@
            [:div {:class "card-subtitle mb-2 text-muted"} "Si el nido ya no está allí, rellene lo siguiente e incluya el día registrado:"]
            [:div [:label (t/to-spanish :destroyed) (form/drop-down "destroyed" [(t/to-spanish :true) (t/to-spanish :false)] (t/to-spanish (keyword (str (:destroyed record)))))]]]]
          [:div [:label (t/to-spanish :destroyed_date) [:input {:type "date" :name "destroyed_date" :destroyed_date record}]]]
-         [:div  {:class "col-auto"} [:input {:type "submit" :class "btn btn-primary mb-2" :value (t/to-spanish :update)}]]]]]])))
+         [:div  {:class "col-auto justify-content-center" :style "display: flex; padding: 1rem;"} [:input {:type "submit" :class "btn btn-primary mb-2" :value (t/to-spanish :update)}]]]]]])))
 

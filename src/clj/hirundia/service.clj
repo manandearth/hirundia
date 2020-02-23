@@ -31,9 +31,6 @@
    [buddy.auth.backends :as auth.backends]
    [buddy.auth :refer [authenticated?] :as auth]))
 
-(defn about-page [request]
-  (ring-resp/response  (views/about request)))
-
 (defn home-page [request]
   (ring-resp/response (views/home request)))
 
@@ -59,30 +56,6 @@
 
 (defn greet-page [request]
   (ring-resp/response (views/greet request)))
-
-(def dashboard
-  "<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-    <link href=\"css/style.css\" rel=\"stylesheet\" type=\"text/css\">
-    <link rel=\"icon\" href=\"https://clojurescript.org/images/cljs-logo-icon-32.png\">
-  </head>
-  <body>
-    <div id=\"app\"></div>
-
-  <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.css\"
-   integrity=\"sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==\"
-   crossorigin=\"\"/>
-
-  <script src=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.js\"
-   integrity=\"sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==\"
-	     crossorigin=\"\"></script>
-  
-   <script src=\"js/compiled/app.js\" type=\"text/javascript\"></script> 
-  </body>
-</html>")
 
 (defn dashboard-page [request]
   (ring-resp/response (views/dashboard request)))
@@ -181,7 +154,7 @@
 (def routes
   "Tabular routes"
   #{["/" :get (conj common-interceptors `home-page) :route-name :home]
-    ["/about" :get (conj common-interceptors `about-page)]
+    #_["/about" :get (conj common-interceptors `about-page)]
     ["/register" :get (conj common-interceptors `register-page) :route-name :register]
     ["/register" :post (conj common-interceptors `session.register/perform)]
     ["/login" :get (conj common-interceptors `login-page) :route-name :login]

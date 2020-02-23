@@ -25,13 +25,10 @@
    [hirundia.service]
    [hirundia.figwheel]))
 
-
 (defn dev-system
   []
   (component/system-map
    :service-map hirundia.server/dev-map
-   ;; :background-processor (background-processor/new :queue-name "cljtest")
-   ;; :enqueuer (enqueuer/new :queue-name "cljtest")
    :db (modular.postgres/map->Postgres {:url "jdbc:postgresql:hirundia_dev"
                                         :user (hirundia.server/env "MANANDEARTH_HIRUNDIA_USER")
                                         :password (hirundia.server/env "MANANDEARTH_HIRUNDIA_PASSWORD")})

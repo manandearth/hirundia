@@ -31,7 +31,6 @@
     [:div {:class "container"}
      [:ul {:class "nav fixed-top justify-content-center nav-pills" :style "background-color: #e3f2fd;"}
       [:li {:class "nav-item"} [:a {:class "nav-link" :href "/"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]]
-      [:li {:class "nav-item"} [:a {:href "/about" :class "nav-link"}  (t/to-spanish :about)]]
       [:li {:class "nav-item"} [:a {:href "/nests" :class "nav-link"} (t/to-spanish :nests)]]
       [:li {:class "nav-item"} [:a {:href "/dashboard" :class "nav-link"} (t/to-spanish :dashboard)]]
       [:li {:class "nav-item"} [:a {:href "/nests-insert" :class "nav-link"} (t/to-spanish :nests-insert)]]
@@ -41,7 +40,6 @@
      [:ul {:class "nav fixed-top justify-content-center" :style "background-color: #e3f2fd;"}
 
       [:li {:class "nav-item"} [:a {:href "/" :class "nav-link"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]]
-      [:li {:class "nav-item"} [:a {:href "/about" :class "nav-link"} (t/to-spanish :about)]]
       [:li {:class "nav-item"} [:a {:href "/nests" :class "nav-link"} (t/to-spanish :nests)]]
       [:li {:class "nav-item"} [:a {:href "/dashboard" :class "nav-link"} (t/to-spanish :dashboard)]]
       [:li {:class "nav-item"} [:a {:href "/login" :class "nav-link"} (t/to-spanish :login)]]
@@ -51,26 +49,9 @@
   (page/html5
    (gen-page-head "Home")
    (header-links request)
-   (if (authenticated? (:session request))
-     [:div {:class "container"}
-      [:div
-       [:p {:class "h2"} "Bienvenido/a al proyecto 'Convivencia'."]
-       [:p "Accede el base de datos o añada entradas por la barra de navegación"]]]
-     [:div {:class "container"} [:p {:class "h2"} "Bienvenido/a al proyecto 'Convivencia'."]
-      (pages/intro)])
+   [:div {:class "container"} [:p {:class "h2"} "Bienvenido/a al proyecto 'Convivencia'."]
+    (pages/intro)]
    (bootstrap-scripts)))
-
-(defn about [request]
-  (page/html5
-   (gen-page-head "About")
-   (header-links request)
-   (if (authenticated? (:session request))
-     (pages/intro)
-     [:div {:class "container"}
-      [:div
-       [:p {:class "h2"} "El proyecto"]
-       [:p "El proyecto Hirundia es una herramienta que explora las relacion entre especies de aves urbanos golondrinas, vencejos y aviones comunes con los humanos para la conservación.
-"]]])))
 
 (defn greet [{:keys [session] :as request}]
   (page/html5
@@ -126,7 +107,7 @@
                              [:div {:class "card-subtitle mb-2 text-muted"} "Si el nido ya no está allí, rellene lo siguiente e incluya el día registrado:"]
                              [:div [:label (t/to-spanish :destroyed) (form/drop-down "destroyed" [(t/to-spanish :false) (t/to-spanish :true)] (t/to-spanish :false))]]
                              [:div [:label (t/to-spanish :destroyed_date) [:input {:type "date" :name "destroyed_date"}]]]]]
-      [:div {:class "col-auto"} [:input {:type "submit" :class "btn btn-primary mb-2" :value (t/to-spanish :submit)}]]]]]))
+      [:div {:class "col-auto justify-content-center" :style "display: flex; padding: 1rem;"} [:input {:type "submit" :class "btn btn-primary mb-2" :value (t/to-spanish :submit)}]]]]]))
 
 (defn register [{:keys [flash] :as request}]
   (page/html5

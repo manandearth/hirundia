@@ -8,38 +8,27 @@
    [ring.util.response :as ring-resp]
    [io.pedestal.http.route :refer [url-for]]
    [hirundia.services.nests.insert.logic :as logic]
+   [hirundia.translate :as t]
+   [hirundia.models.form :as models.form]
    [java-time :refer :all
     :exclude [format update contains? iterate range min max zero?]]
    [clojure.java.io :as io]))
 
-(spec/def ::street         string?)
-(spec/def ::house_number_name         string?)
-(spec/def ::lat            double?)
-(spec/def ::lon            double?)
-(spec/def ::species        #{"swallow" "swift" "martin"})
-(spec/def ::height         nat-int?)
-(spec/def ::facing         #{"N" "NW" "W" "SW" "S" "SE" "E" "NE"})
-(spec/def ::type-of        #{"balcony" "window" "cornice" "gable" "cables" "crack"})
-(spec/def ::date           inst?)
-(spec/def ::qty            int?)
-(spec/def ::destroyed      (spec/or :bool boolean? :empty empty?))
-(spec/def ::destroyed_date (spec/or :inst inst? :empty empty?))
-#_(spec/valid? ::date (sql-date (local-date)))
+(spec/def ::api  (spec/keys :req-un [::models.form/language ::models.form/facing ::models.form/street ::models.form/type-of ::models.form/height ::models.form/lat ::models.form/lon ::models.form/house_number_name ::models.form/destroyed ::models.form/species ::models.form/qty ::models.form/date #_::destroyed_date])) ;TODO need to extend
 
-(spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::house_number_name ::destroyed ::species ::qty ::date #_::destroyed_date])) ;TODO need to extend
-
-(defn perform [{{:keys [street house_number_name lon lat species height facing type-of date qty destroyed destroyed_date]} :form-params :keys [db session] :as request}]
-  (let [parsed-map {:street         street
+(defn perform [{{:keys [language street house_number_name lon lat species height facing type-of date qty destroyed destroyed_date]} :form-params :keys [db session] :as request}]
+  (let [spanish? (= language "spanish")
+        parsed-map {:street         street
                     :house_number_name         house_number_name
                     :gps            (pg/point (list lat lon))
-                    :species        species
+                    :species        (if spanish? (t/from-spanish species) species)
                     :height         height
-                    :facing         facing
-                    :type           type-of
+                    :facing         (if spanish? (t/from-spanish facing) facing)
+                    :type           (if spanish? (t/from-spanish type-of) type-of)
                     :date           (sql-date date)
-                    :destroyed      (if (boolean? destroyed)
-                                      destroyed
-                                      false)
+                    :destroyed      (if spanish? (symbol (t/from-spanish destroyed)) (if (boolean? destroyed)
+                                                                                       destroyed
+                                                                                       false))
                     :destroyed_date (if (empty? destroyed_date)
                                       nil
                                       (sql-date destroyed_date))

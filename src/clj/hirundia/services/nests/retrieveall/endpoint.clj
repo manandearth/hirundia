@@ -25,14 +25,11 @@
                      (jdbc/query db))]
     (ring-resp/response (view/all-nests request records))))
 
-
 (defn to-cljs [{:keys [db] :as request}]
   (let [db (->> db :pool (hash-map :datasource))
         records (->> (logic/to-query)
                      (h/format)
                      (jdbc/query db))]
     (-> (ring-resp/response records)
-        (assoc :headers {
-              "Access-Control-Allow-Origin" "*"
-              "Access-Control-Allow-Headers" "Content-Type"
-              }))))
+        (assoc :headers {"Access-Control-Allow-Origin" "*"
+                         "Access-Control-Allow-Headers" "Content-Type"}))))

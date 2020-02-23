@@ -9,43 +9,26 @@
    [hirundia.services.nests.update.logic :as logic]
    #_[hirundia.services.nests.retrieve-all.logic :as retrieve-all.logic]
    [hirundia.services.nests.update.view :as view]
+   [hirundia.translate :as t]
    [clojure.string :as string]
+   [hirundia.models.form :as models.form]
    [hirundia.views :as views]
    [io.pedestal.http.route :refer [url-for]]))
 
-
-;(spec/def ::street (spec/and string? (complement string/blank?)))
-
 ;(spec/def ::api (spec/keys :req-un [::street]))
+(spec/def ::api  (spec/keys :req-un [::models.form/language ::models.form/facing ::models.form/street ::models.form/type-of ::models.form/height ::models.form/lat ::models.form/lon ::models.form/house_number_name ::models.form/destroyed ::models.form/species ::models.form/qty ::models.form/date #_::destroyed_date])) ;TODO need to extend
 
-
-(spec/def ::street         string?)
-(spec/def ::house_number_name         string?)
-(spec/def ::lat            double?)
-(spec/def ::lon            double?)
-(spec/def ::species        #{"swallow" "swift" "martin"})
-(spec/def ::height         nat-int?)
-(spec/def ::facing         #{"N" "NW" "W" "SW" "S" "SE" "E" "NE"})
-(spec/def ::type-of        #{"balcony" "window" "cornice" "gable" "cables" "crack"})
-(spec/def ::date           inst?)
-(spec/def ::destroyed      (spec/or :bool boolean? :empty empty?))
-(spec/def ::destroyed_date (spec/or :inst inst? :empty empty?))
-
-#_(spec/valid? ::date (sql-date (local-date)))
-
-(spec/def ::api (spec/keys :req-un [::facing ::street ::type-of ::height ::lat ::lon ::house_number_name ::destroyed ::species ::date #_::destroyed_date])) ;TODO need to extend
-
-
-(defn perform [{{:keys [street house_number_name lon lat species height facing type-of date destroyed destroyed_date]} :form-params {:keys [id]} :path-params :keys [db session] :as request}]
-  (let [parsed-map {:street         street
+(defn perform [{{:keys [language street house_number_name lon lat species height facing type-of date destroyed destroyed_date]} :form-params {:keys [id]} :path-params :keys [db session] :as request}]
+  (let [spanish? (= language "spanish")
+        parsed-map {:street         street
                     :house_number_name         house_number_name
                     :gps            (pg/point (list lat lon))
-                    :species        species
+                    :species        (if spanish? (t/from-spanish species) species)
                     :height         height
-                    :facing         facing
-                    :type-of           type-of
+                    :facing         (if spanish? (t/from-spanish facing) facing)
+                    :type-of           (if spanish? (t/from-spanish type-of) type-of)
                     :date           (sql-date date)
-                    :destroyed      destroyed
+                    :destroyed      (if spanish? (symbol (t/from-spanish destroyed)) (if (boolean? destroyed) destroyed false))
                     :destroyed_date (if (empty? destroyed_date)
                                       nil
                                       (sql-date destroyed_date))}

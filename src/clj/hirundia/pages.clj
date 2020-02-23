@@ -8,15 +8,15 @@
 
 (defn intro []
   [:div {:class "container"}
-   [:h2 "El proyecto"]
+   [:p {:class "h3"} "El proyecto"]
    [:p "El proyecto Hirundia es una herramienta que explora las relacion entre especies de aves urbanos golondrinas, vencejos y aviones comunes con los humanos para la conservación.
 "]
    [:p "Hirundia es un instrumento de recopilación de datos para investigar los efectos de los seres humanos en las poblaciones de aves insectívoro migratorias. Los usuarios deben registrar una cuenta para actualizar la base de datos."]
-   [:p "Cada nido hace una entrada, como una fila en una hoja de Excel."]
+   [:p [:strong "Cada nido hace una entrada, como una fila en una hoja de Excel."]]
    [:div {:class "alert alert-success"} [:p "La especie debe ser identificada, el nombre de la calle y el número de la casa (o el nombre) así como las coordenadas GPS (longitud y latitud), la orientación del nido, la altura desde el nivel del suelo, el tipo de construcción (balcón, ventana, cornisa, tejado, grieta, cable, y la fecha en que se recogieron los datos"]]
    [:p "Una vez que un nido ha sido destruido puede ser actualizado en la base de datos, haciendo clic en el ID de la entrada y cambiando el valor de la columna destruida a 'si', así como marcando la fecha de registro como 'fecha_destruida' ."]
    [:div
-    [:h2 "Formulario de entrada:"]
+    [:p {:class "h3"} "Ejemplo de una entrada en el listado:"]
     (table/to-table1d
      sample-entry
      [:id "ID"
@@ -36,11 +36,10 @@
        [:id "ID"
         :name "NAME"])]
    [:div
-    [:h2 "Formulario de ejemplo:"]
-    [:h2 "Tenga en cuenta que este formulario está desactivado y que las entradas deben ser enviadas una vez que se haya iniciado la sesión a través del enlace 'Añadir un nido' de arriba.
+    [:p {:class "h3"} "Formulario de ejemplo:"]
+    [:p "Tenga en cuenta que este formulario está desactivado y que las entradas deben ser enviadas una vez que se haya iniciado la sesión a través del enlace 'Añadir un nido' de arriba.
 "]
     [:div {:class "container"}
-     [:h1 "Añada nido al base de datos"]
      [:div {:class "card"}
       [:form {:action "/nests-insert" :method "POST"}
       ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks

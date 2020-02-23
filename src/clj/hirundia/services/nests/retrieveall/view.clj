@@ -20,7 +20,7 @@
     (when (seq flash) [:div {:class "alert alert-warning alert-dismissible fade show" :role "alert"} flash
                        [:button {:type "button" :class "close" :data-dismiss "alert" :aria-label "Close"}
                         [:span {:aria-hidden "true"} "&times;"]]])
-    [:h1 "Entradas"]
+    [:p {:class "h2"} "Entradas"]
     [:div (let [attr-fns {:data-value-transform (fn [label-key v]
                                                   (if (= :id label-key)
                                                     [:a {:href (url-for :nests/:id :path-params {:id v})} v]

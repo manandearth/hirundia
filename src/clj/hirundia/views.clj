@@ -54,9 +54,9 @@
    (if (authenticated? (:session request))
      [:div {:class "container"}
       [:div
-       [:h1 "Bienvenido/a al proyecto 'Convivencia'."]
+       [:p {:class "h2"} "Bienvenido/a al proyecto 'Convivencia'."]
        [:p "Accede el base de datos o añada entradas por la barra de navegación"]]]
-     [:div {:class "container"} [:h1 "Bienvenido/a a proyecto 'Convivencia'."]
+     [:div {:class "container"} [:p {:class "h2"} "Bienvenido/a al proyecto 'Convivencia'."]
       (pages/intro)])
    (bootstrap-scripts)))
 
@@ -68,7 +68,7 @@
      (pages/intro)
      [:div {:class "container"}
       [:div
-       [:h1 "El proyecto"]
+       [:p {:class "h2"} "El proyecto"]
        [:p "El proyecto Hirundia es una herramienta que explora las relacion entre especies de aves urbanos golondrinas, vencejos y aviones comunes con los humanos para la conservación.
 "]]])))
 
@@ -88,7 +88,7 @@
    (gen-page-head "add a nest to the database")
    (header-links request)
    [:div {:class "container"}
-    [:h1 "Añada nido al base de datos"]
+    [:p {:class "h2"} "Añada nido al base de datos"]
     [:div {:class "card"}
      [:form {:action "/nests-insert" :method "POST"}
       ;;(util/anti-forgery-field) ; prevents cross-site scripting attacks
@@ -118,7 +118,7 @@
        [:div {:class "col-auto"} [:label (t/to-spanish :facing)   (form/drop-down "facing" [(t/to-spanish :N) (t/to-spanish :NE) (t/to-spanish :E) (t/to-spanish :SE) (t/to-spanish :S) (t/to-spanish :SW) (t/to-spanish :W) (t/to-spanish :NW)] (t/to-spanish :N))]]]
 
       [:div [:label (t/to-spanish :date)      [:input {:type "date" :name "date"}]]]
-      [:div {:class "card"} [:div {:class "card-body" :style "background-color: #f5faff"}
+      [:div {:class "card"} [:div {:class "card-body" :style "background-color: #f5faff;"}
                              [:div {:class "card-subtitle mb-2 text-muted"} "Cada nido crea una entrada en la base de datos. "]
                              [:div {:class "card-subtitle mb-2 text-muted"} "En el caso de múltiples nidos con las mismas especificaciones se actualiza este valor:"]
                              [:div (:class "col-auto") [:label (t/to-spanish :qty)       [:input {:class "form-control ms-mx-1" :type "int" :name "qty" :value 1}]]]]]
@@ -133,11 +133,11 @@
    (gen-page-head "Register")
    (header-links request)
    [:div {:class "container" :style "text-align: center;"} (when (seq flash) [:div {:class "alert alert-success"} flash])
-    [:div {:class "card"}
-     [:h1 (t/to-spanish :register)]
+    [:div {:class "card" :style "max-width: 350px;"}
+     [:p {:class "h2"} (t/to-spanish :register)]
      [:form {:action "/register" :method "POST"}
-      [:div
-       [:label {:class "sr-only" :for "inputUsername"} (t/to-spanish :username)] [:input {:class "form-control" :id "inputUsername" :type "text" :name "username" :placeholder (t/to-spanish :username)}]
+      [:div {:class "form-group mx-sm-5 mb-2"}
+       [:label {:class "sr-only" :for "inputUsername"} (t/to-spanish :username)] [:input {:class "form-control " :id "inputUsername" :type "text" :name "username" :placeholder (t/to-spanish :username)}]
        [:label {:class "sr-only" :for "inputPassword"} (t/to-spanish :password)] [:input {:class "form-control" :id "inputPassword" :type "password" :name "password" :placeholder (t/to-spanish :password)}]
        [:label "" [:input {:type "submit" :value (t/to-spanish :register)}]]]]]]))
 
@@ -150,10 +150,10 @@
    (gen-page-head "Login")
    (header-links request)
    [:div {:class "container" :style "text-align: center;"} (when (seq flash) [:div {:class "alert alert-warning alert-dismissible fade show"} flash])
-    [:div {:class "card"}
-     [:h1 "Entrada"]
+    [:div {:class "card" :style "max-width: 350px;"}
+     [:p {:class "h2"} (t/to-spanish :login)]
      [:form {:action "/login" :method "POST"}
-      [:div
+      [:div {:class "form-group mx-sm-5 mb-2"}
        [:label {:class "sr-only" :for "inputUsername"} (t/to-spanish :username)]
        [:input {:class "form-control" :type "text" :name "username" :id "inputUsername" :placeholder (t/to-spanish :username)}]
        [:label {:class "sr-only" :for "inputPassword"} (t/to-spanish :password)]

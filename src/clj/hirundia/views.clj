@@ -38,7 +38,7 @@
       [:a {:class "navbar-brand" :href "/"} [:h2 [:span {:class "badge badge-secondary"} "Hirundia"]]]
 
       [:div {:class "collapse navbar-collapse" :id "navbarTogglerDemo03"}
-       [:ul {:class "navbar-nav mr-auto mt-2 mt-lg-0" :style "background-color: #e3f2fd;"}
+       [:ul {:class "navbar-nav mr-auto mt-2 mt-lg-0"}
         [:li {:class "nav-item"} [:a {:href "/nests" :class "nav-link text-capitalize"} (t/to-spanish :nests)]]
         [:li {:class "nav-item"} [:a {:href "/dashboard" :class "nav-link text-capitalize"} (t/to-spanish :dashboard)]]
         [:li {:class "nav-item"} [:a {:href "/nests-insert" :class "nav-link text-capitalize"} (t/to-spanish :nests-insert)]]
@@ -54,7 +54,7 @@
 
       [:div {:class "collapse navbar-collapse" :id "navbarTogglerDemo03"}
 
-       [:ul {:class "navbar-nav mr-auto mt-2 mt-lg-0" :style "background-color: #e3f2fd;"}
+       [:ul {:class "navbar-nav mr-auto mt-2 mt-lg-0"}
 
         [:li {:class "nav-item"} [:a {:href "/nests" :class "nav-link text-capitalize"} (t/to-spanish :nests)]]
         [:li {:class "nav-item"} [:a {:href "/dashboard" :class "nav-link text-capitalize"} (t/to-spanish :dashboard)]]

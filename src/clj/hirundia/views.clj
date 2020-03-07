@@ -173,6 +173,22 @@
    ;; [:script {:src "lvega/bundle.js"}]
    [:script {:src "js/compiled/app.js" :type "text/javascript"}]))
 
+(defn new-app [request]
+  (page/html5
+   (gen-page-head "new-app")
+   (header-links request)
+   [:div {:class "container" :id "new-app"}]
+   [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+           :integrity "sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+           :crossorigin ""}]
+   ;; [:script {:src "https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+   ;;           :integrity "sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+   ;;           :crossorigin ""}]
+   ;; [:script {:src "https://unpkg.com/vega@3.2.1/build/vega.js"}]
+   ;; [:script {:src "https://unpkg.com/regenerator-runtime@0.11.1/runtime.js"}]
+   ;; [:script {:src "lvega/bundle.js"}]
+   [:script {:src "js/compiled/main.js" :type "text/javascript"}]))
+
 (defn osm-page [request]
   (page/html5
    [:head

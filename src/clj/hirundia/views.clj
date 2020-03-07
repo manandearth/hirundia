@@ -34,9 +34,9 @@
    [:title (str "Nests: " title)]
    [:link  {:rel "stylesheet" :href "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" :integrity "sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" :crossorigin "anonymous"}]
    [:link {:href "https://fonts.googleapis.com/css?family=Roboto" :rel "stylesheet"}]
-   [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-           :integrity "sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-           :crossorigin ""}]
+   [:link {:rel "stylesheet"
+           :href "//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"}]
+   [:link {:rel "stylesheet" :href "//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css"}]
    [:script {:src "https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
              :integrity "sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
              :crossorigin ""}]
@@ -195,10 +195,9 @@
   (page/html5
    (new-app-page-head "new-app")
    (header-links request)
-   [:div {:class "container" :id "new-app"}]
-   [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-           :integrity "sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-           :crossorigin ""}]
+   [:div
+    [:div {:class "container" :id "new-app"}]
+    [:div {:class "container" :id "map"}]]
    [:script {:src "js/compiled/main.js" :type "text/javascript"}]))
 
 (defn osm-page [request]

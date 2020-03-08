@@ -1,5 +1,6 @@
 import React from "react";
 import Overview from "./components/Overview";
+import ScatterPlot from "./components/ScatterPlot.jsx";
 // import logo from "./logo.svg";
 // import './App.css';
 
@@ -18,6 +19,7 @@ function App() {
         ></a>
       </header>
       <Overview />
+      <ScatterPlot />
     </div>
   );
 }

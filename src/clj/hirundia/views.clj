@@ -189,9 +189,11 @@
   (page/html5
    (new-app-page-head "new-app")
    (header-links request)
-   [:div
-    [:div {:class "container" :id "new-app"}]
-    [:div {:class "container" :id "map"}]]
+   [:div {:class "container"}
+    [:p {:class "h2"} "Distribution of nests geographicaly"]
+    [:div {:class "container" :id "map"}]
+    [:p {:class "h2" :style "padding: 2em;"} "Visualizations:"]
+    [:div {:class "container" :id "new-app"}]]
    [:script {:src "js/compiled/main.js" :type "text/javascript"}]))
 
 (defn osm-page [request]

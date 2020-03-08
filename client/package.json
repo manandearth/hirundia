@@ -11,7 +11,11 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-leaflet": "^2.6.1",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "react-vega": "^7.2.1",
+    "react-vega-lite": "^6.1.0",
+    "vega-lib": "^4.4.0",
+    "vega-lite": "^4.5.1"
   },
   "scripts": {
     "start": "react-scripts start",

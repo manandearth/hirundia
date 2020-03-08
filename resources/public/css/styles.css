@@ -113,9 +113,9 @@ legend {
     
 }
 #map {
-    height: 500px;
+    height: 800px;
 }
 .leaflet-container {
-    height: 400px;
-    width: 800px;
+    height: 800px;
+    width: 1000px;
 }

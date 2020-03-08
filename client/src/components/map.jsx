@@ -6,7 +6,8 @@ import {
   TileLayer,
   Marker,
   Popup,
-  Circle
+  Circle,
+  Tooltip
 } from "react-leaflet";
 
 const gpsToArray = gps => {
@@ -34,6 +35,83 @@ const MapComponent = () => {
     gpsToArray(entries[1].gps)[1]
   ];
 
+  const handleColor = entry => {
+    switch (entry.species) {
+      case "swallow":
+        return "crimson";
+        break;
+      case "swift":
+        return "steelblue";
+        break;
+      case "martin":
+        return "orange";
+        break;
+      case "pallid_swift":
+        return "seagreen";
+        break;
+      case "red_rumped_swallow":
+        return "brown";
+        break;
+      default:
+    }
+  };
+
+  const handlePopup = entry => {
+    return (
+      <table>
+        <tr>
+          {" "}
+          <td>
+            <b>Address: </b> {`${entry.street} ${entry.house_number_name} `}
+          </td>{" "}
+        </tr>
+        <tr>
+          {" "}
+          <td>
+            <b>Height: </b>
+            {`${entry.height} m `}
+          </td>{" "}
+        </tr>
+        <tr>
+          <td>
+            <b>Aspect: </b>
+            {entry.facing}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Type of nest: </b>
+            {entry.type}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>First recorded: </b>
+            {entry.date}
+          </td>
+        </tr>
+      </table>
+    );
+  };
+
+  const handleTooltip = entry => {
+    return (
+      <table>
+        <tr>
+          <td>
+            <b>lat/lon: </b>{" "}
+            {`${gpsToArray(entry.gps)[0]} ${gpsToArray(entry.gps)[1]}`}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Species: </b>
+            {entry.species}
+          </td>
+        </tr>
+      </table>
+    );
+  };
   return (
     <LeafletMap center={[36.253, -5.965]} zoom={17}>
       <TileLayer
@@ -43,21 +121,14 @@ const MapComponent = () => {
       {entries.map(entry => (
         <Circle
           center={[gpsToArray(entry.gps)[0], gpsToArray(entry.gps)[1]]}
-          fillColor={
-            entry.species === "swallow"
-              ? "blue"
-              : entry.species === "martin"
-              ? "red"
-              : "green"
-          }
+          fillColor={handleColor(entry)}
+          color={handleColor(entry)}
           radius={5}
-        />
+        >
+          <Popup>{handlePopup(entry)}</Popup>
+          <Tooltip>{handleTooltip(entry)}</Tooltip>
+        </Circle>
       ))}
-      <Marker position={position}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
     </LeafletMap>
   );
 };

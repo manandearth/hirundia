@@ -9,6 +9,7 @@ import {
   Circle,
   Tooltip
 } from "react-leaflet";
+const t = require("../translations/translate_es.json");
 
 const gpsToArray = gps => {
   const regExp = /\(([^)]+)\)/;
@@ -68,25 +69,25 @@ const MapComponent = () => {
         <tr>
           {" "}
           <td>
-            <b>Height: </b>
+            <b>{`${t.height}: `}</b>
             {`${entry.height} m `}
           </td>{" "}
         </tr>
         <tr>
           <td>
-            <b>Aspect: </b>
+            <b>{`${t.facing}: `}</b>
             {entry.facing}
           </td>
         </tr>
         <tr>
           <td>
-            <b>Type of nest: </b>
+            <b>{`${t.type}: `} </b>
             {entry.type}
           </td>
         </tr>
         <tr>
           <td>
-            <b>First recorded: </b>
+            <b>{`${t.date}: `} </b>
             {entry.date}
           </td>
         </tr>

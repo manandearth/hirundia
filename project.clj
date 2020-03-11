@@ -45,7 +45,8 @@
                  [funcool/promesa "2.0.1"]
                  [binaryage/oops "0.7.0"]
                  [joplin.core "0.3.11"]
-                 [joplin.jdbc "0.3.11"]]
+                 [joplin.jdbc "0.3.11"]
+                 [cheshire "5.10.0"]]
   :repl-options {:port 41234}
   :min-lein-version "2.0.0"
   :source-paths ["src/clj" "src/cljs"]

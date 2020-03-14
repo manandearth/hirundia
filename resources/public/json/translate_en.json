@@ -47,6 +47,7 @@
   "delete_entry": "delete entry",
   "update": "update",
   "logged_as": "logged as: ",
-  "update_entry": "update entry"
+  "update_entry": "update entry",
+  "address": "address"
 
 }

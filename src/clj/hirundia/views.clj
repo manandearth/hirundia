@@ -190,7 +190,7 @@
    (new-app-page-head "new-app")
    (header-links request)
    [:div {:class "container"}
-    [:p {:class "h2"} "Distribution of nests geographicaly"]
+    [:p {:class "h2 text-capitalize"} (t/to-spanish :map_title)]
     [:div {:class "container" :id "map"}]
     [:p {:class "h2" :style "padding: 2em;"} "Visualizations:"]
     [:div {:class "container" :id "new-app"}]]

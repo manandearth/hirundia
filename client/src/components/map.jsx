@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getTransitData } from "../api.js";
+import dayjs from "dayjs";
 
 import {
   Map as LeafletMap,
@@ -10,7 +11,8 @@ import {
   Tooltip
 } from "react-leaflet";
 const t = require("../translations/translate_es.json");
-
+require("dayjs/locale/es");
+// dayjs.locale("es");
 const gpsToArray = gps => {
   const regExp = /\(([^)]+)\)/;
   const lan = parseFloat(regExp.exec(gps)[1].split(",")[0]);
@@ -63,7 +65,8 @@ const MapComponent = () => {
         <tr>
           {" "}
           <td>
-            <b>Address: </b> {`${entry.street} ${entry.house_number_name} `}
+            <b>{`${t.address}: `}: </b>{" "}
+            {`${entry.street} ${entry.house_number_name} `}
           </td>{" "}
         </tr>
         <tr>
@@ -76,19 +79,21 @@ const MapComponent = () => {
         <tr>
           <td>
             <b>{`${t.facing}: `}</b>
-            {entry.facing}
+            {t[entry.facing]}
           </td>
         </tr>
         <tr>
           <td>
             <b>{`${t.type}: `} </b>
-            {entry.type}
+            {t[entry.type]}
           </td>
         </tr>
         <tr>
           <td>
             <b>{`${t.date}: `} </b>
-            {entry.date}
+            {dayjs(entry.date)
+              .locale("es")
+              .format("ddd. D MMM YYYY")}
           </td>
         </tr>
       </table>
@@ -106,8 +111,8 @@ const MapComponent = () => {
         </tr>
         <tr>
           <td>
-            <b>Species: </b>
-            {entry.species}
+            <b>{`${t.species}: `}</b>
+            {t[entry.species]}
           </td>
         </tr>
       </table>

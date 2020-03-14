@@ -47,6 +47,7 @@
   "delete_entry": "borrar entrada",
   "update": "actualizar",
   "logged_as": "session ",
-  "update_entry": "actualiza entrada"
-
+  "update_entry": "actualiza entrada",
+  "address": "dirección",
+  "map_title": "distribución geografica"
 }

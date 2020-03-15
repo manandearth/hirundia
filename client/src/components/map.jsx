@@ -26,11 +26,28 @@ const MapComponent = () => {
     { gps: "(36.25302, -5.9655)" }
   ]);
 
+  const [visibility, setVisibility] = useState("CURRENT");
+
   useEffect(() => {
     getTransitData().then(response => {
-      setEntries(response.data);
+      let filteredData;
+      switch (visibility) {
+        case "TOTAL":
+          filteredData = response.data;
+          break;
+        case "CURRENT":
+          filteredData = response.data.filter(
+            entry => entry.destroyed === false
+          );
+          break;
+        case "DESTROYED":
+          filteredData = response.data.filter(
+            entry => entry.destroyed === true
+          );
+      }
+      setEntries(filteredData);
     });
-  }, []);
+  }, [visibility]);
 
   let position = [gpsToArray(entries[0].gps)[0], gpsToArray(entries[0].gps)[1]];
   let circlePosition = [
@@ -118,24 +135,90 @@ const MapComponent = () => {
       </table>
     );
   };
+
+  const handleToggle = state => {
+    setVisibility(state);
+    console.log(`state id -> ${state}`);
+  };
+  const Selector = () => {
+    return (
+      <div className="container">
+        <div className="btn-group btn-group-toggle">
+          <label
+            className={`btn btn-${
+              visibility === "TOTAL" ? "info" : "secondary"
+            }`}
+          >
+            <input
+              type="radio"
+              name="options"
+              id="total"
+              autocomplete="off"
+              checked
+              onClick={() => handleToggle("TOTAL")}
+            />{" "}
+            Total entries
+          </label>
+          <label
+            className={`btn btn-${
+              visibility === "CURRENT" ? "info" : "secondary"
+            }`}
+          >
+            <input
+              type="radio"
+              name="options"
+              id="current"
+              autocomplete="off"
+              onClick={() => handleToggle("CURRENT")}
+            />{" "}
+            Currect entries
+          </label>
+          <label
+            className={`btn btn-${
+              visibility === "DESTROYED" ? "info" : "secondary"
+            }`}
+          >
+            <input
+              type="radio"
+              name="options"
+              id="destroyed"
+              autocomplete="off"
+              onClick={() => handleToggle("DESTROYED")}
+            />{" "}
+            Destroyed entries
+          </label>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <LeafletMap center={[36.253, -5.965]} zoom={17}>
-      <TileLayer
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-      />
-      {entries.map(entry => (
-        <Circle
-          center={[gpsToArray(entry.gps)[0], gpsToArray(entry.gps)[1]]}
-          fillColor={handleColor(entry)}
-          color={handleColor(entry)}
-          radius={5}
-        >
-          <Popup>{handlePopup(entry)}</Popup>
-          <Tooltip>{handleTooltip(entry)}</Tooltip>
-        </Circle>
-      ))}
-    </LeafletMap>
+    <>
+      <div className="container">
+        <div className="row" style={{ padding: "1rem" }}>
+          <Selector />
+        </div>
+        <div className="row">
+          <LeafletMap center={[36.253, -5.965]} zoom={17}>
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            />
+            {entries.map(entry => (
+              <Circle
+                center={[gpsToArray(entry.gps)[0], gpsToArray(entry.gps)[1]]}
+                fillColor={handleColor(entry)}
+                color={handleColor(entry)}
+                radius={5}
+              >
+                <Popup>{handlePopup(entry)}</Popup>
+                <Tooltip>{handleTooltip(entry)}</Tooltip>
+              </Circle>
+            ))}
+          </LeafletMap>
+        </div>
+      </div>
+    </>
   );
 };
 

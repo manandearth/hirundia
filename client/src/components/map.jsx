@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import { getTransitData } from "../api.js";
 import dayjs from "dayjs";
 
@@ -20,71 +20,79 @@ const gpsToArray = gps => {
   return [lan, lon];
 };
 
-const MapComponent = () => {
-  const [entries, setEntries] = useState([
-    { gps: "(36.253, -5.965)" },
-    { gps: "(36.25302, -5.9655)" }
-  ]);
-  // totalEntries can be refered to regardelss of currently filtered state
-  const [totalEntries, setTotalEntries] = useState([
-    { gps: "(36.253, -5.965)" },
-    { gps: "(36.25302, -5.9655)" }
-  ]);
+class MapComponent extends Component {
+  state = {
+    entries: [{ gps: "(36.253, -5.965)" }, { gps: "(36.25302, -5.9655)" }],
+    totalEntries:
+      // totalEntries can be refered to regardelss of currently filtered state
+      [{ gps: "(36.253, -5.965)" }, { gps: "(36.25302, -5.9655)" }],
+    // entriesInFrame filtered by the viewPort
+    entriesInFrame: [
+      { gps: "(36.253, -5.965)" },
+      { gps: "(36.25302, -5.9655)" }
+    ],
+    count: {
+      swallowNests: 0,
+      martinNests: 0,
+      swiftNests: 0,
+      pallidSwiftNests: 0,
+      redrumpedSwallowNests: 0,
+      destroyedNests: 0
+    },
+    visibility: "CURRENT",
+    bounds: { southWest: {}, northEast: {} }
+  };
 
-  const [count, setCount] = useState({
-    swallowNests: 0,
-    martinNests: 0,
-    swiftNests: 0,
-    pallidSwiftNests: 0,
-    redrumpedSwallowNests: 0,
-    destroyedNests: 0
-  });
-
-  const [visibility, setVisibility] = useState("CURRENT");
-
-  useEffect(() => {
+  handleGetData = () =>
     getTransitData().then(response => {
+      this.setState({ ...this.state, totalEntries: response.data });
       let filteredData;
-      switch (visibility) {
+      switch (this.state.visibility) {
         case "TOTAL":
-          filteredData = response.data;
+          filteredData = this.state.totalEntries;
           break;
         case "CURRENT":
-          filteredData = response.data.filter(
+          filteredData = this.state.totalEntries.filter(
             entry => entry.destroyed === false
           );
           break;
         case "DESTROYED":
-          filteredData = response.data.filter(
+          filteredData = this.state.totalEntries.filter(
             entry => entry.destroyed === true
           );
       }
-      setEntries(filteredData);
-      setTotalEntries(response.data);
+      this.setState({
+        ...this.state,
+        entries: filteredData
+      });
     });
-  }, [visibility]);
 
-  useEffect(() => {
-    setCount({
-      swallowNests: totalEntries.filter(e => e.species === "swallow").length,
-      martinNests: totalEntries.filter(e => e.species === "martin").length,
-      swiftNests: totalEntries.filter(e => e.species === "swift").length,
-      pallidSwiftNests: totalEntries.filter(e => e.species === "pallid_swift")
-        .length,
-      redrumpedSwallowNests: totalEntries.filter(
-        e => e.species === "red_rumped_swallow"
-      ).length,
-      destroyedNests: totalEntries.filter(e => e.destroyed === true).length
-    });
-  }, []);
+  componentDidMount() {
+    this.handleGetData();
+  }
 
-  let position = [gpsToArray(entries[0].gps)[0], gpsToArray(entries[0].gps)[1]];
-  let circlePosition = [
-    gpsToArray(entries[1].gps)[0],
-    gpsToArray(entries[1].gps)[1]
+  // componentDidUpdate() {
+  //   if (this.refs.map.leafletElement.getBounds() !== this.state.bounds) {
+  //     this.handleOnUpdate();
+  //     this.setState({
+  //       ...this.state,
+  //       bounds: this.refs.map.leafletElement.getBounds()
+  //     });
+  //     console.log(this.refs.map.leafletElement.getBounds());
+  //     console.log(this.state.bounds);
+  //   }
+  // }
+
+  position = [
+    gpsToArray(this.state.entries[0].gps)[0],
+    gpsToArray(this.state.entries[0].gps)[1]
+  ];
+  circlePosition = [
+    gpsToArray(this.state.entries[1].gps)[0],
+    gpsToArray(this.state.entries[1].gps)[1]
   ];
 
-  const handleColor = entry => {
+  handleColor = entry => {
     switch (entry.species) {
       case "swallow":
         return "crimson";
@@ -105,7 +113,7 @@ const MapComponent = () => {
     }
   };
 
-  const handlePopup = entry => {
+  handlePopup = entry => {
     return (
       <table>
         <tr>
@@ -146,7 +154,7 @@ const MapComponent = () => {
     );
   };
 
-  const handleTooltip = entry => {
+  handleTooltip = entry => {
     return (
       <table>
         <tr>
@@ -165,17 +173,17 @@ const MapComponent = () => {
     );
   };
 
-  const handleToggle = state => {
-    setVisibility(state);
-    console.log(`state id -> ${state}`);
+  handleToggle = s => {
+    this.setState({ ...this.state, visibility: s });
+    console.log(`state id -> ${s}`);
   };
-  const Selector = () => {
+  Selector = () => {
     return (
       <div className="container">
         <div className="btn-group btn-group-toggle">
           <label
             className={`btn btn-${
-              visibility === "TOTAL" ? "info" : "secondary"
+              this.state.visibility === "TOTAL" ? "info" : "secondary"
             }`}
           >
             <input
@@ -184,13 +192,13 @@ const MapComponent = () => {
               id="total"
               autocomplete="off"
               checked
-              onClick={() => handleToggle("TOTAL")}
+              onClick={() => this.handleToggle("TOTAL")}
             />{" "}
             Total entries
           </label>
           <label
             className={`btn btn-${
-              visibility === "CURRENT" ? "info" : "secondary"
+              this.state.visibility === "CURRENT" ? "info" : "secondary"
             }`}
           >
             <input
@@ -198,13 +206,13 @@ const MapComponent = () => {
               name="options"
               id="current"
               autocomplete="off"
-              onClick={() => handleToggle("CURRENT")}
+              onClick={() => this.handleToggle("CURRENT")}
             />{" "}
             Currect entries
           </label>
           <label
             className={`btn btn-${
-              visibility === "DESTROYED" ? "info" : "secondary"
+              this.state.visibility === "DESTROYED" ? "info" : "secondary"
             }`}
           >
             <input
@@ -212,7 +220,7 @@ const MapComponent = () => {
               name="options"
               id="destroyed"
               autocomplete="off"
-              onClick={() => handleToggle("DESTROYED")}
+              onClick={() => this.handleToggle("DESTROYED")}
             />{" "}
             Destroyed entries
           </label>
@@ -221,85 +229,128 @@ const MapComponent = () => {
     );
   };
 
-  const Summary = () => {
+  Summary = () => {
     return (
       <div>
         <div>
-          <span>total nests in db:</span>
-          <span>{totalEntries.length}</span>
+          <span>total nests in viewport:</span>
+          <span>{this.state.entriesInFrame.length}</span>
         </div>
         <div>
           <span>of which destroyed:</span>
-          <span>{count.destroyedNests}</span>
+          <span>{this.state.count.destroyedNests}</span>
         </div>
         <div>
           <span>current nests then:</span>
-          <span>{totalEntries.length - count.destroyedNests}</span>
+          <span>
+            {this.state.entriesInFrame.length - this.state.count.destroyedNests}
+          </span>
         </div>
         <div>
           <span>swallow nests:</span>
-          <span>{count.swallowNests}</span>
+          <span>{this.state.count.swallowNests}</span>
         </div>
         <div>
           <span>swift nests:</span>
-          <span>{count.swiftNests}</span>
+          <span>{this.state.count.swiftNests}</span>
         </div>
         <div>
           <span>martin nests:</span>
-          <span>{count.martinNests}</span>
+          <span>{this.state.count.martinNests}</span>
         </div>
         <div>
           <span>red rumped swallow nests:</span>
-          <span>{count.redrumpedSwallowNests}</span>
+          <span>{this.state.count.redrumpedSwallowNests}</span>
         </div>
         <div>
           <span>pallid swift nests:</span>
-          <span>{count.pallidSwiftNests}</span>
+          <span>{this.state.count.pallidSwiftNests}</span>
         </div>
       </div>
     );
   };
 
-  const handleViewportChanged = func => {
-    console.log(func);
+  withinBounds = e => {
+    const gps = gpsToArray(e.gps);
+    if (
+      gps[0] > this.state.bounds.southWest.lat &&
+      gps[0] < this.state.bounds.northEast.lat &&
+      gps[1] > this.state.bounds.southWest.lng &&
+      gps[1] < this.state.bounds.northEast.lng
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
-  return (
-    <>
-      <div className="container">
-        <div className="row" style={{ padding: "1rem" }}>
-          <Selector />
-        </div>
-        <div className="row">
-          <LeafletMap
-            center={[36.253, -5.965]}
-            zoom={17}
-            ref="map"
-            onViewportChanged={() =>
-              console.log(this.refs.map.LeafletElement.getBounds)
-            }
-          >
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            />
-            {entries.map(entry => (
-              <Circle
-                center={[gpsToArray(entry.gps)[0], gpsToArray(entry.gps)[1]]}
-                fillColor={handleColor(entry)}
-                color={handleColor(entry)}
-                radius={5}
-              >
-                <Popup>{handlePopup(entry)}</Popup>
-                <Tooltip>{handleTooltip(entry)}</Tooltip>
-              </Circle>
-            ))}
-          </LeafletMap>
-          <Summary />
+  handleViewportChanged = () => {
+    let bounds = this.refs.map.leafletElement.getBounds();
+    this.setState({
+      ...this.state,
+      bounds: {
+        northEast: { lat: bounds._northEast.lat, lng: bounds._northEast.lng },
+        southWest: { lat: bounds._southWest.lat, lng: bounds._southWest.lng }
+      },
+      entriesInFrame: this.state.totalEntries.filter(e => this.withinBounds(e)),
+      count: {
+        swallowNests: this.state.entriesInFrame.filter(
+          e => e.species === "swallow"
+        ).length,
+        martinNests: this.state.entriesInFrame.filter(
+          e => e.species === "martin"
+        ).length,
+        swiftNests: this.state.entriesInFrame.filter(e => e.species === "swift")
+          .length,
+        pallidSwiftNests: this.state.entriesInFrame.filter(
+          e => e.species === "pallid_swift"
+        ).length,
+        redrumpedSwallowNests: this.state.entriesInFrame.filter(
+          e => e.species === "red_rumped_swallow"
+        ).length,
+        destroyedNests: this.state.entriesInFrame.filter(
+          e => e.destroyed === true
+        ).length
+      }
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <div className="container">
+          <div className="row" style={{ padding: "1rem" }}>
+            {this.Selector()}
+          </div>
+          <div className="row">
+            <LeafletMap
+              center={[36.253, -5.965]}
+              zoom={17}
+              ref="map"
+              onViewportChange={() => this.handleViewportChanged()}
+            >
+              <TileLayer
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+              />
+              {this.state.entries.map(entry => (
+                <Circle
+                  center={[gpsToArray(entry.gps)[0], gpsToArray(entry.gps)[1]]}
+                  fillColor={this.handleColor(entry)}
+                  color={this.handleColor(entry)}
+                  radius={5}
+                >
+                  <Popup>{this.handlePopup(entry)}</Popup>
+                  <Tooltip>{this.handleTooltip(entry)}</Tooltip>
+                </Circle>
+              ))}
+            </LeafletMap>
+            {this.Summary()}
+          </div>
         </div>
       </div>
-    </>
-  );
-};
+    );
+  }
+}
 
 export default MapComponent;

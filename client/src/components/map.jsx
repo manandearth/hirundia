@@ -25,6 +25,20 @@ const MapComponent = () => {
     { gps: "(36.253, -5.965)" },
     { gps: "(36.25302, -5.9655)" }
   ]);
+  // totalEntries can be refered to regardelss of currently filtered state
+  const [totalEntries, setTotalEntries] = useState([
+    { gps: "(36.253, -5.965)" },
+    { gps: "(36.25302, -5.9655)" }
+  ]);
+
+  const [count, setCount] = useState({
+    swallowNests: 0,
+    martinNests: 0,
+    swiftNests: 0,
+    pallidSwiftNests: 0,
+    redrumpedSwallowNests: 0,
+    destroyedNests: 0
+  });
 
   const [visibility, setVisibility] = useState("CURRENT");
 
@@ -46,8 +60,23 @@ const MapComponent = () => {
           );
       }
       setEntries(filteredData);
+      setTotalEntries(response.data);
     });
   }, [visibility]);
+
+  useEffect(() => {
+    setCount({
+      swallowNests: totalEntries.filter(e => e.species === "swallow").length,
+      martinNests: totalEntries.filter(e => e.species === "martin").length,
+      swiftNests: totalEntries.filter(e => e.species === "swift").length,
+      pallidSwiftNests: totalEntries.filter(e => e.species === "pallid_swift")
+        .length,
+      redrumpedSwallowNests: totalEntries.filter(
+        e => e.species === "red_rumped_swallow"
+      ).length,
+      destroyedNests: totalEntries.filter(e => e.destroyed === true).length
+    });
+  }, []);
 
   let position = [gpsToArray(entries[0].gps)[0], gpsToArray(entries[0].gps)[1]];
   let circlePosition = [
@@ -192,6 +221,49 @@ const MapComponent = () => {
     );
   };
 
+  const Summary = () => {
+    return (
+      <div>
+        <div>
+          <span>total nests in db:</span>
+          <span>{totalEntries.length}</span>
+        </div>
+        <div>
+          <span>of which destroyed:</span>
+          <span>{count.destroyedNests}</span>
+        </div>
+        <div>
+          <span>current nests then:</span>
+          <span>{totalEntries.length - count.destroyedNests}</span>
+        </div>
+        <div>
+          <span>swallow nests:</span>
+          <span>{count.swallowNests}</span>
+        </div>
+        <div>
+          <span>swift nests:</span>
+          <span>{count.swiftNests}</span>
+        </div>
+        <div>
+          <span>martin nests:</span>
+          <span>{count.martinNests}</span>
+        </div>
+        <div>
+          <span>red rumped swallow nests:</span>
+          <span>{count.redrumpedSwallowNests}</span>
+        </div>
+        <div>
+          <span>pallid swift nests:</span>
+          <span>{count.pallidSwiftNests}</span>
+        </div>
+      </div>
+    );
+  };
+
+  const handleViewportChanged = func => {
+    console.log(func);
+  };
+
   return (
     <>
       <div className="container">
@@ -199,7 +271,14 @@ const MapComponent = () => {
           <Selector />
         </div>
         <div className="row">
-          <LeafletMap center={[36.253, -5.965]} zoom={17}>
+          <LeafletMap
+            center={[36.253, -5.965]}
+            zoom={17}
+            ref="map"
+            onViewportChanged={() =>
+              console.log(this.refs.map.LeafletElement.getBounds)
+            }
+          >
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -216,6 +295,7 @@ const MapComponent = () => {
               </Circle>
             ))}
           </LeafletMap>
+          <Summary />
         </div>
       </div>
     </>

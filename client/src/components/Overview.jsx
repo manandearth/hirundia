@@ -8,7 +8,8 @@ const Overview = () => {
     martinNests: 0,
     swiftNests: 0,
     pallidSwiftNests: 0,
-    redrumpedSwallowNests: 0
+    redrumpedSwallowNests: 0,
+    destroyedNests: 0
   });
 
   useEffect(() => {
@@ -24,7 +25,8 @@ const Overview = () => {
             .length,
           redrumpedSwallowNests: data.filter(
             e => e.species === "red_rumped_swallow"
-          ).length
+          ).length,
+          destroyedNests: data.filter(e => e.destroyed === true).length
         });
       }
     });
@@ -35,6 +37,14 @@ const Overview = () => {
       <div>
         <span>total nests in db:</span>
         <span>{totalNests}</span>
+      </div>
+      <div>
+        <span>of which destroyed:</span>
+        <span>{count.destroyedNests}</span>
+      </div>
+      <div>
+        <span>current nests then:</span>
+        <span>{totalNests - count.destroyedNests}</span>
       </div>
       <div>
         <span>swallow nests:</span>

@@ -312,6 +312,78 @@ class MapComponent extends Component {
     });
   };
 
+  Legend = () => {
+    return (
+      <div>
+        <span className="text-capitalize">
+          <svg width="30px">
+            <circle
+              r="10px"
+              stroke="red"
+              fill="crimson"
+              opacity="0.3"
+              cx="20"
+              cy="75"
+            ></circle>
+          </svg>
+          {t.swallow}
+        </span>
+        <span className="text-capitalize">
+          <svg width="30px">
+            <circle
+              r="10px"
+              opacity="0.3"
+              stroke="blue"
+              fill="blue"
+              cx="20"
+              cy="75"
+            ></circle>
+          </svg>
+          {t.swift}
+        </span>
+        <span className="text-capitalize">
+          <svg width="30px">
+            <circle
+              r="10px"
+              stroke="green"
+              fill="green"
+              opacity="0.3"
+              cx="20"
+              cy="75"
+            ></circle>
+          </svg>
+          {t.pallid_swift}{" "}
+        </span>
+        <span className="text-capitalize">
+          <svg width="30px">
+            <circle
+              r="10px"
+              stroke="brown"
+              fill="brown"
+              opacity="0.3"
+              cx="20"
+              cy="75"
+            ></circle>
+          </svg>
+          {t.red_rumped_swallow}{" "}
+        </span>
+        <span className="text-capitalize">
+          <svg width="30px">
+            <circle
+              r="10px"
+              stroke="orange"
+              fill="yellow"
+              opacity="0.3"
+              cx="20"
+              cy="75"
+            ></circle>
+          </svg>
+          {t.martin}{" "}
+        </span>
+      </div>
+    );
+  };
+
   render() {
     return (
       <div>
@@ -342,8 +414,9 @@ class MapComponent extends Component {
                 </Circle>
               ))}
             </LeafletMap>
-            {this.Summary()}
           </div>
+          {this.Legend()}
+          {this.Summary()}
         </div>
       </div>
     );

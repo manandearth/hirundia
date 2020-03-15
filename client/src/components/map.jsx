@@ -40,7 +40,8 @@ class MapComponent extends Component {
       destroyedNests: 0
     },
     visibility: "CURRENT",
-    bounds: { southWest: {}, northEast: {} }
+    bounds: { southWest: {}, northEast: {} },
+    toggled: false
   };
 
   handleGetData = () =>
@@ -71,17 +72,12 @@ class MapComponent extends Component {
     this.handleGetData();
   }
 
-  // componentDidUpdate() {
-  //   if (this.refs.map.leafletElement.getBounds() !== this.state.bounds) {
-  //     this.handleOnUpdate();
-  //     this.setState({
-  //       ...this.state,
-  //       bounds: this.refs.map.leafletElement.getBounds()
-  //     });
-  //     console.log(this.refs.map.leafletElement.getBounds());
-  //     console.log(this.state.bounds);
-  //   }
-  // }
+  componentDidUpdate() {
+    if (this.state.toggled) {
+      this.handleGetData();
+      this.setState({ ...this.state, toggled: false });
+    }
+  }
 
   position = [
     gpsToArray(this.state.entries[0].gps)[0],
@@ -174,9 +170,10 @@ class MapComponent extends Component {
   };
 
   handleToggle = s => {
-    this.setState({ ...this.state, visibility: s });
+    this.setState({ ...this.state, visibility: s, toggled: true });
     console.log(`state id -> ${s}`);
   };
+
   Selector = () => {
     return (
       <div className="container">

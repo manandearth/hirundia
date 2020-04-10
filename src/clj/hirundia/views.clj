@@ -28,6 +28,24 @@
    (page/include-css "/css/styles.css")
    (bootstrap-scripts)])
 
+(defn new-app-page-head
+  [title]
+  [:head
+   [:title (str "Nests: " title)]
+   [:link  {:rel "stylesheet" :href "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" :integrity "sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" :crossorigin "anonymous"}]
+   [:link {:href "https://fonts.googleapis.com/css?family=Roboto" :rel "stylesheet"}]
+   [:link {:rel "stylesheet"
+           :href "//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"}]
+   [:link {:rel "stylesheet" :href "//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css"}]
+   [:script {:src "https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+             :integrity "sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+             :crossorigin ""}]
+   [:meta {:charset "UTF-8"}]
+   [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+   [:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"}]
+   (page/include-css "/css/styles.css")
+   (bootstrap-scripts)])
+
 (defn header-links
   [{:keys [session] :as request}]
   (if  (:identity session)
@@ -165,13 +183,18 @@
    [:link {:rel "stylesheet" :href "https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
            :integrity "sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
            :crossorigin ""}]
-   ;; [:script {:src "https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-   ;;           :integrity "sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-   ;;           :crossorigin ""}]
-   ;; [:script {:src "https://unpkg.com/vega@3.2.1/build/vega.js"}]
-   ;; [:script {:src "https://unpkg.com/regenerator-runtime@0.11.1/runtime.js"}]
-   ;; [:script {:src "lvega/bundle.js"}]
    [:script {:src "js/compiled/app.js" :type "text/javascript"}]))
+
+(defn new-app [request]
+  (page/html5
+   (new-app-page-head "new-app")
+   (header-links request)
+   [:div {:class "container"}
+    [:p {:class "h2 text-capitalize"} (t/to-spanish :map_title)]
+    [:div {:class "container" :id "map"}]
+    [:p {:class "h2" :style "padding: 2em;"} "Visualizations:"]
+    [:div {:class "container" :id "new-app"}]]
+   [:script {:src "js/compiled/main.js" :type "text/javascript"}]))
 
 (defn osm-page [request]
   (page/html5

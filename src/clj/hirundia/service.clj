@@ -60,6 +60,8 @@
 (defn dashboard-page [request]
   (ring-resp/response (views/dashboard request)))
 
+(defn new-app-page [request]
+  (ring-resp/response (views/new-app request)))
 ;;;--------------------
 ;;;auth interceptor
 ;;;--------------------
@@ -167,7 +169,7 @@
     ["/nests-insert" :get (into common-interceptors [http/json-body  `insert-nest-page])]
     ["/nests-insert" :post (into common-interceptors [http/json-body authentication-interceptor (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
     ["/nests-delete/:id" :get (into common-interceptors [http/json-body authentication-interceptor admin-interceptor (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
-    ["/dashboard" :get (conj common-interceptors `dashboard-page)]
+    ["/dashboard" :get (conj common-interceptors `new-app-page)]
     ["/transit" :get  (into common-interceptors [http/json-body `nests.retrieveall/to-cljs])]
     ["/osm" :get (conj common-interceptors `views/osm-page)]})
 

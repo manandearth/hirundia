@@ -112,3 +112,10 @@ p {
 legend {
     
 }
+#map {
+    height: 1400px;
+}
+.leaflet-container {
+    height: 800px;
+    width: 1000px;
+}

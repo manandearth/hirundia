@@ -24,6 +24,17 @@ const Form = props => {
     return { value: bird, label: t[bird] };
   });
 
+  const height = [...Array(20).keys()];
+
+  const heightOptions = height.map(h => {
+    return { value: h, label: h };
+  });
+
+  const facing = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  const facingOptions = facing.map(aspect => {
+    return { value: aspect, label: t[aspect] };
+  });
+
   return (
     <Fragment>
       <Formik
@@ -105,15 +116,17 @@ const Form = props => {
                 </div>
               </div>
               <div className="form-group row text-capitalize">
-                <div className="col-auto">
+                <div className="col-sm-4">
                   <label>{t.species}</label>
                   <Select
+                    className="basic-single"
+                    classNamePrefix="select"
                     name="species"
                     options={speciesOptions}
                     value={speciesOptions[0].value}
                   />
                 </div>
-                <div className="col-auto">
+                <div className="col-sm-4">
                   <label>{t.type}</label>
                   <Select
                     name="type"
@@ -122,13 +135,90 @@ const Form = props => {
                   />
                 </div>
               </div>
-              <input
-                type="email"
-                name="email"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.email}
-              />
+              <div className="form-group row text-capitalize">
+                <div className="col-sm-4">
+                  <label>{t.height}</label>
+                  <Select
+                    name="height"
+                    options={heightOptions}
+                    value={heightOptions[0].value}
+                  />
+                </div>
+                <div className="col-sm-4">
+                  <label>{t.facing}</label>
+                  <Select
+                    name="facing"
+                    options={facingOptions}
+                    value={facingOptions[0].value}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-capitalize">
+                  {t.date}
+                  <input type="date" name="date" />
+                </label>
+              </div>
+              <div className="card">
+                <div
+                  className="card-body"
+                  style={{ backgroundColor: "#f5faff" }}
+                >
+                  <div className="card-subtitle mb-2 text-muted">
+                    {" "}
+                    "Cada nido crea una entrada en la base de datos. "
+                  </div>
+                  <div className="card-subtitle mb-2 text-muted">
+                    {" "}
+                    "En el caso de múltiples nidos con las mismas
+                    especificaciones se actualiza este valor:"
+                  </div>
+                  <div className="col-auto">
+                    <label className="text-capitalize">
+                      {t.qty}
+                      <input
+                        className="form-control ms-mx-1"
+                        type="int"
+                        name="qty"
+                        value={1}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div
+                  className="card-body"
+                  style={{ backgroundColor: "#e3f2fd" }}
+                >
+                  <div className="card-subtitle mb-2 text-muted">
+                    Si el nido ya no está allí, rellene lo siguiente e incluya
+                    el día registrado:
+                  </div>
+                  <div>
+                    <label className="text-capitalize">{t.destroyed}</label>
+                    <Select
+                      name={t.destroyed}
+                      options={[
+                        { value: t[true], label: t[true] },
+                        { value: t[false], label: t[false] }
+                      ]}
+                      value={t.false}
+                    />
+                  </div>
+                  <label className="text-capitalize">
+                    {t.destroyed_date}
+                    <input type="date" name="destroyed_date" />
+                  </label>
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email}
+                />
+              </div>
               {errors.email && touched.email && errors.email}
               <input
                 type="password"
@@ -138,7 +228,12 @@ const Form = props => {
                 value={values.password}
               />
               {errors.password && touched.password && errors.password}
-              <button type="submit" disabled={isSubmitting}>
+              <button
+                type="submit"
+                className="btn btn-primary mb-2 text-capitalize"
+                value={t.submit}
+                disabled={isSubmitting}
+              >
                 Submit
               </button>
             </form>

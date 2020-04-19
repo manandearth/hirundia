@@ -12,8 +12,24 @@ const validationSchema = Yup.object().shape({
   house_number_name: Yup.string()
     .max(20, "Too Long!")
     .required("Required"),
-  lat: Yup.string().required("Required"),
-  lon: Yup.string().required("Required")
+  species: Yup.object().shape({
+    label: Yup.string().required("hey... this is required")
+  }),
+  lat: Yup.string()
+    .matches(/[0-9]+\./, "only a valid coordinate")
+    .required("Required"),
+  lon: Yup.string()
+    .matches(/[0-9]+\./, "only a valid coordinate")
+    .required("Required"),
+  date: Yup.date().required("Required"),
+  qty: Yup.string().required("Required"),
+  destroyed: Yup.string()
+    .max(1, "testing!")
+    .required("Required"),
+  destroyed_date: Yup.date().when("destroyed", {
+    is: t[true],
+    then: Yup.date().required("date is required")
+  })
 });
 
 const constructions = ["window", "cornice", "crack", "cables", "gable"];
@@ -57,9 +73,11 @@ const Form = props => {
     handleChange,
     handleBlur,
     handleSubmit,
-    isSubmitting
+    isSubmitting,
+    setFieldValue,
+    setFieldTouched
   } = useFormik({
-    initialValues: { email: "", password: "", street: "" },
+    initialValues: { qty: "1", destroyed: { label: t.false, value: t.false } },
     validationSchema,
     onSubmit: (values, { setSubmitting }) => {
       setTimeout(() => {
@@ -144,9 +162,13 @@ const Form = props => {
                 name="species"
                 options={speciesOptions}
                 defaultValue={speciesOptions[0].label}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                onChange={item => setFieldValue("species", item)}
+                value={values.species}
+                onBlur={() => setFieldTouched("species", true)}
               />
+              {errors.species &&
+                touched.species &&
+                validationError(errors.species.label)}
             </div>
             <div className="col-sm-4">
               <label>{t.type}</label>
@@ -154,9 +176,12 @@ const Form = props => {
                 name="type"
                 options={constructionOptions}
                 defaultValue={constructionOptions[0].label}
-                onChange={handleChange}
+                onChange={setFieldValue}
                 onBlur={handleBlur}
               />
+              {errors.type &&
+                touched.type &&
+                validationError(errors.type.label)}
             </div>
           </div>
           <div className="form-group row text-capitalize">
@@ -166,9 +191,12 @@ const Form = props => {
                 name="height"
                 options={heightOptions}
                 defaultValue={heightOptions[0].value}
-                onChange={handleChange}
+                onChange={setFieldValue}
                 onBlur={handleBlur}
               />
+              {errors.height &&
+                touched.height &&
+                validationError(errors.height.label)}
             </div>
             <div className="col-sm-4">
               <label>{t.facing}</label>
@@ -176,9 +204,12 @@ const Form = props => {
                 name="facing"
                 options={facingOptions}
                 defaultValue={facingOptions[0].value}
-                onChange={handleChange}
+                onChange={setFieldValue}
                 onBlur={handleBlur}
               />
+              {errors.facing &&
+                touched.facing &&
+                validationError(errors.facing.label)}
             </div>
           </div>
           <div>
@@ -191,6 +222,7 @@ const Form = props => {
                 onBlur={handleBlur}
               />
             </label>
+            {errors.date && touched.date && validationError(errors.date.label)}
           </div>
           <div className="card">
             <div className="card-body" style={{ backgroundColor: "#f5faff" }}>
@@ -210,11 +242,12 @@ const Form = props => {
                     className="form-control ms-mx-1"
                     type="int"
                     name="qty"
-                    defaultValue={1}
+                    value={values.qty}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
                 </label>
+                {errors.qty && touched.qty && validationError(errors.qty)}
               </div>
             </div>
           </div>
@@ -227,20 +260,35 @@ const Form = props => {
               <div>
                 <label className="text-capitalize">{t.destroyed}</label>
                 <Select
-                  name={t.destroyed}
+                  name="destroyed"
+                  defaultValue={{ value: false, label: t.false }}
                   options={[
-                    { value: t["true"], label: t["true"] },
-                    { value: t["false"], label: t["false"] }
+                    { value: t.true, label: t.true },
+                    { value: t.false, label: t.false }
                   ]}
-                  defaultValue={t.false}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  onChange={value => {
+                    setFieldValue("destroyed", value);
+                  }}
+                  onBlur={() => {
+                    /* handleBlur(); */
+                    console.log(values.destroyed.label);
+                  }}
                 />
+                {errors.date && touched.date && validationError(errors.date)}
               </div>
-              <label className="text-capitalize">
-                {t.destroyed_date}
-                <input type="date" name="destroyed_date" />
-              </label>
+              <div
+                className={
+                  values.destroyed.label === t.false ? "invisible" : ""
+                }
+              >
+                <label className="text-capitalize">
+                  {t.destroyed_date}
+                  <input type="date" name="destroyed_date" />
+                </label>
+                {errors.destroyed_date &&
+                  touched.destroyed_date &&
+                  validationError(errors.destroyed_date)}
+              </div>
             </div>
           </div>
           <button

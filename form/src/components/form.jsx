@@ -1,7 +1,8 @@
-import React, { Fragment } from "react";
+import React, { useRef, Fragment } from "react";
 import { useFormik } from "formik";
 import Select from "react-select";
 import * as Yup from "yup";
+import { postFormUrl, postDataToApi } from "../api.jsx";
 const t = require("../translations/translate_es.json");
 
 const validationSchema = Yup.object().shape({
@@ -23,9 +24,7 @@ const validationSchema = Yup.object().shape({
     .required("Required"),
   date: Yup.date().required("Required"),
   qty: Yup.string().required("Required"),
-  destroyed: Yup.string()
-    .max(1, "testing!")
-    .required("Required"),
+  destroyed: Yup.string().required("Required"),
   destroyed_date: Yup.date().when("destroyed", {
     is: t[true],
     then: Yup.date().required("date is required")
@@ -34,7 +33,7 @@ const validationSchema = Yup.object().shape({
 
 const constructions = ["window", "cornice", "crack", "cables", "gable"];
 const constructionOptions = constructions.map(construction => {
-  return { value: construction, label: t[construction] };
+  return { value: t[construction], label: t[construction] };
 });
 
 const birds = [
@@ -45,7 +44,7 @@ const birds = [
   "red_rumped_swallow"
 ];
 const speciesOptions = birds.map(bird => {
-  return { value: bird, label: t[bird] };
+  return { value: t[bird], label: t[bird] };
 });
 
 const height = [...Array(20).keys()];
@@ -56,7 +55,7 @@ const heightOptions = height.map(h => {
 
 const facing = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 const facingOptions = facing.map(aspect => {
-  return { value: aspect, label: t[aspect] };
+  return { value: t[aspect], label: t[aspect] };
 });
 
 const validationError = field => (
@@ -66,31 +65,38 @@ const validationError = field => (
 );
 
 const Form = props => {
+  const formEl = useRef(null);
+
+  const htmlSubmit = values => {
+    console.log(errors);
+    setSubmitting(true);
+    formEl.current.submit();
+  };
+
   const {
     values,
     errors,
     touched,
     handleChange,
     handleBlur,
-    handleSubmit,
     isSubmitting,
+    setSubmitting,
     setFieldValue,
     setFieldTouched
   } = useFormik({
     initialValues: { qty: "1", destroyed: { label: t.false, value: t.false } },
-    validationSchema,
-    onSubmit: (values, { setSubmitting }) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-      }, 400);
-    }
+    validationSchema
+    // handleSubmit: htmlSubmit
+    // onSubmit: async (values, { setSubmitting }) => {
+    //   await postDataToApi(postFormUrl, values);
+    //   setSubmitting(false);
+    // }
   });
 
   return (
     <Fragment>
       <div className="card">
-        <form onSubmit={handleSubmit}>
+        <form method="POST" ref={formEl} action="/form" onSubmit={htmlSubmit}>
           <input type="hidden" name="language" value="spanish" />
           <div className="form-group row">
             <div className="col-auto">
@@ -173,7 +179,7 @@ const Form = props => {
             <div className="col-sm-4">
               <label>{t.type}</label>
               <Select
-                name="type"
+                name="type-of"
                 options={constructionOptions}
                 defaultValue={constructionOptions[0].label}
                 onChange={setFieldValue}
@@ -261,7 +267,7 @@ const Form = props => {
                 <label className="text-capitalize">{t.destroyed}</label>
                 <Select
                   name="destroyed"
-                  defaultValue={{ value: false, label: t.false }}
+                  defaultValue={{ value: t.false, label: t.false }}
                   options={[
                     { value: t.true, label: t.true },
                     { value: t.false, label: t.false }
@@ -292,10 +298,12 @@ const Form = props => {
             </div>
           </div>
           <button
-            type="submit"
+            /* type="submit" */
             className="btn btn-primary mb-2 text-capitalize"
             value={t.submit}
-            disabled={isSubmitting}
+            disabled={isSubmitting || Object.keys(errors).length > 0}
+            onClick={() => console.log(errors)}
+            /* onClick={() => postDataToApi(window.location.href, values)} */
           >
             Submit
           </button>

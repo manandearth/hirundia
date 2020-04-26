@@ -68,22 +68,27 @@ const Form = props => {
   const root = document.getElementById("form");
   // const { data } = props;
   const formEl = useRef(null);
-  const {
-    street,
-    house_number_name,
-    gps,
-    species,
-    type,
-    height,
-    facing,
-    qty,
-    date,
-    destroyed,
-    destroyed_date
-  } =
+
+  const parsedData =
+    root &&
     root.attributes &&
     root.attributes.data &&
     JSON.parse(root.attributes.data.nodeValue);
+
+  // const {
+  // street
+  // house_number_name,
+  // gps,
+  // species,
+  // type,
+  // height,
+  // facing,
+  // qty,
+  // date,
+  // destroyed,
+  // destroyed_date
+  // } = parsedData;
+
   const htmlSubmit = values => {
     console.log(errors);
     setSubmitting(true);
@@ -102,30 +107,46 @@ const Form = props => {
     setFieldTouched
   } = useFormik({
     initialValues: {
-      street: street || "",
-      house_number_name: house_number_name || "",
-      lat: gps.match(/\((.*?)\)/)[1].split(",")[0] || "",
-      lon: gps.match(/\((.*?)\)/)[1].split(",")[1] || "",
-      species: { label: t[species], value: t[species] } || {
-        label: t.swallow,
-        value: t.swallow
-      },
-      type: { label: t[type], value: t[type] } || { label: "", value: "" },
-      height: { label: height, value: height } || {
-        label: "",
-        value: ""
-      },
-      facing: { label: t[facing], value: t[facing] } || {
-        label: "",
-        value: ""
-      },
-      date: date.substring(0, 10) || "",
-      qty: t[qty] || "1",
-      destroyed: { label: t[destroyed], value: t[destroyed] } || {
-        label: t.false,
-        value: t.false
-      },
-      destroyed_date: destroyed_date.substring(0, 10) || ""
+      street: parsedData ? parsedData.street : "",
+      house_number_name: parsedData ? parsedData.house_number_name : "",
+      lat: parsedData ? parsedData.gps.match(/\((.*?)\)/)[1].split(",")[0] : "",
+      lon: parsedData ? parsedData.gps.match(/\((.*?)\)/)[1].split(",")[1] : "",
+      species: parsedData
+        ? { label: t[parsedData.species], value: t[parsedData.species] }
+        : {
+            label: t.swallow,
+            value: t.swallow
+          },
+      type_of: parsedData
+        ? { label: t[parsedData.type], value: t[parsedData.type] }
+        : {
+            label: "",
+            value: ""
+          },
+      height: parsedData
+        ? { label: parsedData.height, value: parsedData.height }
+        : {
+            label: "",
+            value: ""
+          },
+      facing: parsedData
+        ? { label: t[parsedData.facing], value: t[parsedData.facing] }
+        : {
+            label: "",
+            value: ""
+          },
+      date: parsedData ? parsedData.date.substring(0, 10) : "",
+      qty: "1",
+      destroyed: parsedData
+        ? { label: t[parsedData.destroyed], value: t[parsedData.destroyed] }
+        : {
+            label: t.false,
+            value: t.false
+          },
+      destroyed_date:
+        parsedData && parsedData.destroyed_date !== null
+          ? parsedData.destroyed_date.substring(0, 10)
+          : ""
     },
     validationSchema
     // handleSubmit: htmlSubmit
@@ -224,12 +245,12 @@ const Form = props => {
             <div className="col-sm-4">
               <label>{t.type}</label>
               <Select
-                name="type-of"
+                name="type_of"
                 options={constructionOptions}
                 defaultValue={constructionOptions[0].label}
-                onChange={item => setFieldValue("type-of", item)}
+                onChange={item => setFieldValue("type_of", item)}
                 onBlur={handleBlur}
-                value={values.type}
+                value={values.type_of}
               />
               {errors.type &&
                 touched.type &&

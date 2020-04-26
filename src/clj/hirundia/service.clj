@@ -169,12 +169,12 @@
     ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform) :route-name :nests]
     ["/nests-update/:id" :post (into common-interceptors [http/json-body (param-spec-interceptor ::nests.update/api :form-params) `nests.update/perform])]
     ["/nests/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::nests.retrieve/api :path-params) (author-interceptor nests.retrieve/get-author) `nests.retrieve/perform]) :route-name :nests/:id]
-    ["/nests-insert" :get (into common-interceptors [http/json-body  `insert-nest-page])]
+    #_["/nests-insert" :get (into common-interceptors [http/json-body  `insert-nest-page])]
     #_["/nests-insert" :post (into common-interceptors [http/json-body authentication-interceptor (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
     ["/nests-delete/:id" :get (into common-interceptors [http/json-body authentication-interceptor admin-interceptor (param-spec-interceptor ::nests.delete/api :path-params) `nests.delete/perform]) :route-name :nests-delete/:id]
     ["/dashboard" :get (conj common-interceptors `new-app-page)]
-    ["/form" :get (into common-interceptors [http/json-body `form-page])]
-    ["/form" :post (into common-interceptors [http/json-body authentication-interceptor (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
+    ["/nests-insert" :get (into common-interceptors [http/json-body `form-page])]
+    ["/nests-insert" :post (into common-interceptors [http/json-body authentication-interceptor (param-spec-interceptor ::nests.insert/api :form-params) `nests.insert/perform])]
     ["/transit" :get  (into common-interceptors [http/json-body `nests.retrieveall/to-cljs])]
     ["/osm" :get (conj common-interceptors `views/osm-page)]})
 

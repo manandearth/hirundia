@@ -66,28 +66,12 @@ const validationError = field => (
 
 const Form = props => {
   const root = document.getElementById("form");
-  // const { data } = props;
   const formEl = useRef(null);
-
   const parsedData =
     root &&
     root.attributes &&
     root.attributes.data &&
     JSON.parse(root.attributes.data.nodeValue);
-
-  // const {
-  // street
-  // house_number_name,
-  // gps,
-  // species,
-  // type,
-  // height,
-  // facing,
-  // qty,
-  // date,
-  // destroyed,
-  // destroyed_date
-  // } = parsedData;
 
   const htmlSubmit = values => {
     console.log(errors);
@@ -149,17 +133,19 @@ const Form = props => {
           : ""
     },
     validationSchema
-    // handleSubmit: htmlSubmit
-    // onSubmit: async (values, { setSubmitting }) => {
-    //   await postDataToApi(postFormUrl, values);
-    //   setSubmitting(false);
-    // }
   });
 
   return (
     <Fragment>
       <div className="card">
-        <form method="POST" ref={formEl} action="/form" onSubmit={htmlSubmit}>
+        <form
+          method="POST"
+          ref={formEl}
+          action={
+            parsedData ? `/nests-update/${parsedData.id}` : "/nests-insert"
+          }
+          onSubmit={htmlSubmit}
+        >
           <input type="hidden" name="language" value="spanish" />
           <div className="form-group row">
             <div className="col-auto">
@@ -373,12 +359,10 @@ const Form = props => {
             </div>
           </div>
           <button
-            /* type="submit" */
             className="btn btn-primary mb-2 text-capitalize"
             value={t.submit}
             disabled={isSubmitting || Object.keys(errors).length > 0}
             onClick={() => console.log(errors)}
-            /* onClick={() => postDataToApi(window.location.href, values)} */
           >
             Submit
           </button>
@@ -387,7 +371,5 @@ const Form = props => {
     </Fragment>
   );
 };
-
-// const UpdateForm = () => <Form {...root.attributes} />;
 
 export default Form;

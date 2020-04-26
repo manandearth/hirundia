@@ -27,7 +27,6 @@
                     (jdbc/query db)
                     (first))]
     (if record
-      ;; (ring-resp/response (view/update-entry request id record))
       (ring-resp/response (views/form request id record))
       (ring-resp/not-found "Not in DB"))))
 

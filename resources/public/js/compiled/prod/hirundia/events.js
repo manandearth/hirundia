@@ -8,17 +8,17 @@ goog.require('hirundia.db');
 re_frame.core.reg_event_db.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$hirundia$events_SLASH_initialize_DASH_db,(function (_,___$1){
 return hirundia.db.default_db;
 }));
-re_frame.core.reg_event_db.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$select_DASH_attr,(function (db,p__53378){
-var vec__53379 = p__53378;
-var _ = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__53379,(0),null);
-var attr = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__53379,(1),null);
+re_frame.core.reg_event_db.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$select_DASH_attr,(function (db,p__45615){
+var vec__45616 = p__45615;
+var _ = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__45616,(0),null);
+var attr = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__45616,(1),null);
 return cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(db,cljs.core.cst$kw$selected_DASH_attr,attr);
 }));
-re_frame.core.reg_event_fx.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$hirundia$events_SLASH_http_DASH_get,(function (_world,p__53382){
-var vec__53383 = p__53382;
-var _ = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__53383,(0),null);
-var val = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__53383,(1),null);
-return new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$http_DASH_xhrio,new cljs.core.PersistentArrayMap(null, 7, [cljs.core.cst$kw$method,cljs.core.cst$kw$get,cljs.core.cst$kw$uri,"/transit",cljs.core.cst$kw$timeout,(5000),cljs.core.cst$kw$format,(ajax.core.json_request_format.cljs$core$IFn$_invoke$arity$0 ? ajax.core.json_request_format.cljs$core$IFn$_invoke$arity$0() : ajax.core.json_request_format.call(null)),cljs.core.cst$kw$response_DASH_format,(function (){var G__53386 = new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$keywords_QMARK_,true], null);
-return (ajax.core.json_response_format.cljs$core$IFn$_invoke$arity$1 ? ajax.core.json_response_format.cljs$core$IFn$_invoke$arity$1(G__53386) : ajax.core.json_response_format.call(null,G__53386));
+re_frame.core.reg_event_fx.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$hirundia$events_SLASH_http_DASH_get,(function (_world,p__45619){
+var vec__45620 = p__45619;
+var _ = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__45620,(0),null);
+var val = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__45620,(1),null);
+return new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$http_DASH_xhrio,new cljs.core.PersistentArrayMap(null, 7, [cljs.core.cst$kw$method,cljs.core.cst$kw$get,cljs.core.cst$kw$uri,"/transit",cljs.core.cst$kw$timeout,(5000),cljs.core.cst$kw$format,(ajax.core.json_request_format.cljs$core$IFn$_invoke$arity$0 ? ajax.core.json_request_format.cljs$core$IFn$_invoke$arity$0() : ajax.core.json_request_format.call(null)),cljs.core.cst$kw$response_DASH_format,(function (){var G__45623 = new cljs.core.PersistentArrayMap(null, 1, [cljs.core.cst$kw$keywords_QMARK_,true], null);
+return (ajax.core.json_response_format.cljs$core$IFn$_invoke$arity$1 ? ajax.core.json_response_format.cljs$core$IFn$_invoke$arity$1(G__45623) : ajax.core.json_response_format.call(null,G__45623));
 })(),cljs.core.cst$kw$on_DASH_success,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$hirundia$events_SLASH_good_DASH_get_DASH_result], null),cljs.core.cst$kw$on_DASH_failure,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$hirundia$events_SLASH_bad_DASH_get_DASH_result], null)], null)], null);
 }));

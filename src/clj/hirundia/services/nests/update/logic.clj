@@ -11,7 +11,7 @@
                  :species (:species entry)
                  :height (:height entry)
                  :facing (:facing entry)
-                 :type (:type-of entry)
+                 :type (:type_of entry)
                  :date (:date entry)
                  :destroyed (:destroyed entry)
                  :destroyed_date (:destroyed_date entry)})

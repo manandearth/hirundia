@@ -16,7 +16,6 @@
 
 (cheshire.generate/add-encoder Jdbc4Array (fn [c json-generator]
                                             (-> c .getArray (cheshire.generate/encode-seq json-generator))))
-
 (spec/def ::id nat-int?)
 
 (spec/def ::api (spec/keys :req-un [::id]))
@@ -28,7 +27,8 @@
                     (jdbc/query db)
                     (first))]
     (if record
-      (ring-resp/response (view/update-entry request id record))
+      ;; (ring-resp/response (view/update-entry request id record))
+      (ring-resp/response (views/form request id record))
       (ring-resp/not-found "Not in DB"))))
 
 (defn get-author [{{:keys [id]} :path-params :keys [db] :as request}]

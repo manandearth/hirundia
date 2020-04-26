@@ -6,6 +6,7 @@
    [hiccup.form :as form]
    [java-time :refer :all :exclude [contains? iterate max zero? format min max range]]
    [clojure.java.io :as io]
+   [cheshire.core :refer :all]
    [buddy.auth :refer [authenticated?]]
    [hirundia.pages :as pages]
    [hirundia.translate :as t]))
@@ -196,14 +197,23 @@
     [:div {:class "container" :id "new-app"}]]
    [:script {:src "js/dashboard/compiled/main.js" :type "text/javascript"}]))
 
-(defn form [request]
-  (page/html5
-   (gen-page-head "Form")
-   (header-links request)
-   [:div {:class "container"}
-    [:p {class "h2 text-capitalize"} (t/to-spanish :nests-insert)]
-    [:div {:class "container" :id "form"}]]
-   [:script {:src "js/form/compiled/main.js" :type "text/javascript"}]))
+(defn form
+  ([request]
+   (page/html5
+    (gen-page-head "Form")
+    (header-links request)
+    [:div {:class "container"}
+     [:p {:class "h2 text-capitalize"} (t/to-spanish :nests-insert)]
+     [:div {:class "container" :id "form"}]]
+    [:script {:src "js/form/compiled/main.js" :type "text/javascript"}]))
+  ([request id record]
+   (page/html5
+    (gen-page-head "Form")
+    (header-links request)
+    [:div {:class "container"}
+     [:p {:class "h2 text-capitalize"} (str (t/to-spanish :update_entry) " - " id)]
+     [:div {:class "container" :id "form" :data (generate-string record)}]]
+    [:script {:src "../js/form/compiled/main.js" :type "text/javascript"}])))
 
 (defn osm-page [request]
   (page/html5

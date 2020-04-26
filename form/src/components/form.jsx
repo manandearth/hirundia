@@ -65,8 +65,25 @@ const validationError = field => (
 );
 
 const Form = props => {
+  const root = document.getElementById("form");
+  // const { data } = props;
   const formEl = useRef(null);
-
+  const {
+    street,
+    house_number_name,
+    gps,
+    species,
+    type,
+    height,
+    facing,
+    qty,
+    date,
+    destroyed,
+    destroyed_date
+  } =
+    root.attributes &&
+    root.attributes.data &&
+    JSON.parse(root.attributes.data.nodeValue);
   const htmlSubmit = values => {
     console.log(errors);
     setSubmitting(true);
@@ -84,7 +101,32 @@ const Form = props => {
     setFieldValue,
     setFieldTouched
   } = useFormik({
-    initialValues: { qty: "1", destroyed: { label: t.false, value: t.false } },
+    initialValues: {
+      street: street || "",
+      house_number_name: house_number_name || "",
+      lat: gps.match(/\((.*?)\)/)[1].split(",")[0] || "",
+      lon: gps.match(/\((.*?)\)/)[1].split(",")[1] || "",
+      species: { label: t[species], value: t[species] } || {
+        label: t.swallow,
+        value: t.swallow
+      },
+      type: { label: t[type], value: t[type] } || { label: "", value: "" },
+      height: { label: height, value: height } || {
+        label: "",
+        value: ""
+      },
+      facing: { label: t[facing], value: t[facing] } || {
+        label: "",
+        value: ""
+      },
+      date: date.substring(0, 10) || "",
+      qty: t[qty] || "1",
+      destroyed: { label: t[destroyed], value: t[destroyed] } || {
+        label: t.false,
+        value: t.false
+      },
+      destroyed_date: destroyed_date.substring(0, 10) || ""
+    },
     validationSchema
     // handleSubmit: htmlSubmit
     // onSubmit: async (values, { setSubmitting }) => {
@@ -123,6 +165,7 @@ const Form = props => {
                   type="text"
                   name="house_number_name"
                   onChange={handleChange}
+                  value={values.house_number_name}
                   onBlur={handleBlur}
                 />
               </label>
@@ -141,6 +184,7 @@ const Form = props => {
                   name="lat"
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  value={values.lat}
                 />
               </label>
               {errors.lat && touched.lat && validationError(errors.lat)}
@@ -154,6 +198,7 @@ const Form = props => {
                   name="lon"
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  value={values.lon}
                 />
               </label>
               {errors.lon && touched.lon && validationError(errors.lon)}
@@ -182,8 +227,9 @@ const Form = props => {
                 name="type-of"
                 options={constructionOptions}
                 defaultValue={constructionOptions[0].label}
-                onChange={setFieldValue}
+                onChange={item => setFieldValue("type-of", item)}
                 onBlur={handleBlur}
+                value={values.type}
               />
               {errors.type &&
                 touched.type &&
@@ -196,9 +242,10 @@ const Form = props => {
               <Select
                 name="height"
                 options={heightOptions}
-                defaultValue={heightOptions[0].value}
-                onChange={setFieldValue}
+                onChange={item => setFieldValue("height", item)}
                 onBlur={handleBlur}
+                defaultValue={heightOptions[0].value}
+                value={values.height}
               />
               {errors.height &&
                 touched.height &&
@@ -209,8 +256,9 @@ const Form = props => {
               <Select
                 name="facing"
                 options={facingOptions}
-                defaultValue={facingOptions[0].value}
-                onChange={setFieldValue}
+                defaultValue={values.facing.label}
+                value={values.facing}
+                onChange={item => setFieldValue("facing", item)}
                 onBlur={handleBlur}
               />
               {errors.facing &&
@@ -226,6 +274,7 @@ const Form = props => {
                 name="date"
                 onChange={handleChange}
                 onBlur={handleBlur}
+                value={values.date}
               />
             </label>
             {errors.date && touched.date && validationError(errors.date.label)}
@@ -248,9 +297,9 @@ const Form = props => {
                     className="form-control ms-mx-1"
                     type="int"
                     name="qty"
-                    value={values.qty}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    value={values.qty}
                   />
                 </label>
                 {errors.qty && touched.qty && validationError(errors.qty)}
@@ -267,7 +316,7 @@ const Form = props => {
                 <label className="text-capitalize">{t.destroyed}</label>
                 <Select
                   name="destroyed"
-                  defaultValue={{ value: t.false, label: t.false }}
+                  defaultValue={values.destroyed}
                   options={[
                     { value: t.true, label: t.true },
                     { value: t.false, label: t.false }
@@ -279,6 +328,7 @@ const Form = props => {
                     /* handleBlur(); */
                     console.log(values.destroyed.label);
                   }}
+                  value={values.destroyed}
                 />
                 {errors.date && touched.date && validationError(errors.date)}
               </div>
@@ -289,7 +339,11 @@ const Form = props => {
               >
                 <label className="text-capitalize">
                   {t.destroyed_date}
-                  <input type="date" name="destroyed_date" />
+                  <input
+                    type="date"
+                    name="destroyed_date"
+                    value={values.destroyed_date}
+                  />
                 </label>
                 {errors.destroyed_date &&
                   touched.destroyed_date &&
@@ -312,5 +366,7 @@ const Form = props => {
     </Fragment>
   );
 };
+
+// const UpdateForm = () => <Form {...root.attributes} />;
 
 export default Form;

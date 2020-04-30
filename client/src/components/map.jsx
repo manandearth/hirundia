@@ -91,19 +91,19 @@ class MapComponent extends Component {
   handleColor = entry => {
     switch (entry.species) {
       case "swallow":
-        return "crimson";
+        return "#cc0000";
         break;
       case "swift":
-        return "steelblue";
+        return "#3300ff";
         break;
       case "martin":
-        return "orange";
+        return "#ffcc33";
         break;
       case "pallid_swift":
-        return "seagreen";
+        return "#669999";
         break;
       case "red_rumped_swallow":
-        return "brown";
+        return "#FF759C";
         break;
       default:
     }
@@ -319,9 +319,9 @@ class MapComponent extends Component {
           <svg width="30px">
             <circle
               r="10px"
-              stroke="red"
-              fill="crimson"
-              opacity="0.3"
+              stroke="#cc0000"
+              fill="#cc0000"
+              opacity="0.7"
               cx="20"
               cy="75"
             ></circle>
@@ -332,9 +332,9 @@ class MapComponent extends Component {
           <svg width="30px">
             <circle
               r="10px"
-              opacity="0.3"
-              stroke="blue"
-              fill="blue"
+              opacity="0.7"
+              stroke="#3300ff"
+              fill="#3300ff"
               cx="20"
               cy="75"
             ></circle>
@@ -345,9 +345,9 @@ class MapComponent extends Component {
           <svg width="30px">
             <circle
               r="10px"
-              stroke="green"
-              fill="green"
-              opacity="0.3"
+              stroke="#669999"
+              fill="#669999"
+              opacity="0.7"
               cx="20"
               cy="75"
             ></circle>
@@ -358,9 +358,9 @@ class MapComponent extends Component {
           <svg width="30px">
             <circle
               r="10px"
-              stroke="brown"
-              fill="brown"
-              opacity="0.3"
+              stroke="#FF759C"
+              fill="#FF759C"
+              opacity="0.7"
               cx="20"
               cy="75"
             ></circle>
@@ -371,9 +371,9 @@ class MapComponent extends Component {
           <svg width="30px">
             <circle
               r="10px"
-              stroke="orange"
-              fill="yellow"
-              opacity="0.3"
+              stroke="#ffcc33"
+              fill="#ffcc33"
+              opacity="0.7"
               cx="20"
               cy="75"
             ></circle>

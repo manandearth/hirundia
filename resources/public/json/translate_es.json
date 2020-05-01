@@ -49,5 +49,10 @@
   "logged_as": "session ",
   "update_entry": "actualiza entrada",
   "address": "dirección",
-  "map_title": "distribución geografica"
+  "map_title": "distribución geografica",
+  "key": "clave",
+  "totalNests": "El total de nidos en la ventanilla",
+  "totalDestroyed": "Los destruidos",
+  "totalCurrent": "Los actuales",
+  "visualizations": "Visualizaciones"
 }

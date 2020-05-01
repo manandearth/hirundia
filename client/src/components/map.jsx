@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Component } from "react";
 import { getTransitData } from "../api.js";
 import dayjs from "dayjs";
-
 import {
   Map as LeafletMap,
   TileLayer,
@@ -229,40 +228,62 @@ class MapComponent extends Component {
   Summary = () => {
     return (
       <div>
-        <div>
-          <span>total nests in viewport:</span>
-          <span>{this.state.entriesInFrame.length}</span>
-        </div>
-        <div>
-          <span>of which destroyed:</span>
-          <span>{this.state.count.destroyedNests}</span>
-        </div>
-        <div>
-          <span>current nests then:</span>
-          <span>
-            {this.state.entriesInFrame.length - this.state.count.destroyedNests}
-          </span>
-        </div>
-        <div>
-          <span>swallow nests:</span>
-          <span>{this.state.count.swallowNests}</span>
-        </div>
-        <div>
-          <span>swift nests:</span>
-          <span>{this.state.count.swiftNests}</span>
-        </div>
-        <div>
-          <span>martin nests:</span>
-          <span>{this.state.count.martinNests}</span>
-        </div>
-        <div>
-          <span>red rumped swallow nests:</span>
-          <span>{this.state.count.redrumpedSwallowNests}</span>
-        </div>
-        <div>
-          <span>pallid swift nests:</span>
-          <span>{this.state.count.pallidSwiftNests}</span>
-        </div>
+        <div className="h3"></div>
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">{t.key}</th>
+              <th scope="col">{t.qty}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1.</th>
+              <td>{t.totalNests}</td>
+              <td>{this.state.entriesInFrame.length}</td>
+            </tr>
+            <tr>
+              <th scope="row">2.</th>
+              <td>{t.totalDestroyed}</td>
+              <td>{this.state.count.destroyedNests}</td>
+            </tr>
+
+            <tr>
+              <th scope="row">3.</th>
+              <td>{t.totalCurrent}</td>
+              <td>
+                {this.state.entriesInFrame.length -
+                  this.state.count.destroyedNests}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">4.</th>
+              <td>{t.swallow}</td>
+              <td>{this.state.count.swallowNests}</td>
+            </tr>
+            <tr>
+              <th scope="row">5.</th>
+              <td>{t.swift}</td>
+              <td>{this.state.count.swiftNests}</td>
+            </tr>
+            <tr>
+              <th scope="row">6.</th>
+              <td>{t.martin}</td>
+              <td>{this.state.count.martinNests}</td>
+            </tr>
+            <tr>
+              <th scope="row">7.</th>
+              <td>{t.red_rumped_swallow}</td>
+              <td>{this.state.count.redrumpedSwallowNests}</td>
+            </tr>
+            <tr>
+              <th scope="row">8.</th>
+              <td>{t.pallid_swift}</td>
+              <td>{this.state.count.pallidSwiftNests}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   };
@@ -387,7 +408,7 @@ class MapComponent extends Component {
   render() {
     return (
       <div>
-        <div className="container">
+        <div className="container bp-4">
           <div className="row" style={{ padding: "1rem" }}>
             {this.Selector()}
           </div>

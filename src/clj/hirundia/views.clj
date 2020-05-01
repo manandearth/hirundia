@@ -190,10 +190,10 @@
   (page/html5
    (new-app-page-head "new-app")
    (header-links request)
-   [:div {:class "container"}
+   [:div {:class "container flex"}
     [:p {:class "h2 text-capitalize"} (t/to-spanish :map_title)]
     [:div {:class "container" :id "map"}]
-    [:p {:class "h2" :style "padding: 2em;"} "Visualizations:"]
+    [:div [:p {:class "h2"} (str (t/to-spanish :visualizations) ":")]]
     [:div {:class "container" :id "new-app"}]]
    [:script {:src "js/dashboard/compiled/main.js" :type "text/javascript"}]))
 

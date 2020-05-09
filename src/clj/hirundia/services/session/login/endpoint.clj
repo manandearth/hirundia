@@ -31,11 +31,16 @@
       (let [next-url (get-in request [:query-params :next] "/")
             updated-session (assoc session :identity (conj {:username username} (get-role request username)))]
         (-> (ring-resp/redirect next-url)
+            (assoc :headers {:Access-Control-Expose-Headers "Location"})
             (assoc :session updated-session)))
       (-> (ring-resp/redirect (url-for :login))
+          (assoc :headers {:Access-Control-Expose-Headers "Location"})
           (assoc :flash "wrong password")))))
 
+
 ;;FIX -> this has to go.
+
+
 (defn username-password-role [{:keys [db] :as request} username]
   (let [db (->> db :pool (hash-map :datasource))]
     (->> (logic/query-username-password-role username)

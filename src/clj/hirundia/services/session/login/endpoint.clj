@@ -40,10 +40,10 @@
         password (get-in request [:form-params :password])
         session (:session request)]
     (if (logic/check-password password (:encrypted_password (password-by-username request username)))
-      (-> (ring-resp/response {:login true})
+      (-> (ring-resp/response {"login" "true"})
           (assoc :headers {"Access-Control-Allow-Origin"  "*"
                            "Access-Control-Allow-Headers" "Content-Type"}))
-      (-> (ring-resp/response {:login false})
+      (-> (ring-resp/response {"login" "false"})
           (assoc :headers {"Access-Control-Allow-Origin"  "*"
                            "Access-Control-Allow-Headers" "Content-Type"})))))
 

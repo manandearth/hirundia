@@ -38,6 +38,17 @@
           (assoc :headers (merge (:headers (ring-resp/redirect (url-for :login)) {"Access-Control-Allow-Origin" "*" "Access-Control-Allow-Headers" "Location" "Access-Control-Expose-Headers" "Location" "Location" "/login"})))
           (assoc :flash "wrong password")))))
 
+(defn perform-mobile [request]
+  (let [username (get-in request [:form-params :username])
+        password (get-in request [:form-params :password])]
+    (if (logic/check-password password (:encrypted_password (password-by-username request username)))
+      (-> (ring-resp/response {:login true})
+          (assoc :headers {"Access-Control-Allow-Origin"  "*"
+                           "Access-Control-Allow-Headers" "Content-Type"}))
+      (-> (ring-resp/response {:login false})
+          (assoc :headers {"Access-Control-Allow-Origin"  "*"
+                           "Access-Control-Allow-Headers" "Content-Type"})))))
+
 
 ;;FIX -> this has to go.
 

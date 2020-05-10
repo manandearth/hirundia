@@ -31,16 +31,14 @@
       (let [next-url (get-in request [:query-params :next] "/")
             updated-session (assoc session :identity (conj {:username username} (get-role request username)))]
         (-> (ring-resp/redirect next-url)
-            (assoc :headers (merge (:headers (ring-resp/redirect next-url) {"Access-Control-Allow-Origin" "*" "Access-Control-Allow-Headers" "Location" "Access-Control-Expose-Headers" "Location" "Location" "/"})))
-            ;;TODO remove session in case of bad login
             (assoc :session updated-session)))
       (-> (ring-resp/redirect (url-for :login))
-          (assoc :headers (merge (:headers (ring-resp/redirect (url-for :login)) {"Access-Control-Allow-Origin" "*" "Access-Control-Allow-Headers" "Location" "Access-Control-Expose-Headers" "Location" "Location" "/login"})))
           (assoc :flash "wrong password")))))
 
 (defn perform-mobile [request]
   (let [username (get-in request [:form-params :username])
-        password (get-in request [:form-params :password])]
+        password (get-in request [:form-params :password])
+        session (:session request)]
     (if (logic/check-password password (:encrypted_password (password-by-username request username)))
       (-> (ring-resp/response {:login true})
           (assoc :headers {"Access-Control-Allow-Origin"  "*"

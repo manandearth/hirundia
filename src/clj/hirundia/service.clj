@@ -164,7 +164,7 @@
     ["/register" :post (conj common-interceptors `session.register/perform)]
     ["/login" :get (conj common-interceptors `login-page) :route-name :login]
     ["/login" :post (conj common-interceptors `session.login/perform)]
-    ["/login-mobile" :post (into common-interceptors [http/json-body `session.login/perform-mobile])]
+    ["/login-mobile" :get (into common-interceptors [http/json-body `session.login/perform-mobile])]
     ["/logout" :get (conj common-interceptors `logout)]
     ["/greet" :get (conj common-interceptors `greet-page)]
     ["/nests" :get  (conj common-interceptors `nests.retrieveall/perform) :route-name :nests]

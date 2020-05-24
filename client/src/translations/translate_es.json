@@ -54,5 +54,7 @@
   "totalNests": "Nidos Total",
   "totalDestroyed": "Nidos destruidos",
   "totalCurrent": "Nidos actuales",
-  "visualizations": "Visualizaciones"
+  "visualizations": "Visualizaciones",
+  "tableInfo": "La siguinte tabla es dinamica y se actualiza para representar los datos de la zona cuadrada en la ventanilla."
+
 }

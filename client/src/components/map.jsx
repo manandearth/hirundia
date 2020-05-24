@@ -420,6 +420,8 @@ class MapComponent extends Component {
                 <LeafletMap
                   center={[36.253, -5.965]}
                   zoom={17}
+                  touchZoom={false}
+                  scrollWheelZoom={false}
                   ref="map"
                   onViewportChange={() => this.handleViewportChanged()}
                 >
@@ -447,10 +449,7 @@ class MapComponent extends Component {
             </div>
             <div className="m-4 pt-4">
               {" "}
-              <div>
-                La siguinte tabla es dinamica y se actualiza para representar
-                los datos de la zona cuadrada en la ventanilla.
-              </div>
+              <div>{t.tableInfo} </div>
               {this.Summary()}
             </div>
           </div>

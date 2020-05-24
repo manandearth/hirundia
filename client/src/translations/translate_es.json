@@ -51,8 +51,8 @@
   "address": "dirección",
   "map_title": "distribución geografica",
   "key": "clave",
-  "totalNests": "El total de nidos en la ventanilla",
-  "totalDestroyed": "Los destruidos",
-  "totalCurrent": "Los actuales",
+  "totalNests": "Nidos Total",
+  "totalDestroyed": "Nidos destruidos",
+  "totalCurrent": "Nidos actuales",
   "visualizations": "Visualizaciones"
 }

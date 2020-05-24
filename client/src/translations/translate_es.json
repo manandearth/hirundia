@@ -51,8 +51,10 @@
   "address": "dirección",
   "map_title": "distribución geografica",
   "key": "clave",
-  "totalNests": "El total de nidos en la ventanilla",
-  "totalDestroyed": "Los destruidos",
-  "totalCurrent": "Los actuales",
-  "visualizations": "Visualizaciones"
+  "totalNests": "Nidos Total",
+  "totalDestroyed": "Nidos destruidos",
+  "totalCurrent": "Nidos actuales",
+  "visualizations": "Visualizaciones",
+  "tableInfo": "La siguinte tabla es dinamica y se actualiza para representar los datos de la zona cuadrada en la ventanilla."
+
 }

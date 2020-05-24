@@ -190,7 +190,7 @@ class MapComponent extends Component {
               checked
               onClick={() => this.handleToggle("TOTAL")}
             />{" "}
-            Total entries
+            {t.totalNests}
           </label>
           <label
             className={`btn btn-${
@@ -204,7 +204,7 @@ class MapComponent extends Component {
               autocomplete="off"
               onClick={() => this.handleToggle("CURRENT")}
             />{" "}
-            Currect entries
+            {t.totalCurrent}
           </label>
           <label
             className={`btn btn-${
@@ -218,7 +218,7 @@ class MapComponent extends Component {
               autocomplete="off"
               onClick={() => this.handleToggle("DESTROYED")}
             />{" "}
-            Destroyed entries
+            {t.totalDestroyed}
           </label>
         </div>
       </div>
@@ -231,7 +231,7 @@ class MapComponent extends Component {
         <div className="h3"></div>
         <table className="table table-hover">
           <thead>
-            <tr>
+            <tr className="text-capitalize">
               <th scope="col">#</th>
               <th scope="col">{t.key}</th>
               <th scope="col">{t.qty}</th>
@@ -239,7 +239,9 @@ class MapComponent extends Component {
           </thead>
           <tbody>
             <tr>
-              <th scope="row">1.</th>
+              <th scope="row" className="text-capitalize">
+                1.
+              </th>
               <td>{t.totalNests}</td>
               <td>{this.state.entriesInFrame.length}</td>
             </tr>
@@ -259,27 +261,27 @@ class MapComponent extends Component {
             </tr>
             <tr>
               <th scope="row">4.</th>
-              <td>{t.swallow}</td>
+              <td className="text-capitalize">{t.swallow}</td>
               <td>{this.state.count.swallowNests}</td>
             </tr>
             <tr>
               <th scope="row">5.</th>
-              <td>{t.swift}</td>
+              <td className="text-capitalize">{t.swift}</td>
               <td>{this.state.count.swiftNests}</td>
             </tr>
             <tr>
               <th scope="row">6.</th>
-              <td>{t.martin}</td>
+              <td className="text-capitalize">{t.martin}</td>
               <td>{this.state.count.martinNests}</td>
             </tr>
             <tr>
               <th scope="row">7.</th>
-              <td>{t.red_rumped_swallow}</td>
+              <td className="text-capitalize">{t.red_rumped_swallow}</td>
               <td>{this.state.count.redrumpedSwallowNests}</td>
             </tr>
             <tr>
               <th scope="row">8.</th>
-              <td>{t.pallid_swift}</td>
+              <td className="text-capitalize">{t.pallid_swift}</td>
               <td>{this.state.count.pallidSwiftNests}</td>
             </tr>
           </tbody>
@@ -408,36 +410,49 @@ class MapComponent extends Component {
   render() {
     return (
       <div>
-        <div className="container bp-4">
-          <div className="row" style={{ padding: "1rem" }}>
-            {this.Selector()}
-          </div>
-          <div className="row">
-            <LeafletMap
-              center={[36.253, -5.965]}
-              zoom={17}
-              ref="map"
-              onViewportChange={() => this.handleViewportChanged()}
-            >
-              <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-              />
-              {this.state.entries.map(entry => (
-                <Circle
-                  center={[gpsToArray(entry.gps)[0], gpsToArray(entry.gps)[1]]}
-                  fillColor={this.handleColor(entry)}
-                  color={this.handleColor(entry)}
-                  radius={5}
+        <div className="container bp-2">
+          <div className="d-flex flex-row">
+            <div>
+              <div className="row" style={{ padding: "1rem" }}>
+                {this.Selector()}
+              </div>
+              <div className="row">
+                <LeafletMap
+                  center={[36.253, -5.965]}
+                  zoom={17}
+                  touchZoom={false}
+                  scrollWheelZoom={false}
+                  ref="map"
+                  onViewportChange={() => this.handleViewportChanged()}
                 >
-                  <Popup>{this.handlePopup(entry)}</Popup>
-                  <Tooltip>{this.handleTooltip(entry)}</Tooltip>
-                </Circle>
-              ))}
-            </LeafletMap>
+                  <TileLayer
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                  />
+                  {this.state.entries.map(entry => (
+                    <Circle
+                      center={[
+                        gpsToArray(entry.gps)[0],
+                        gpsToArray(entry.gps)[1]
+                      ]}
+                      fillColor={this.handleColor(entry)}
+                      color={this.handleColor(entry)}
+                      radius={5}
+                    >
+                      <Popup>{this.handlePopup(entry)}</Popup>
+                      <Tooltip>{this.handleTooltip(entry)}</Tooltip>
+                    </Circle>
+                  ))}
+                </LeafletMap>
+              </div>
+              {this.Legend()}
+            </div>
+            <div className="m-4 pt-4">
+              {" "}
+              <div>{t.tableInfo} </div>
+              {this.Summary()}
+            </div>
           </div>
-          {this.Legend()}
-          {this.Summary()}
         </div>
       </div>
     );

@@ -18,6 +18,13 @@ const validationSchema = Yup.object().shape({
     .min(8, "Too short!")
     .max(8, "Too Long!")
     .required("Required"),
+  repeatPassword: Yup.string()
+    .min(8, "Too short!")
+    .max(8, "Too Long!")
+    .required("Required")
+    .test("passwords-match", "Passwords must match", function(value) {
+      return this.parent.password === value;
+    }),
   email: Yup.string()
     .email()
     .required()
@@ -54,6 +61,7 @@ const Form = props => {
       lastName: "",
       username: "",
       password: "",
+      repeatPassword: "",
       email: ""
     },
     validationSchema
@@ -122,7 +130,7 @@ const Form = props => {
                 touched.username &&
                 validationError(errors.username)}
             </div>
-            <div className="col-auto">
+            <div classNam e="col-auto">
               <label className="my-1 mr-2 text-capitalize">
                 {t.password}
                 <input
@@ -137,6 +145,22 @@ const Form = props => {
               {errors.password &&
                 touched.password &&
                 validationError(errors.password)}
+            </div>
+            <div className="col-auto">
+              <label className="my-1 mr-2 text-capitalize">
+                {t.repeatPassword}
+                <input
+                  className="form-control ma-sm-1"
+                  type="password"
+                  name="repeatPassword"
+                  onChange={handleChange}
+                  value={values.repeatPassword}
+                  onBlur={handleBlur}
+                />
+              </label>
+              {errors.repeatPassword &&
+                touched.repeatPassword &&
+                validationError(errors.repeatPassword)}
             </div>
           </div>
           <div className="form-group row">

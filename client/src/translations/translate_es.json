@@ -58,6 +58,7 @@
   "tableInfo": "La siguinte tabla es dinamica y se actualiza para representar los datos de la zona cuadrada en la ventanilla.",
   "firstName": "nombre",
   "lastName": "apellido",
-  "email": "email"
+  "email": "email",
+  "repeatPassword": "confirmar contraseña"
 
 }

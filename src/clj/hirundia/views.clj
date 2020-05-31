@@ -155,7 +155,9 @@
       [:div {:class "form-group mx-sm-5 mb-2"}
        [:label {:class "sr-only" :for "inputUsername"} (t/to-spanish :username)] [:input {:class "form-control " :id "inputUsername" :type "text" :name "username" :placeholder (t/to-spanish :username)}]
        [:label {:class "sr-only" :for "inputPassword"} (t/to-spanish :password)] [:input {:class "form-control" :id "inputPassword" :type "password" :name "password" :placeholder (t/to-spanish :password)}]
-       [:label "" [:input {:class "text-capitalize" :type "submit" :value (t/to-spanish :register)}]]]]]]))
+       [:label "" [:input {:class "text-capitalize" :type "submit" :value (t/to-spanish :register)}]]]]]
+    [:div {:class "container" :id "registration"}]]
+   [:script {:src "../js/registration/compiled/main.js" :type "text/javascript"}]))
 
 
 ;FIXME flash here suppose to be just the username but this view is redirected by also `login` POST perform endpoint which sends a flash message for wrong password..

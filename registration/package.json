@@ -1,0 +1,37 @@
+{
+  "name": "registration",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "formik": "^2.1.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
+    "yup": "^0.29.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build && npm run post-build",
+    "post-build": "cp build/static/js/2.*.chunk.js public/2.chunk.js; cp build/static/js/main.*.chunk.js public/main.chunk.js; cp build/static/js/runtime-main.*.js public/runtime-main.js; (cat public/main.chunk.js; echo ''; cat public/2.chunk.js; echo ''; cat public/runtime-main.js; echo) > public/main.js; cp public/main.js ../resources/public/js/registration/compiled/main.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -55,6 +55,10 @@
   "totalDestroyed": "Nidos destruidos",
   "totalCurrent": "Nidos actuales",
   "visualizations": "Visualizaciones",
-  "tableInfo": "La siguinte tabla es dinamica y se actualiza para representar los datos de la zona cuadrada en la ventanilla."
+  "tableInfo": "La siguinte tabla es dinamica y se actualiza para representar los datos de la zona cuadrada en la ventanilla.",
+  "firstName": "nombre",
+  "lastName": "apellido",
+  "email": "email",
+  "repeatPassword": "confirmar contraseña"
 
 }

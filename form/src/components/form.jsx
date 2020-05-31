@@ -32,9 +32,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const constructions = ["window", "cornice", "crack", "cables", "gable"];
-const constructionOptions = constructions.map(construction => {
-  return { value: t[construction], label: t[construction] };
-});
+cons;
 
 const birds = [
   "swallow",

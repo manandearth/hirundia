@@ -75,7 +75,7 @@ const Form = props => {
           ref={formEl}
           action={
             //TODO what new url ?
-            "/nests-insert"
+            "/register"
           }
           onSubmit={htmlSubmit}
         >

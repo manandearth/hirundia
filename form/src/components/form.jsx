@@ -32,7 +32,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const constructions = ["window", "cornice", "crack", "cables", "gable"];
-cons;
+const constructionOptions = constructions.map(construction => {
+  return { value: t[construction], label: t[construction] };
+});
 
 const birds = [
   "swallow",
@@ -347,6 +349,8 @@ const Form = props => {
                   <input
                     type="date"
                     name="destroyed_date"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     value={values.destroyed_date}
                   />
                 </label>

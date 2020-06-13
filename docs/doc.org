@@ -64,6 +64,10 @@ So I need to automate the cljs startup and find a way to add it to reharden-rese
    
   `pg_ctl -D /var/lib/postgres/data/ -l logfile start`
 
+*For psql*
+connect to db (local development)
+`\c hirundia_dev`
+
 
 * Deployment 
 

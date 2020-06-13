@@ -55,5 +55,9 @@
   "totalDestroyed": "Los destruidos",
   "totalCurrent": "Los actuales",
   "visualizations": "Visualizaciones",
+  "first_name": "nombre",
+  "last_name": "apellido",
+  "email": "email",
   "role": "role"
+  
 }

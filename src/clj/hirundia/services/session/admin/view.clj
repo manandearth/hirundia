@@ -31,5 +31,9 @@
             (table/to-table1d
              extended-records
              [:username (t/to-spanish :username)
+              :first_name (t/to-spanish :first_name)
+              :last_name (t/to-spanish :last_name)
+              :email (t/to-spanish :email)
               :role (t/to-spanish :role)]
+
              attr-fns))]]))

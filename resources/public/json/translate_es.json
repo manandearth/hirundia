@@ -54,5 +54,6 @@
   "totalNests": "El total de nidos en la ventanilla",
   "totalDestroyed": "Los destruidos",
   "totalCurrent": "Los actuales",
-  "visualizations": "Visualizaciones"
+  "visualizations": "Visualizaciones",
+  "role": "role"
 }

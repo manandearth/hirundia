@@ -62,7 +62,9 @@
         [:li {:class "nav-item"} [:a {:href "/dashboard" :class "nav-link text-capitalize"} (t/to-spanish :dashboard)]]
         [:li {:class "nav-item"} [:a {:href "/nests-insert" :class "nav-link text-capitalize"} (t/to-spanish :nests-insert)]]
         [:li {:class "nav-item"} [:a {:class "text-capitalize"} (t/to-spanish :logged_as)  [:span {:class "badge badge-secondary text-capitalize"} (get-in session [:identity :username])]]]
-        [:li {:class "nav-item"} [:a {:href "/logout" :class "nav-link text-capitalize"} (t/to-spanish :logout)]]]]]]
+        [:li {:class "nav-item"} [:a {:href "/logout" :class "nav-link text-capitalize"} (t/to-spanish :logout)]]]]
+      (if (= "admin" (get-in session [:identity :role]))
+        [:li {:class "nav-item"} [:a {:href "/admin-dashboard" :class "nav-link text-capitalize"} "admin-panel"]])]]
 
     [:div {:class "container"}
 
@@ -96,7 +98,9 @@
     [:h1 "A greeting"]
     (if (authenticated? (:session request))
       (let [username (:identity session)]
-        [:p (str "Hi, " username)])
+        [:div [:h2 (str "Hi, " username)]
+         [:h2 (str "role: " (get-in session [:identity :role]))]])
+
       "Hi, Anonymous...")]))
 
 (defn insert-entry [request]

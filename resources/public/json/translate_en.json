@@ -48,6 +48,7 @@
   "update": "update",
   "logged_as": "logged as: ",
   "update_entry": "update entry",
-  "address": "address"
+  "address": "address",
+  "role": "role"
 
 }

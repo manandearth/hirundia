@@ -8,7 +8,7 @@
   (let [values {:username username :encrypted_password encrypted-password}]
     (-> (hh/insert-into :register)
         (hh/values [(if-not role
-                      values
+                      (assoc values :role "user")
                       (assoc values :role role))]))))
 
 (defn to-check [username]

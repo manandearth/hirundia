@@ -4,8 +4,8 @@
    [honeysql.helpers :as hh]
    [honeysql.core :as h]))
 
-(defn to-insert [username encrypted-password & [role]]
-  (let [values {:username username :encrypted_password encrypted-password}]
+(defn to-insert [username encrypted-password first-name last-name email & [role]]
+  (let [values {:username username :encrypted_password encrypted-password :first_name first-name :last_name last-name :email email}]
     (-> (hh/insert-into :register)
         (hh/values [(if-not role
                       (assoc values :role "user")

@@ -82,11 +82,11 @@
         [:li {:class "nav-item"} [:a {:href "/login" :class "nav-link text-capitalize"} (t/to-spanish :login)]]
         [:li {:class "nav-item"} [:a {:href "/register" :class "nav-link text-capitalize"} (t/to-spanish :register)]]]]]]))
 
-(defn home [request]
+(defn home [{:keys [flash] :as request}]
   (page/html5
    (gen-page-head "Home")
    (header-links request)
-   [:div {:class "container"} [:p {:class "h2"} "Bienvenido/a al proyecto 'Convivencia'."]
+   [:div {:class "container"} (when (seq flash) [:div {:class "alert alert-success"} flash]) [:p {:class "h2"} "Bienvenido/a al proyecto 'Convivencia'."]
     (pages/intro)]
    (bootstrap-scripts)))
 

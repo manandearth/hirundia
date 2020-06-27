@@ -30,8 +30,11 @@
     (if (logic/check-password password (:encrypted_password (password-by-username request username)))
       (let [next-url (get-in request [:query-params :next] "/")
             updated-session (assoc session :identity (conj {:username username} (get-role request username)))]
-        (-> (ring-resp/redirect next-url)
-            (assoc :session updated-session)))
+        (if (= (:role (get-role request username)) "pending")
+          (-> (ring-resp/redirect (url-for :login))
+              (assoc :flash "pending email confirmation"))
+          (-> (ring-resp/redirect next-url)
+              (assoc :session updated-session))))
       (-> (ring-resp/redirect (url-for :login))
           (assoc :flash "wrong password")))))
 
@@ -40,9 +43,17 @@
         password (get-in request [:form-params :password])
         session (:session request)]
     (if (logic/check-password password (:encrypted_password (password-by-username request username)))
-      (-> (ring-resp/response {"login" "true"})
-          (assoc :headers {"Access-Control-Allow-Origin"  "*"
-                           "Access-Control-Allow-Headers" "Content-Type"}))
+      (if (= (:role (get-role request username)) "pending")
+
+             ;; case pending user (pending email confirmation
+        (-> (ring-resp/response {"login" "false"})
+            (assoc :headers {"Access-Control-Allow-Origin"  "*"
+                             "Access-Control-Allow-Headers" "Content-Type"}))
+             ;; case correct credentials
+        (-> (ring-resp/response {"login" "true"})
+            (assoc :headers {"Access-Control-Allow-Origin"  "*"
+                             "Access-Control-Allow-Headers" "Content-Type"})))
+             ;; case incorrect credentials
       (-> (ring-resp/response {"login" "false"})
           (assoc :headers {"Access-Control-Allow-Origin"  "*"
                            "Access-Control-Allow-Headers" "Content-Type"})))))

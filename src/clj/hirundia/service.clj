@@ -163,6 +163,7 @@
     #_["/about" :get (conj common-interceptors `about-page)]
     ["/register" :get (conj common-interceptors `register-page) :route-name :register]
     ["/register" :post (conj common-interceptors `session.register/perform)]
+    ["/register/:id" :get (into common-interceptors [http/json-body (param-spec-interceptor ::session.register/api :path-params) `session.register/complete])]
     ["/login" :get (conj common-interceptors `login-page) :route-name :login]
     ["/login" :post (conj common-interceptors `session.login/perform)]
     ["/login-mobile" :post (into common-interceptors [http/json-body `session.login/perform-mobile])]

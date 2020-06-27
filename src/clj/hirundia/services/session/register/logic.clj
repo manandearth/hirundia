@@ -18,3 +18,8 @@
 
 (defn derive-password [password]
   (hashers/derive password))
+
+(defn complete-registration [id]
+  (-> (hh/update :register)
+      (hh/sset {:role "user"})
+      (hh/where [:= :username id])))

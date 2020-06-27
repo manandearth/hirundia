@@ -7,11 +7,14 @@
             [postal.core :as postal]
             [hirundia.services.session.register.email :as email]
             [hirundia.models.user :as models.user]
-            [hirundia.services.session.register.logic :as logic]))
+            [hirundia.services.session.register.logic :as logic]
+            [ajax.ring :as ring]))
 
 (spec/def ::username (spec/and string? (spec/nilable not-empty)))
 (spec/def ::password (spec/and string? (spec/nilable not-empty)))
 (spec/def ::api (spec/keys :req-un [::username ::password]))
+
+(spec/def ::api (spec/keys :req-un [::id]))
 
 (defn perform  [{{:keys [username password firstName lastName email]} :form-params :keys [db] :as request}]
   (let [db     (->> db :pool (hash-map :datasource))
@@ -28,3 +31,10 @@
 
       (-> (ring-resp/redirect (url-for :register))
           (assoc  :flash (str  "username already taken, choose another"))))))
+
+(defn complete [{{:keys [id]} :path-params  :keys [db] :as request}]
+  (let [db     (->> db :pool (hash-map :datasource))
+        update (-> (logic/complete-registration id)
+                   (h/format))]
+    (do (jdbc/execute! db update)
+        (ring-resp/redirect (url-for :login)))))

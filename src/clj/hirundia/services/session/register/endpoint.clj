@@ -4,6 +4,8 @@
             [honeysql.core :as h]
             [io.pedestal.http.route :refer [url-for]]
             [ring.util.response :as ring-resp]
+            [postal.core :as postal]
+            [hirundia.services.session.register.email :as email]
             [hirundia.models.user :as models.user]
             [hirundia.services.session.register.logic :as logic]))
 
@@ -20,6 +22,7 @@
                    (h/format))]
     (if (empty? check)
       (do (jdbc/execute! db insert)
+          (email/send-email email)
           (-> (ring-resp/redirect (url-for :login))
               (assoc  :flash (str  username ", You are registered. Please login"))))
 
